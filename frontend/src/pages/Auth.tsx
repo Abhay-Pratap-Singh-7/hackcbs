@@ -120,21 +120,12 @@ const Auth = () => {
         if (!response.ok) throw new Error(data.message || 'Verification failed');
         
         showToast('Login successful!');
-        const userObj = data.data?.user || data.user;
         const accessToken = data.data?.tokens?.accessToken || data.accessToken || data.data?.accessToken;
         const refreshToken = data.data?.tokens?.refreshToken || data.refreshToken || data.data?.refreshToken;
         if (accessToken) localStorage.setItem('accessToken', accessToken);
         if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
-        if (userObj) {
-          localStorage.setItem('user', JSON.stringify(userObj));
-          if (userObj.role === 'INSTITUTE_ADMIN') {
-            navigate('/university/dashboard');
-          } else {
-            navigate('/dashboard');
-          }
-        } else {
-          navigate('/dashboard');
-        }
+        if (data.data?.user || data.user) localStorage.setItem('user', JSON.stringify(data.data?.user || data.user));
+        navigate('/dashboard');
       } catch (err: any) {
         showToast(err.message || 'An error occurred');
       } finally {
@@ -368,10 +359,6 @@ const Auth = () => {
               <div className="input-icon-right"><User size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="email" placeholder="Official Gov Email (.gov.in / .nic.in)" required onChange={e => handleProfileChange('officialGovEmail', e.target.value)} />
-              <div className="input-icon-right"><Mail size={17} /></div>
-            </div>
-            <div className="input-pill">
               <input type="text" placeholder="Employee ID / Cadre Code" required onChange={e => handleProfileChange('employeeId', e.target.value)} />
               <div className="input-icon-right"><BadgeCheck size={17} /></div>
             </div>
@@ -384,11 +371,7 @@ const Auth = () => {
               <div className="input-icon-right"><Briefcase size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="Jurisdiction State" required onChange={e => handleProfileChange('jurisdictionState', e.target.value)} />
-              <div className="input-icon-right"><Map size={17} /></div>
-            </div>
-            <div className="input-pill">
-              <input type="text" placeholder="Jurisdiction District" required onChange={e => handleProfileChange('jurisdictionDistrict', e.target.value)} />
+              <input type="text" placeholder="Jurisdiction State / District" required onChange={e => handleProfileChange('jurisdiction', e.target.value)} />
               <div className="input-icon-right"><MapPin size={17} /></div>
             </div>
           </>
@@ -400,10 +383,6 @@ const Auth = () => {
             <div className="input-pill">
               <input type="text" placeholder="Institution Name" required onChange={e => handleProfileChange('institutionName', e.target.value)} />
               <div className="input-icon-right"><Building size={17} /></div>
-            </div>
-            <div className="input-pill">
-              <input type="email" placeholder="Official Institute Email" required onChange={e => handleProfileChange('officialInstituteEmail', e.target.value)} />
-              <div className="input-icon-right"><Mail size={17} /></div>
             </div>
             <div className="input-pill">
               <input type="text" placeholder="AISHE Code" required onChange={e => handleProfileChange('aisheCode', e.target.value)} />
@@ -432,16 +411,8 @@ const Auth = () => {
               <div className="input-icon-right"><Globe size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="Campus City" required onChange={e => handleProfileChange('campusCity', e.target.value)} />
+              <input type="text" placeholder="Campus City, District & State" required onChange={e => handleProfileChange('campusLocation', e.target.value)} />
               <div className="input-icon-right"><MapPin size={17} /></div>
-            </div>
-            <div className="input-pill">
-              <input type="text" placeholder="District" required onChange={e => handleProfileChange('district', e.target.value)} />
-              <div className="input-icon-right"><Map size={17} /></div>
-            </div>
-            <div className="input-pill">
-              <input type="text" placeholder="State" required onChange={e => handleProfileChange('state', e.target.value)} />
-              <div className="input-icon-right"><Map size={17} /></div>
             </div>
             <div className="input-pill">
               <input type="text" placeholder="Pincode" required onChange={e => handleProfileChange('pincode', e.target.value)} />
@@ -559,6 +530,7 @@ const Auth = () => {
   return (
     <div className="auth-page-container">
       <video className="bg-video" autoPlay muted loop playsInline>
+        <source src="/assets/bg.webm" type="video/webm" />
         <source src="/assets/bg.mp4" type="video/mp4" />
       </video>
       <div className="bg-overlay"></div>
@@ -566,7 +538,7 @@ const Auth = () => {
       <div className="auth-card">
         <div className="form-column" id="formColumn" ref={formColumnRef}>
           <div className="form-header">
-            <img src="/assets/logo.png" alt="Jharkhand Samadhan" className="brand-logo" />
+            <img src="/assets/logo.webp" alt="Jharkhand Samadhan" className="brand-logo" />
             <p>Civic Innovation & Grievance Resolution Platform</p>
           </div>
 
@@ -766,7 +738,7 @@ const Auth = () => {
         </div>
 
         <div className="image-column">
-          <img src="/assets/RightImage.png" alt="Jharkhand Samadhan Campus" className="hero-img" />
+          <img src="/assets/RightImage.webp" alt="Jharkhand Samadhan Campus" className="hero-img" />
         </div>
       </div>
 

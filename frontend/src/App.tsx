@@ -5,7 +5,7 @@ import Dashboard from './pages/Dashboard';
 import ProblemSubmission from './pages/ProblemSubmission';
 import PublicFeed from './pages/PublicFeed';
 import ProblemDetail from './pages/ProblemDetail';
-import UniversityDashboard from './pages/UniversityDashboard';
+import BulkIngest from './pages/BulkIngest';
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
         <Route path="/submit-problem" element={<ProblemSubmission />} />
         <Route path="/feed" element={<PublicFeed />} />
         <Route path="/problem/:id" element={<ProblemDetail />} />
-        <Route path="/university/dashboard" element={<UniversityDashboard />} />
+        <Route path="/bulk-ingest" element={<BulkIngest />} />
       </Routes>
     </Router>
   );

@@ -3,48 +3,12 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    /* Brand Colors */
-    --civic-primary: #1E6F42;
-    --civic-primary-dark: #144A2C;
-    --civic-primary-light: #8CC63F;
-    --civic-primary-soft: #F0FDF4;
-
-    /* Accents */
-    --civic-orange: #F6A261;
-    --civic-pink: #DD47A1;
-    --civic-blue: #2563EB;
-
-    /* Neutrals */
-    --civic-bg-page: #F8FAFC;
-    --civic-bg-surface: #FFFFFF;
-    --civic-border-subtle: #E2E8F0;
-    --civic-border-input: #CFD8DC;
-    --civic-border-focus: #1E6F42;
-    --civic-text-main: #1E293B;
-    --civic-text-body: #475569;
-    --civic-text-muted: #94A3B8;
-
-    /* Urgency & Status */
-    --civic-critical: #DC2626;
-    --civic-critical-bg: #FEE2E2;
-    --civic-medium: #D97706;
-    --civic-medium-bg: #FEF3C7;
-    --civic-resolved: #16A34A;
-    --civic-resolved-bg: #DCFCE7;
-
-    /* Typography */
-    --font-family-base: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  }
-
-  body {
-    font-family: var(--font-family-base);
-    background-color: var(--civic-bg-page);
-    color: var(--civic-text-main);
-    margin: 0;
-    padding: 0;
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
+  html, body {
+    @apply bg-[#061a14] text-white antialiased m-0 p-0;
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    -webkit-overscroll-behavior: none;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 }
 
