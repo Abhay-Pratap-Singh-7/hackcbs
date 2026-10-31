@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "meko": {
+      "url": "https://mcp.mekodata.ai/mcp",
+      "headers": {
+        "Authorization": "Bearer mko_tkn_sz36o244sxwkvdj4zt7ridslvy4o5ejgsmddtbq"
+      }
+    }
+  }
+}

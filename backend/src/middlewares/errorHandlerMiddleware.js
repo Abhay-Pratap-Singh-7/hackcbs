@@ -23,6 +23,14 @@ const errorHandler = (err, req, res, next) => {
     return res.status(400).json({ success: false, message });
   }
 
+  // Mongoose Connection / Buffering Timeout Error
+  if (err.message && err.message.includes('buffering timed out')) {
+    return res.status(503).json({
+      success: false,
+      message: 'Database connection unavailable. Please set a valid MONGO_URI in backend/.env to enable user accounts and data storage.'
+    });
+  }
+
   return res.status(err.statusCode || 500).json({
     success: false,
     message: error.message || 'Internal Server Error'

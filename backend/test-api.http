@@ -1,0 +1,70 @@
+### 1. Health Check
+GET http://localhost:5000/api/health
+Accept: application/json
+
+###
+
+### 2. Test Multi-Language Translation (Hindi)
+POST http://localhost:5000/api/translate/text
+Content-Type: application/json
+
+{
+  "text": "Clean water supply issue reported in Ranchi",
+  "targetLang": "Hindi"
+}
+
+###
+
+### 3. Test Batch Translation
+POST http://localhost:5000/api/translate/batch
+Content-Type: application/json
+
+{
+  "texts": [
+    "Clean water supply issue reported in Ranchi",
+    "Potholes on main road near railway station"
+  ],
+  "targetLang": "Hindi"
+}
+
+###
+
+### 4. User Registration (Citizen)
+POST http://localhost:5000/api/auth/signup
+Content-Type: application/json
+
+{
+  "email": "citizen_test@example.com",
+  "password": "Password@123",
+  "confirmPassword": "Password@123",
+  "role": "INDIVIDUAL_CITIZEN",
+  "profileDetails": {
+    "fullName": "Rohan Kumar",
+    "district": "Ranchi",
+    "state": "Jharkhand",
+    "pincode": "834001"
+  }
+}
+
+###
+
+### 5. User Login
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "citizen_test@example.com",
+  "password": "Password@123"
+}
+
+###
+
+### 6. FCM Push Notification Diagnostic Status
+GET http://localhost:5000/api/notifications/fcm-status
+Accept: application/json
+
+###
+
+### 7. Android AssetLinks Route
+GET http://localhost:5000/.well-known/assetlinks.json
+Accept: application/json
