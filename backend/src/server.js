@@ -5,13 +5,16 @@ dotenv.config();
 
 const app = require('./app');
 const connectDB = require('./config/db');
+const { connectYugabyte } = require('./config/yugabyte');
 
 const PORT = process.env.PORT || 5000;
 
-// Connect to Database and start server
+// Connect to Databases and start server
 const startServer = async () => {
   try {
     await connectDB();
+    await connectYugabyte();
+
     app.listen(PORT, () => {
       console.log(`\n======================================================`);
       console.log(`[SIH Server Running]: Listening on port ${PORT}`);

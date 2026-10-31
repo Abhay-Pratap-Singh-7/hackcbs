@@ -18,16 +18,30 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 applySecurityMiddlewares(app);
 
 // API Health Check Route
-app.get('/api/health', (req, res) => {
+app.get('/api/health', async (req, res) => {
   const { isFirebaseInitialized, getInitError } = require('./config/firebase');
+  const { getYugabytePool } = require('./config/yugabyte');
   const detectedEnvKeys = Object.keys(process.env).filter((k) =>
     k.toLowerCase().includes('firebase') ||
     k.toLowerCase().includes('google') ||
     k.toLowerCase().includes('service_account')
   );
+
+  let yugabyteStatus = 'NOT_CONFIGURED';
+  try {
+    const p = getYugabytePool();
+    if (p) {
+      await p.query('SELECT 1');
+      yugabyteStatus = 'CONNECTED';
+    }
+  } catch (err) {
+    yugabyteStatus = 'ERROR: ' + err.message;
+  }
+
   res.status(200).json({
     status: 'UP',
     message: 'SIH Backend API is operational',
+    yugabyte: yugabyteStatus,
     firebaseInitialized: isFirebaseInitialized(),
     firebaseError: getInitError(),
     detectedEnvKeys,
@@ -36,6 +50,39 @@ app.get('/api/health', (req, res) => {
       enableRecaptcha: process.env.ENABLE_RECAPTCHA === 'true'
     }
   });
+});
+
+// YugabyteDB Detailed Health & Info Probe
+app.get('/api/health/yugabyte', async (req, res) => {
+  const { getYugabytePool } = require('./config/yugabyte');
+  const p = getYugabytePool();
+  if (!p) {
+    return res.status(503).json({ success: false, message: 'YugabyteDB pool not configured. Check DATABASE_URL.' });
+  }
+
+  const start = Date.now();
+  try {
+    const info = await p.query('SELECT current_database() as db, current_user as user, version() as version, now() as server_time');
+    const latency = Date.now() - start;
+    const tables = await p.query("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_name");
+
+    return res.status(200).json({
+      success: true,
+      status: 'CONNECTED',
+      latencyMs: latency,
+      database: info.rows[0].db,
+      user: info.rows[0].user,
+      serverTime: info.rows[0].server_time,
+      version: info.rows[0].version.split('\n')[0],
+      publicTables: tables.rows.map(r => r.table_name)
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      status: 'ERROR',
+      error: err.message
+    });
+  }
 });
 
 // Diagnostic route to trigger a direct FCM push from Render cloud
