@@ -43,7 +43,7 @@ const ProblemSubmission = () => {
   const [existingInterventions, setExistingInterventions] = useState('');
   void existingInterventions; void setExistingInterventions;
   const [mediaFiles, setMediaFiles] = useState<File[]>([]);
-  
+
   // Location State
   const [position, setPosition] = useState<L.LatLng | null>(null);
   const [address, setAddress] = useState('');
@@ -51,6 +51,21 @@ const ProblemSubmission = () => {
   const [state, setState] = useState('');
   const [pincode, setPincode] = useState('');
   const [village, setVillage] = useState('');
+
+  const handleUseCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setPosition(L.latLng(pos.coords.latitude, pos.coords.longitude));
+        },
+        (err) => {
+          setError('Failed to get current location: ' + err.message);
+        }
+      );
+    } else {
+      setError('Geolocation is not supported by this browser.');
+    }
+  };
 
   // Auto-fetch location details on map pin drop
   React.useEffect(() => {
@@ -83,14 +98,37 @@ const ProblemSubmission = () => {
 
     setLoading(true);
     setError('');
-    
+
     try {
       const token = localStorage.getItem('accessToken');
       if (!token) {
         navigate('/login');
         return;
       }
-      
+
+      let uploadedMedia = [];
+      if (mediaFiles.length > 0) {
+        const file = mediaFiles[0];
+        const base64 = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = error => reject(error);
+        });
+        uploadedMedia.push({
+          url: base64,
+          mediaType: file.type.startsWith('image/') ? 'image' : 'document',
+          name: file.name
+        });
+      } else {
+        // Fallback for MVP if no photo provided
+        uploadedMedia.push({
+          url: 'https://via.placeholder.com/600x400.png?text=Evidence',
+          mediaType: 'image',
+          name: 'Evidence'
+        });
+      }
+
       const payload = {
         description,
         location: {
@@ -102,10 +140,7 @@ const ProblemSubmission = () => {
           latitude: position?.lat || 0,
           longitude: position?.lng || 0
         },
-        imagesAndMedia: [
-          // Mocking upload for MVP
-          { url: 'https://via.placeholder.com/600x400.png?text=Evidence', mediaType: 'image', name: 'Evidence' }
-        ],
+        imagesAndMedia: uploadedMedia,
         supportingInfo: {
           existingInterventions
         }
@@ -121,7 +156,7 @@ const ProblemSubmission = () => {
       });
 
       const data = await response.json();
-      
+
       if (response.status === 401) {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('user');
@@ -160,23 +195,23 @@ const ProblemSubmission = () => {
               <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle size={32} />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Problem Submitted Successfully!</h2>
-              <p className="text-gray-600 mb-6">AI has analyzed and classified your submission.</p>
-              
-              <div className="bg-gray-50 p-6 rounded-xl text-left border border-gray-200 mb-6">
+              <h2 className="text-2xl font-bold text-civic-text-main mb-2 font-poppins">Problem Submitted Successfully!</h2>
+              <p className="text-civic-text-muted font-medium mb-6">AI has analyzed and classified your submission.</p>
+
+              <div className="bg-civic-page p-6 rounded-card text-left border border-civic-border-subtle mb-6">
                 <div className="flex gap-4 items-start mb-4">
-                  <span className="px-3 py-1 bg-primary/10 text-primary font-bold text-xs uppercase rounded">
+                  <span className="px-3 py-1 bg-civic-surface text-civic-primary font-bold text-xs uppercase rounded border border-civic-border-subtle">
                     {success.aiAnalysis?.problem_classification}
                   </span>
-                  <span className="px-3 py-1 bg-red-100 text-red-700 font-bold text-xs uppercase rounded">
+                  <span className="px-3 py-1 bg-civic-critical-bg text-civic-critical font-bold text-xs uppercase rounded border border-civic-critical/20">
                     Severity: {success.aiAnalysis?.severity}
                   </span>
                 </div>
-                <p className="font-medium text-gray-900 mb-2">AI Summary:</p>
-                <p className="text-gray-700 text-sm">{success.aiAnalysis?.summary}</p>
+                <p className="font-bold text-civic-text-main mb-2 font-poppins">AI Summary:</p>
+                <p className="text-civic-text-body text-sm leading-relaxed">{success.aiAnalysis?.summary}</p>
               </div>
-              
-              <button onClick={() => setSuccess(null)} className="px-6 py-2 bg-primary text-white rounded-lg font-bold hover:bg-primary-hover">
+
+              <button onClick={() => setSuccess(null)} className="px-6 py-3 bg-civic-primary text-white rounded-xl font-bold shadow-sm hover:bg-civic-primary-dark transition-all">
                 Submit Another Issue
               </button>
             </div>
@@ -189,15 +224,15 @@ const ProblemSubmission = () => {
               )}
 
               {/* Step 1: Description */}
-              <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
-                <h3 className="text-lg font-bold text-gray-900 mb-6 border-b border-gray-100 pb-4">1. Issue Details</h3>
-                <div className="space-y-4">
+              <section className="bg-civic-surface p-8 rounded-card shadow-sm border border-civic-border-subtle relative overflow-hidden">
+                <h3 className="text-xl font-bold text-civic-text-main mb-6 border-b border-civic-border-subtle pb-4 font-poppins">1. Issue Details</h3>
+                <div className="space-y-4 relative z-10">
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-1">Detailed Description *</label>
-                    <p className="text-xs text-gray-500 mb-2">Describe the problem, its impact, and how long it has persisted. (Min 50 chars)</p>
-                    <textarea 
+                    <label className="block text-sm font-bold text-civic-text-body mb-1">Detailed Description *</label>
+                    <p className="text-xs font-medium text-civic-text-muted mb-2">Describe the problem, its impact, and how long it has persisted. (Min 50 chars)</p>
+                    <textarea
                       required
-                      className="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all min-h-[120px]"
+                      className="w-full p-4 bg-civic-page border border-civic-border-subtle rounded-xl focus:ring-2 focus:ring-civic-primary/30 focus:border-civic-primary outline-none transition-all min-h-[120px] text-civic-text-main"
                       placeholder="e.g., During peak summer months, over 5,000 residents face acute drinking water shortage..."
                       value={description}
                       onChange={e => setDescription(e.target.value)}
@@ -207,12 +242,21 @@ const ProblemSubmission = () => {
               </section>
 
               {/* Step 2: Location */}
-              <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
-                <h3 className="text-lg font-bold text-gray-900 mb-6 border-b border-gray-100 pb-4 flex items-center gap-2">
-                  <MapPin size={20} className="text-primary"/> 2. Location Mapping
-                </h3>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <section className="bg-civic-surface p-8 rounded-card shadow-sm border border-civic-border-subtle relative overflow-hidden">
+                <div className="flex items-center justify-between border-b border-civic-border-subtle pb-4 mb-6">
+                  <h3 className="text-xl font-bold text-civic-text-main flex items-center gap-2 m-0 font-poppins">
+                    <MapPin size={22} className="text-civic-primary" /> 2. Location Mapping
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={handleUseCurrentLocation}
+                    className="text-sm bg-civic-page text-civic-primary hover:bg-civic-border-subtle px-3 py-1.5 rounded-xl font-bold flex items-center gap-1 transition-colors border border-civic-border-subtle"
+                  >
+                    <MapPin size={16} /> Auto-Detect Location
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
@@ -256,14 +300,14 @@ const ProblemSubmission = () => {
               </section>
 
               {/* Step 3: Media */}
-              <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
-                <h3 className="text-lg font-bold text-gray-900 mb-6 border-b border-gray-100 pb-4 flex items-center gap-2">
-                  <ImageIcon size={20} className="text-primary"/> 3. Evidence Upload
+              <section className="bg-civic-surface p-8 rounded-card shadow-sm border border-civic-border-subtle relative overflow-hidden">
+                <h3 className="text-xl font-bold text-civic-text-main mb-6 border-b border-civic-border-subtle pb-4 flex items-center gap-2 font-poppins">
+                  <ImageIcon size={22} className="text-civic-primary" /> 3. Evidence Upload
                 </h3>
-                <div className="border-2 border-dashed border-gray-300 rounded-xl p-10 text-center hover:bg-gray-50 transition-colors cursor-pointer relative">
-                  <input 
-                    type="file" 
-                    multiple 
+                <div className="border-2 border-dashed border-civic-border-subtle rounded-2xl p-10 text-center hover:bg-civic-page transition-colors cursor-pointer relative bg-civic-surface">
+                  <input
+                    type="file"
+                    multiple
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                     onChange={(e) => {
                       if (e.target.files) setMediaFiles(Array.from(e.target.files));
@@ -286,10 +330,10 @@ const ProblemSubmission = () => {
               </section>
 
               <div className="flex justify-end">
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   disabled={loading}
-                  className="bg-amber-500 hover:bg-amber-600 text-white font-bold text-lg px-8 py-4 rounded-xl flex items-center gap-2 transition-transform active:scale-95 disabled:opacity-70"
+                  className="bg-civic-primary hover:bg-civic-primary-dark text-white shadow-sm font-semibold text-lg px-8 py-4 rounded-xl flex items-center gap-2 transition-all active:scale-95 disabled:opacity-70 font-poppins"
                 >
                   {loading ? 'Analyzing with AI...' : (
                     <>
