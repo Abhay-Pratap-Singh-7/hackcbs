@@ -4,6 +4,10 @@ from typing import Literal
 try:
     from dotenv import load_dotenv
     load_dotenv()
+    # Check parent directory for backend/.env
+    parent_env = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".env")
+    if os.path.exists(parent_env):
+        load_dotenv(parent_env)
 except ImportError:
     pass  # In production (Render), env vars are injected directly, so dotenv is not needed
 
@@ -51,14 +55,20 @@ class ProblemAnalysis(BaseModel):
 # Groq client
 # ---------------------------------------------------------
 
-api_key = os.getenv("GROQ_API_KEY")
+client = None
 
-if not api_key:
-    raise ValueError(
-        "GROQ_API_KEY is not set in the environment variables."
-    )
+def get_groq_client() -> Groq:
+    global client
+    if client is not None:
+        return client
 
-client = Groq(api_key=api_key)
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
+        raise ValueError(
+            "GROQ_API_KEY is not set in the environment variables."
+        )
+    client = Groq(api_key=api_key)
+    return client
 
 
 # ---------------------------------------------------------
@@ -73,8 +83,9 @@ def analyze_problem(problem_text: str) -> dict:
         )
 
     problem_text = problem_text.strip()
+    groq_client = get_groq_client()
 
-    response = client.chat.completions.create(
+    response = groq_client.chat.completions.create(
 
         model="openai/gpt-oss-120b",
 
