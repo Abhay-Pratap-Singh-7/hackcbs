@@ -209,12 +209,15 @@ const getUniversityDashboard = async (req, res, next) => {
 // @access  Private (INSTITUTE_ADMIN only)
 const updateProblemAllocationStatus = async (req, res, next) => {
   try {
-    const { action } = req.body; // 'accept' or 'reject'
+    let action = (req.body.action || req.body.status || '').toLowerCase().trim();
+    if (action === 'accepted') action = 'accept';
+    if (action === 'rejected') action = 'reject';
+
     const user = req.user;
     const institutionName = user.profileDetails?.institutionName || '';
 
     if (!['accept', 'reject'].includes(action)) {
-      return res.status(400).json({ success: false, message: 'Invalid action. Use accept or reject.' });
+      return res.status(400).json({ success: false, message: 'Invalid action. Use accept, reject, ACCEPTED, or REJECTED.' });
     }
 
     const problem = await ProblemStatement.findById(req.params.id);

@@ -108,7 +108,12 @@
 
 ### 1.8 Reset Password — `POST /api/auth/reset-password`
 ```json
-{ "token": "reset_token_from_email", "password": "NewPass@123", "confirmPassword": "NewPass@123" }
+{
+  "email": "dev@university.edu.in",
+  "otp": "839201",
+  "newPassword": "NewPassword@123",
+  "confirmPassword": "NewPassword@123"
+}
 ```
 
 ---

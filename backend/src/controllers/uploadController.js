@@ -30,6 +30,19 @@ exports.uploadFiles = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'No files provided' });
     }
 
+    if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY) {
+      const mockUrls = req.files.map(file => ({
+        url: `https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80`,
+        mediaType: file.mimetype.startsWith('video/') ? 'video' : 'image',
+        name: file.originalname
+      }));
+      return res.status(200).json({
+        success: true,
+        message: 'Files uploaded successfully (Dev mock mode: configure CLOUDINARY_CLOUD_NAME for live cloud upload)',
+        data: mockUrls
+      });
+    }
+
     const uploadedUrls = [];
 
     for (const file of req.files) {

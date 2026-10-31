@@ -58,7 +58,13 @@ const updateSolutionStatus = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Team not found' });
     }
 
-    if (String(team.industryAllocation?.industryId) !== String(user._id)) {
+    const isAuthorized =
+      String(team.industryAllocation?.industryId) === String(user._id) ||
+      (team.industryAllocation?.companyName &&
+        user.profileDetails?.companyName &&
+        team.industryAllocation.companyName.toLowerCase().includes(user.profileDetails.companyName.toLowerCase()));
+
+    if (!isAuthorized) {
       return res.status(403).json({ success: false, message: 'Not authorized to update this solution.' });
     }
 

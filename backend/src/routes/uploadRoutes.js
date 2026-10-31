@@ -11,9 +11,10 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit per file
 });
 
-// @route   POST /api/upload
+// @route   POST /api/upload and POST /api/upload/media
 // @desc    Upload multiple files to Cloudflare R2
 // @access  Private
 router.post('/', protect, upload.array('files', 5), uploadFiles);
+router.post('/media', protect, upload.array('files', 5), uploadFiles);
 
 module.exports = router;

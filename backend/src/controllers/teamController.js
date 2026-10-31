@@ -146,10 +146,14 @@ const submitSolution = async (req, res, next) => {
           const topCompany = matchedCompanies[0];
           
           // Try to find the registered INDUSTRY_PARTNER user in the database
-          const industryUser = await User.findOne({
+          let industryUser = await User.findOne({
             role: ROLES.INDUSTRY_PARTNER,
-            'profileDetails.companyName': new RegExp(`^${topCompany.company_name}$`, 'i')
+            'profileDetails.companyName': new RegExp(topCompany.company_name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
           });
+
+          if (!industryUser) {
+            industryUser = await User.findOne({ role: ROLES.INDUSTRY_PARTNER });
+          }
 
           team.industryAllocation = {
             companyName: topCompany.company_name,
@@ -159,6 +163,14 @@ const submitSolution = async (req, res, next) => {
         }
       } catch (aiErr) {
         console.error('[Industry Matching Error]:', aiErr.message);
+        const fallbackIndustry = await User.findOne({ role: ROLES.INDUSTRY_PARTNER });
+        if (fallbackIndustry) {
+          team.industryAllocation = {
+            companyName: fallbackIndustry.profileDetails?.companyName || fallbackIndustry.name,
+            industryId: fallbackIndustry._id,
+            status: 'PENDING'
+          };
+        }
       }
     }
 

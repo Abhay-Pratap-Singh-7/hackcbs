@@ -29,9 +29,11 @@ const generateAccessToken = (user) => {
 
 // Helper to generate JWT Refresh Token and store in DB
 const generateRefreshToken = async (user) => {
-  const token = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, {
-    expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d'
-  });
+  const token = jwt.sign(
+    { id: user._id, nonce: Date.now() + '-' + Math.random().toString(36).substring(2, 9) },
+    process.env.JWT_REFRESH_SECRET,
+    { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d' }
+  );
 
   // Calculate expiry date (7 days from now)
   const expiresAt = new Date();
@@ -170,7 +172,9 @@ const verifySignupOtp = async (req, res, next) => {
         tokens: {
           accessToken,
           refreshToken
-        }
+        },
+        accessToken,
+        refreshToken
       }
     });
   } catch (err) {
@@ -335,6 +339,8 @@ const verifyLoginOtp = async (req, res, next) => {
           accessToken,
           refreshToken
         },
+        accessToken,
+        refreshToken,
         dashboardRedirect: `/api/dashboard/${user.role.toLowerCase()}`
       }
     });
@@ -484,7 +490,9 @@ const continueWithGoogle = async (req, res, next) => {
         tokens: {
           accessToken,
           refreshToken
-        }
+        },
+        accessToken,
+        refreshToken
       }
     });
   } catch (err) {
@@ -566,7 +574,9 @@ const handleDigiLockerCallback = async (req, res, next) => {
         tokens: {
           accessToken,
           refreshToken
-        }
+        },
+        accessToken,
+        refreshToken
       }
     });
   } catch (err) {
