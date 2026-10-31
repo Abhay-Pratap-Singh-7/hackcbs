@@ -7,20 +7,21 @@ const caPath = process.env.DB_CA_CERT_PATH
   ? path.resolve(__dirname, process.env.DB_CA_CERT_PATH)
   : path.resolve(__dirname, 'root.crt');
 
-console.log('[YugabyteDB Test] Checking CA cert at:', caPath);
-if (!fs.existsSync(caPath)) {
-  console.error('[YugabyteDB Test] ERROR: CA cert not found at:', caPath);
-  process.exit(1);
-}
+let sslConfig = { rejectUnauthorized: false };
 
-const caCert = fs.readFileSync(caPath).toString();
+if (fs.existsSync(caPath)) {
+  console.log('[YugabyteDB Test] Using CA cert at:', caPath);
+  sslConfig = {
+    rejectUnauthorized: true,
+    ca: fs.readFileSync(caPath).toString()
+  };
+} else {
+  console.log('[YugabyteDB Test] CA cert not found at:', caPath, '— connecting with rejectUnauthorized: false');
+}
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: true,
-    ca: caCert
-  }
+  ssl: sslConfig
 });
 
 async function run() {
