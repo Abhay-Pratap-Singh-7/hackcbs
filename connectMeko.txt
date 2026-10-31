@@ -1,0 +1,9 @@
+mko_tkn_xhuf5o37rkvhjkuq5wjgjabc3h42qrd3itvhgoq
+
+npx -y mcp-add@latest \
+  --name meko \
+  --type http \
+  --url 'https://mcp.mekodata.ai/mcp' \
+  --headers 'Authorization=Bearer mko_tkn_xhuf5o37rkvhjkuq5wjgjabc3h42qrd3itvhgoq,User-Agent=meko-mcp-installer/1.0' \
+  --scope global \
+  --clients 'claude code,cursor,codex,vscode'
