@@ -40,7 +40,7 @@ app.get('/api/health', async (req, res) => {
 
   res.status(200).json({
     status: 'UP',
-    message: 'SIH Backend API is operational',
+    message: 'HackCBS Backend API is operational',
     yugabyte: yugabyteStatus,
     firebaseInitialized: isFirebaseInitialized(),
     firebaseError: getInitError(),

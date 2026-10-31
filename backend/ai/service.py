@@ -77,7 +77,7 @@ if __name__ == "__main__":
         from pydantic import BaseModel, Field
         import uvicorn
         
-        app = FastAPI(title="SIH AI Problem Analyzer")
+        app = FastAPI(title="HackCBS AI Problem Analyzer")
         
         class DeduplicationRequest(BaseModel):
             description: str = Field(..., min_length=10)

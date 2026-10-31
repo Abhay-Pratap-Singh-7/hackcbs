@@ -1,7 +1,7 @@
 {
-  "name": "backend-sih",
+  "name": "backend-hackcbs",
   "version": "1.0.0",
-  "description": "SIH Multi-Role Backend API with Security, OTP, JWT Access/Refresh tokens, Google & DigiLocker OAuth",
+  "description": "HackCBS Multi-Role Backend API with Security, OTP, JWT Access/Refresh tokens, Google & DigiLocker OAuth",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
@@ -11,7 +11,7 @@
   "keywords": [
     "express",
     "mongodb",
-    "sih",
+    "hackcbs",
     "authentication",
     "jwt",
     "otp",

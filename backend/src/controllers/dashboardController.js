@@ -27,7 +27,7 @@ const getDashboardData = async (req, res, next) => {
       },
       FACULTY_MENTOR: {
         title: 'Faculty Mentor Dashboard',
-        metrics: { mentoredTeams: 4, publishedPapers: 12, activeSIHProjects: 3 }
+        metrics: { mentoredTeams: 4, publishedPapers: 12, activeHackCBSProjects: 3 }
       },
       STUDENT_INNOVATOR: {
         title: 'Student & Innovator Portal',

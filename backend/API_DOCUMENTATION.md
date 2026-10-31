@@ -1,4 +1,4 @@
-# 📘 SIH-26 Backend — Complete API Documentation
+# 📘 HackCBS Backend — Complete API Documentation
 **Local Test URL:** `http://localhost:5001`  
 **Production URL:** `https://sih-26-jarr.onrender.com`  
 **Auth:** All protected routes require `Authorization: Bearer <access_token>`
@@ -637,7 +637,7 @@ Body: Same fields as submit (partial update supported)
 ```json
 {
   "status": "UP",
-  "message": "SIH Backend API is operational",
+  "message": "HackCBS Backend API is operational",
   "timestamp": "2026-09-03T19:00:00.000Z"
 }
 ```

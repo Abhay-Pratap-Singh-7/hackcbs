@@ -99,10 +99,10 @@ const sendEmailViaBrevoApi = async (email, otp, purpose) => {
 
   const subject =
     purpose === 'LOGIN_VERIFY'
-      ? 'SIH Portal - Login Verification OTP'
+      ? 'HackCBS Portal - Login Verification OTP'
       : purpose === 'PASSWORD_RESET'
-      ? 'SIH Portal - Password Reset OTP'
-      : 'SIH Portal - Account Registration Verification OTP';
+      ? 'HackCBS Portal - Password Reset OTP'
+      : 'HackCBS Portal - Account Registration Verification OTP';
 
   const htmlContent = getEmailContent(otp, purpose);
 
@@ -143,10 +143,10 @@ const sendEmailViaSmtp = async (email, otp, purpose) => {
 
   const subject =
     purpose === 'LOGIN_VERIFY'
-      ? 'SIH Portal - Login Verification OTP'
+      ? 'HackCBS Portal - Login Verification OTP'
       : purpose === 'PASSWORD_RESET'
-      ? 'SIH Portal - Password Reset OTP'
-      : 'SIH Portal - Account Registration Verification OTP';
+      ? 'HackCBS Portal - Password Reset OTP'
+      : 'HackCBS Portal - Account Registration Verification OTP';
 
   const htmlContent = getEmailContent(otp, purpose);
 

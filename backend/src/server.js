@@ -17,7 +17,7 @@ const startServer = async () => {
 
     app.listen(PORT, () => {
       console.log(`\n======================================================`);
-      console.log(`[SIH Server Running]: Listening on port ${PORT}`);
+      console.log(`[HackCBS Server Running]: Listening on port ${PORT}`);
       console.log(`[Environment]: ${process.env.NODE_ENV || 'development'}`);
       console.log(`[reCAPTCHA Security]: ${process.env.ENABLE_RECAPTCHA === 'true' ? 'ENABLED' : 'DISABLED (Postman Testing Mode)'}`);
       console.log(`======================================================\n`);

@@ -1,6 +1,6 @@
 # Quick API Test Script for Windows PowerShell
 Write-Host "==========================================" -ForegroundColor Cyan
-Write-Host "   Testing SIH Backend API (Localhost:5000)   " -ForegroundColor Cyan
+Write-Host "   Testing HackCBS Backend API (Localhost:5000)   " -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 
 function Test-Endpoint {

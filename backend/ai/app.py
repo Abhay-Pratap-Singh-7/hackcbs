@@ -254,8 +254,8 @@ def run_model_pipeline(payload_str: str) -> str:
 # ==========================================
 # GRADIO INTERFACE & APIS
 # ==========================================
-with gr.Blocks(title="SIH AI Services") as demo:
-    gr.Markdown("# 🚀 SIH Modular AI Problem-Solving Platform")
+with gr.Blocks(title="HackCBS AI Services") as demo:
+    gr.Markdown("# 🚀 HackCBS Modular AI Problem-Solving Platform")
     
     with gr.Tab("1. Problem Analyzer (Groq AI)"):
         p1_in = gr.Textbox(label="Problem Description JSON", lines=6, placeholder='{"description": "Severe water logging on road"}')
