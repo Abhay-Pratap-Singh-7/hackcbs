@@ -1,0 +1,9 @@
+{
+  "name": "hackcbs-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "cd backend && node src/server.js",
+    "build": "cd backend && npm install"
+  }
+}
