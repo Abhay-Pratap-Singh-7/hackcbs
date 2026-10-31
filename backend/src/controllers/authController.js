@@ -69,9 +69,10 @@ const signup = async (req, res, next) => {
     }
 
     const { name, email, password, role, profileDetails, preferredLanguage } = req.body;
+    const cleanEmail = (email || '').toLowerCase().trim();
 
     // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email: cleanEmail });
     if (existingUser) {
       if (existingUser.isEmailVerified) {
         return res.status(400).json({
@@ -79,15 +80,16 @@ const signup = async (req, res, next) => {
           message: 'An account with this email address already exists. Please log in.'
         });
       } else {
-        // Overwrite unverified incomplete registration
-        await User.deleteOne({ email });
+        // Overwrite unverified incomplete registration cleanly by ID
+        await User.findByIdAndDelete(existingUser._id);
+        await Otp.deleteMany({ email: cleanEmail });
       }
     }
 
     // Create user record
     const user = await User.create({
-      name,
-      email,
+      name: name?.trim(),
+      email: cleanEmail,
       password,
       role,
       profileDetails,
@@ -98,10 +100,10 @@ const signup = async (req, res, next) => {
 
     // Generate & Send OTP
     const otpCode = generateOtpCode();
-    await Otp.deleteMany({ email, purpose: 'SIGNUP_VERIFY' });
-    await Otp.create({ email, otp: otpCode, purpose: 'SIGNUP_VERIFY' });
+    await Otp.deleteMany({ email: cleanEmail, purpose: 'SIGNUP_VERIFY' });
+    await Otp.create({ email: cleanEmail, otp: otpCode, purpose: 'SIGNUP_VERIFY' });
 
-    sendOtpEmail(email, otpCode, 'SIGNUP_VERIFY').catch(err => console.error('[Email Error]:', err));
+    sendOtpEmail(cleanEmail, otpCode, 'SIGNUP_VERIFY').catch(err => console.error('[Email Error]:', err));
 
     return res.status(201).json({
       success: true,

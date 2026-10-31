@@ -137,7 +137,13 @@ const Auth = () => {
         setLoginStep(2);
         setLoginResendTimer(60);
       } catch (err: any) {
-        showToast(err.message || 'An error occurred', 'error');
+        const msg = err.message || 'An error occurred';
+        showToast(msg, 'error');
+        if (msg.toLowerCase().includes('already exists') || msg.toLowerCase().includes('already registered')) {
+          setLoginEmail(signupEmail);
+          setFormError('This email is already registered. Please log in.');
+          setTimeout(() => switchView('login'), 1500);
+        }
       } finally {
         setLoading(false);
       }
@@ -172,7 +178,13 @@ const Auth = () => {
           navigate('/dashboard');
         }
       } catch (err: any) {
-        showToast(err.message || 'An error occurred', 'error');
+        const msg = err.message || 'An error occurred';
+        showToast(msg, 'error');
+        if (msg.toLowerCase().includes('already exists') || msg.toLowerCase().includes('already registered')) {
+          setLoginEmail(signupEmail);
+          setFormError('This email is already registered. Please log in.');
+          setTimeout(() => switchView('login'), 1500);
+        }
       } finally {
         setLoading(false);
       }
@@ -291,7 +303,13 @@ const Auth = () => {
         setSignupStep(2);
         setSignupResendTimer(60);
       } catch (err: any) {
-        showToast(err.message || 'An error occurred', 'error');
+        const msg = err.message || 'An error occurred';
+        showToast(msg, 'error');
+        if (msg.toLowerCase().includes('already exists') || msg.toLowerCase().includes('already registered')) {
+          setLoginEmail(signupEmail);
+          setFormError('This email is already registered. Please log in.');
+          setTimeout(() => switchView('login'), 1500);
+        }
       } finally {
         setLoading(false);
       }
@@ -315,7 +333,13 @@ const Auth = () => {
         switchView('login');
         setSignupStep(1);
       } catch (err: any) {
-        showToast(err.message || 'An error occurred', 'error');
+        const msg = err.message || 'An error occurred';
+        showToast(msg, 'error');
+        if (msg.toLowerCase().includes('already exists') || msg.toLowerCase().includes('already registered')) {
+          setLoginEmail(signupEmail);
+          setFormError('This email is already registered. Please log in.');
+          setTimeout(() => switchView('login'), 1500);
+        }
       } finally {
         setLoading(false);
       }
@@ -541,15 +565,6 @@ const Auth = () => {
             <div className="input-pill">
               <input type="text" placeholder="Designation" required onChange={e => handleProfileChange('designation', e.target.value)} />
               <div className="input-icon-right"><Briefcase size={17} /></div>
-            </div>
-            <div className="input-pill">
-              <input 
-                type="email" 
-                placeholder="Official Institute Email" 
-                required 
-                onChange={e => handleProfileChange('officialInstituteEmail', e.target.value)} 
-              />
-              <div className="input-icon-right"><Mail size={17} /></div>
             </div>
             <div className="input-pill">
               <input 
