@@ -25,4 +25,19 @@ refreshTokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 const RefreshToken = mongoose.model('RefreshToken', refreshTokenSchema);
 
-module.exports = RefreshToken;
+const yugabyteService = require('../services/yugabyteDataService');
+
+const RefreshTokenProxy = new Proxy(RefreshToken, {
+  get(target, prop) {
+    if (mongoose.connection.readyState === 1) {
+      return target[prop];
+    }
+    if (prop === 'create') return (data) => yugabyteService.refreshTokens.create(data);
+    if (prop === 'findOne') return (q) => yugabyteService.refreshTokens.findOne(q);
+    if (prop === 'deleteOne') return (q) => yugabyteService.refreshTokens.deleteOne(q);
+    if (prop === 'deleteMany') return (q) => yugabyteService.refreshTokens.deleteMany(q);
+    return target[prop];
+  }
+});
+
+module.exports = RefreshTokenProxy;

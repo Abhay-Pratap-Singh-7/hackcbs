@@ -165,9 +165,25 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 
 const User = mongoose.model('User', userSchema);
 
-User.User = User;
-User.ROLES = ROLES;
+const yugabyteService = require('../services/yugabyteDataService');
 
-module.exports = User;
-module.exports.User = User;
+const UserProxy = new Proxy(User, {
+  get(target, prop) {
+    if (mongoose.connection.readyState === 1) {
+      return target[prop];
+    }
+    if (prop === 'findOne') return (q) => yugabyteService.users.findOne(q);
+    if (prop === 'findById') return (id) => yugabyteService.users.findById(id);
+    if (prop === 'create') return (data) => yugabyteService.users.create(data);
+    if (prop === 'findByIdAndDelete') return (id) => yugabyteService.users.findByIdAndDelete(id);
+    if (prop === 'deleteOne') return (q) => yugabyteService.users.deleteOne(q);
+    return target[prop];
+  }
+});
+
+UserProxy.User = UserProxy;
+UserProxy.ROLES = ROLES;
+
+module.exports = UserProxy;
+module.exports.User = UserProxy;
 module.exports.ROLES = ROLES;

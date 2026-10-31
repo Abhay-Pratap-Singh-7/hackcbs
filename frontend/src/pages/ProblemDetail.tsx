@@ -250,7 +250,7 @@ const ProblemDetail = () => {
                   {problem.status || 'ACTIVE'}
                 </span>
               </div>
-              <p className="text-xs text-[#556958]">ID: #{problem._id?.substring(0, 12)}</p>
+              <p className="text-xs text-[#556958]">ID: #{(problem.id || problem._id)?.substring(0, 12)}</p>
             </div>
           </div>
 
@@ -303,7 +303,7 @@ const ProblemDetail = () => {
               <div className="flex flex-wrap items-center gap-6 text-xs text-[#556958] font-medium mb-6 pb-6 border-b border-[#e2ded0]">
                 <span className="flex items-center gap-1.5">
                   <MapPin size={14} className="text-[#4a6b4e]" />
-                  {problem.location?.district || 'Ranchi'}, {problem.location?.state || 'Jharkhand'}
+                  {problem.district || problem.location?.district || 'Ranchi'}, {problem.state || problem.location?.state || 'Jharkhand'}
                   {problem.location?.village && ` • ${problem.location.village}`}
                 </span>
                 <span className="flex items-center gap-1.5">

@@ -141,6 +141,19 @@ const UniversityDashboard = () => {
     }
   };
 
+  const normalizeItem = (item: any) => {
+    if (!item || typeof item !== 'object') return item;
+    const probStmt = typeof item.problemStatement === 'object' && item.problemStatement
+      ? { ...item.problemStatement, _id: item.problemStatement._id || item.problemStatement.id, id: item.problemStatement.id || item.problemStatement._id }
+      : (item.problemStatement || item.problem_id);
+    return {
+      ...item,
+      _id: item._id || item.id,
+      id: item.id || item._id,
+      problemStatement: probStmt
+    };
+  };
+
   const fetchAllocatedProblems = async (token: string) => {
     setAllocatedLoading(true);
     try {
@@ -150,7 +163,7 @@ const UniversityDashboard = () => {
       });
       if (res.ok) {
         const data = await res.json();
-        setAllocatedProblems(data.data || []);
+        setAllocatedProblems((data.data || []).map(normalizeItem));
       }
     } catch (e) {
       console.error(e);
@@ -167,7 +180,7 @@ const UniversityDashboard = () => {
       });
       if (res.ok) {
         const data = await res.json();
-        setAcceptedProblems(data.data || []);
+        setAcceptedProblems((data.data || []).map(normalizeItem));
       }
     } catch (e) {
       console.error(e);
@@ -184,7 +197,7 @@ const UniversityDashboard = () => {
       });
       if (res.ok) {
         const data = await res.json();
-        setTeams(data.data || []);
+        setTeams((data.data || []).map(normalizeItem));
       }
     } catch (e) {
       console.error(e);

@@ -3,9 +3,7 @@ const mongoose = require('mongoose');
 const connectDB = async () => {
   const uri = process.env.MONGO_URI;
   if (!uri || uri.includes('<username>') || uri.includes('<password>')) {
-    console.warn('[MongoDB Warning]: MONGO_URI is missing or contains placeholders in backend/.env.');
-    console.warn('[MongoDB Notice]: Database buffering disabled. Set a valid MONGO_URI to enable database operations.');
-    mongoose.set('bufferCommands', false);
+    console.warn('[MongoDB Notice]: MONGO_URI not configured. Operating in SQL/YugabyteDB mode.');
     return;
   }
   try {
@@ -15,8 +13,7 @@ const connectDB = async () => {
     console.log(`[MongoDB Connected]: Host ${conn.connection.host}`);
   } catch (error) {
     console.error(`[MongoDB Connection Error]: ${error.message}`);
-    console.warn('[MongoDB Notice]: Running without active MongoDB connection.');
-    mongoose.set('bufferCommands', false);
+    console.warn('[MongoDB Notice]: Running without active MongoDB connection. Operating in SQL/YugabyteDB mode.');
   }
 };
 

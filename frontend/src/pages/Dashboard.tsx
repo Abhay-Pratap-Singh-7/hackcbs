@@ -251,12 +251,18 @@ const Dashboard = () => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {problems.map((problem) => {
-                  const upvotes = problem.upvotesCount ?? problem.upvotedBy?.length ?? 0;
-                  const firstPhotoUrl = problem.imagesAndMedia?.[0]?.url;
+                  const pId = problem.id || problem._id;
+                  const upvotes = problem.upvotesCount ?? problem.upvotes ?? (Array.isArray(problem.upvotedBy) ? problem.upvotedBy.length : 0);
+                  const firstPhotoUrl = problem.media_urls?.[0] || problem.mediaUrls?.[0] || problem.imagesAndMedia?.[0]?.url;
+                  const severity = problem.ai_analysis?.severity || problem.aiAnalysis?.severity;
+                  const classification = problem.ai_analysis?.problem_classification || problem.aiAnalysis?.problem_classification || problem.category || 'Civic Problem';
+                  const summary = problem.ai_analysis?.summary || problem.aiAnalysis?.summary || problem.description;
+                  const district = problem.district || problem.location?.district || 'Ranchi';
+                  const state = problem.state || problem.location?.state || 'Jharkhand';
 
                   return (
                     <div 
-                      key={problem._id} 
+                      key={pId} 
                       className="bg-white rounded-3xl border border-[#e2ded0] shadow-[0_4px_16px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all flex flex-col justify-between overflow-hidden"
                     >
                       {/* Photo / Header */}
@@ -264,8 +270,8 @@ const Dashboard = () => {
                         <CardEvidenceImage url={firstPhotoUrl} />
 
                         <div className="absolute top-3 left-3">
-                          <span className={`px-2.5 py-0.5 text-[10.5px] font-bold uppercase rounded-full shadow-sm border ${getSeverityBadge(problem.aiAnalysis?.severity)}`}>
-                            {problem.aiAnalysis?.severity || 'NORMAL'}
+                          <span className={`px-2.5 py-0.5 text-[10.5px] font-bold uppercase rounded-full shadow-sm border ${getSeverityBadge(severity)}`}>
+                            {severity || 'NORMAL'}
                           </span>
                         </div>
 
@@ -281,7 +287,7 @@ const Dashboard = () => {
                         <div>
                           <div className="flex items-center gap-2 mb-2">
                             <span className="px-2.5 py-0.5 bg-[#4a6b4e]/10 text-[#2c4230] text-[11px] font-bold rounded-md border border-[#4a6b4e]/20">
-                              {problem.aiAnalysis?.problem_classification || 'Civic Problem'}
+                              {classification}
                             </span>
                           </div>
 
@@ -290,13 +296,13 @@ const Dashboard = () => {
                           </h4>
 
                           <p className="text-xs text-[#556958] line-clamp-2 mb-3 leading-relaxed">
-                            {problem.aiAnalysis?.summary || problem.description}
+                            {summary}
                           </p>
 
                           <div className="flex items-center gap-1.5 text-xs text-[#556958] mb-4">
                             <MapPin size={13} className="text-[#4a6b4e]" />
                             <span className="truncate">
-                              {problem.location?.district || 'Ranchi'}, {problem.location?.state || 'Jharkhand'}
+                              {district}, {state}
                             </span>
                           </div>
                         </div>
@@ -306,7 +312,7 @@ const Dashboard = () => {
                             <ThumbsUp size={13} className="text-[#4a6b4e]" /> {upvotes} Upvotes
                           </span>
                           <Link 
-                            to={`/problem/${problem._id}`}
+                            to={`/problem/${pId}`}
                             className="text-[#2c4230] font-bold flex items-center gap-1 hover:text-[#4a6b4e] transition-colors"
                           >
                             <span>Track Lifecycle</span>

@@ -27,4 +27,18 @@ const otpSchema = new mongoose.Schema(
 
 const Otp = mongoose.model('Otp', otpSchema);
 
-module.exports = Otp;
+const yugabyteService = require('../services/yugabyteDataService');
+
+const OtpProxy = new Proxy(Otp, {
+  get(target, prop) {
+    if (mongoose.connection.readyState === 1) {
+      return target[prop];
+    }
+    if (prop === 'findOne') return (q) => yugabyteService.otps.findOne(q);
+    if (prop === 'create') return (data) => yugabyteService.otps.create(data);
+    if (prop === 'deleteMany') return (q) => yugabyteService.otps.deleteMany(q);
+    return target[prop];
+  }
+});
+
+module.exports = OtpProxy;

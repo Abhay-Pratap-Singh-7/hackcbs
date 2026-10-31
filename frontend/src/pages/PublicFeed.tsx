@@ -106,9 +106,9 @@ const PublicFeed = () => {
         setProblems(rawProblems);
       } else {
         setProblems(prev => {
-          // Avoid duplicate problems by _id
-          const existingIds = new Set(prev.map(p => p._id));
-          const newItems = rawProblems.filter((p: any) => !existingIds.has(p._id));
+          // Avoid duplicate problems by id or _id
+          const existingIds = new Set(prev.map(p => p.id || p._id));
+          const newItems = rawProblems.filter((p: any) => !existingIds.has(p.id || p._id));
           return [...prev, ...newItems];
         });
       }
@@ -124,7 +124,8 @@ const PublicFeed = () => {
       setUpvotedMap(prev => {
         const next = { ...prev };
         rawProblems.forEach((p: any) => {
-          next[p._id] = p.upvotedBy?.includes(user._id || user.id) || false;
+          const pId = p.id || p._id;
+          next[pId] = p.upvotedBy?.includes(user._id || user.id) || false;
         });
         return next;
       });
@@ -132,7 +133,8 @@ const PublicFeed = () => {
       setUpvotesCountMap(prev => {
         const next = { ...prev };
         rawProblems.forEach((p: any) => {
-          next[p._id] = p.upvotesCount ?? (Array.isArray(p.upvotedBy) ? p.upvotedBy.length : 0);
+          const pId = p.id || p._id;
+          next[pId] = p.upvotesCount ?? p.upvotes ?? (Array.isArray(p.upvotedBy) ? p.upvotedBy.length : 0);
         });
         return next;
       });
@@ -318,13 +320,19 @@ const PublicFeed = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProblems.map(problem => {
-                const isUpvoted = !!upvotedMap[problem._id];
-                const upvotes = upvotesCountMap[problem._id] ?? (problem.upvotesCount ?? problem.upvotedBy?.length ?? 0);
-                const firstPhotoUrl = problem.imagesAndMedia?.[0]?.url;
+                const pId = problem.id || problem._id;
+                const isUpvoted = !!upvotedMap[pId];
+                const upvotes = upvotesCountMap[pId] ?? (problem.upvotesCount ?? problem.upvotes ?? problem.upvotedBy?.length ?? 0);
+                const firstPhotoUrl = problem.media_urls?.[0] || problem.mediaUrls?.[0] || problem.imagesAndMedia?.[0]?.url;
+                const severity = problem.ai_analysis?.severity || problem.aiAnalysis?.severity;
+                const classification = problem.ai_analysis?.problem_classification || problem.aiAnalysis?.problem_classification || problem.category || 'Civic Problem';
+                const summary = problem.ai_analysis?.summary || problem.aiAnalysis?.summary || problem.description;
+                const district = problem.district || problem.location?.district || 'Ranchi';
+                const state = problem.state || problem.location?.state || 'Jharkhand';
 
                 return (
                   <div 
-                    key={problem._id} 
+                    key={pId} 
                     className="bg-white rounded-3xl border border-[#e2ded0] shadow-[0_4px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all flex flex-col h-full overflow-hidden"
                   >
                     {/* Card Photo Evidence / Header */}
@@ -333,8 +341,8 @@ const PublicFeed = () => {
                       
                       {/* Top Badges */}
                       <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                        <span className={`px-2.5 py-0.5 text-[10.5px] font-extrabold uppercase rounded-full shadow-sm border ${getSeverityBadge(problem.aiAnalysis?.severity)}`}>
-                          {problem.aiAnalysis?.severity || 'NORMAL'}
+                        <span className={`px-2.5 py-0.5 text-[10.5px] font-extrabold uppercase rounded-full shadow-sm border ${getSeverityBadge(severity)}`}>
+                          {severity || 'NORMAL'}
                         </span>
                       </div>
 
@@ -352,7 +360,7 @@ const PublicFeed = () => {
                         {/* Domain Tag */}
                         <div className="flex items-center gap-2 mb-2.5">
                           <span className="px-2.5 py-0.5 bg-[#4a6b4e]/10 text-[#2c4230] text-[11px] font-bold rounded-md border border-[#4a6b4e]/20">
-                            {problem.aiAnalysis?.problem_classification || 'Civic Problem'}
+                            {classification}
                           </span>
                         </div>
                         
@@ -363,14 +371,14 @@ const PublicFeed = () => {
                         
                         {/* Summary / Description */}
                         <p className="text-xs text-[#556958] line-clamp-3 mb-4 leading-relaxed">
-                          {problem.aiAnalysis?.summary || problem.description}
+                          {summary}
                         </p>
 
                         {/* Location */}
                         <div className="flex items-center gap-1 text-[11.5px] text-[#556958] font-medium mb-4">
                           <MapPin size={13} className="text-[#4a6b4e] shrink-0" />
                           <span className="truncate">
-                            {problem.location?.district || 'Ranchi'}, {problem.location?.state || 'Jharkhand'}
+                            {district}, {state}
                             {problem.location?.village && ` • ${problem.location.village}`}
                           </span>
                         </div>
@@ -380,7 +388,7 @@ const PublicFeed = () => {
                       <div className="pt-3 border-t border-[#e2ded0] flex items-center justify-between mt-auto text-xs">
                         {/* Upvote Button */}
                         <button
-                          onClick={(e) => handleToggleUpvote(problem._id, e)}
+                          onClick={(e) => handleToggleUpvote(pId, e)}
                           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
                             isUpvoted
                               ? 'bg-[#2c4230] text-[#f4f1e1] shadow-sm'
@@ -393,7 +401,7 @@ const PublicFeed = () => {
 
                         {/* Details Link */}
                         <Link 
-                          to={`/problem/${problem._id}`} 
+                          to={`/problem/${pId}`} 
                           className="text-[#2c4230] font-bold text-xs flex items-center gap-1 hover:text-[#4a6b4e] transition-colors"
                         >
                           <span>Track Solution</span>

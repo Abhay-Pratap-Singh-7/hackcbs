@@ -240,15 +240,17 @@ const ExploreMap = () => {
 
               {/* Problem Statement Markers */}
               {filteredProblems.map((p, idx) => {
-                const lat = p.location?.latitude || p.location?.coordinates?.latitude || (23.3441 + (idx % 7 - 3) * 0.04);
-                const lng = p.location?.longitude || p.location?.coordinates?.longitude || (85.3096 + (idx % 5 - 2) * 0.04);
-                const isSelected = selectedProblem?._id === p._id;
+                const lat = p.latitude || p.location?.latitude || p.location?.coordinates?.latitude || (23.3441 + (idx % 7 - 3) * 0.04);
+                const lng = p.longitude || p.location?.longitude || p.location?.coordinates?.longitude || (85.3096 + (idx % 5 - 2) * 0.04);
+                const pId = p.id || p._id;
+                const isSelected = (selectedProblem?.id || selectedProblem?._id) === pId;
+                const severity = p.ai_analysis?.severity || p.aiAnalysis?.severity || 'medium';
 
                 return (
                   <Marker
-                    key={p._id || idx}
+                    key={pId || idx}
                     position={[lat, lng]}
-                    icon={createCustomIcon(p.aiAnalysis?.severity || 'medium', isSelected)}
+                    icon={createCustomIcon(severity, isSelected)}
                     eventHandlers={{
                       click: () => {
                         setSelectedProblem(p);
@@ -334,7 +336,7 @@ const ExploreMap = () => {
             {/* Actions */}
             <div className="flex items-center gap-3">
               <Link
-                to={`/problem/${selectedProblem._id}`}
+                to={`/problem/${selectedProblem.id || selectedProblem._id}`}
                 className="flex-1 py-2.5 bg-[#2c4230] hover:bg-[#1e2d21] text-[#f4f1e1] text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-md transition-all active:scale-95"
               >
                 <span>View Full Tracking & Solution</span>

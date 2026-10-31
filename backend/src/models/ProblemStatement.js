@@ -228,4 +228,19 @@ problemStatementSchema.pre('save', function (next) {
 
 const ProblemStatement = mongoose.model('ProblemStatement', problemStatementSchema);
 
-module.exports = ProblemStatement;
+const yugabyteService = require('../services/yugabyteDataService');
+
+const ProblemStatementProxy = new Proxy(ProblemStatement, {
+  get(target, prop) {
+    if (mongoose.connection.readyState === 1) {
+      return target[prop];
+    }
+    if (prop === 'find') return (q) => yugabyteService.problems.find(q);
+    if (prop === 'findById') return (id) => yugabyteService.problems.findById(id);
+    if (prop === 'create') return (data) => yugabyteService.problems.create(data);
+    if (prop === 'countDocuments') return (q) => yugabyteService.problems.countDocuments(q);
+    return target[prop];
+  }
+});
+
+module.exports = ProblemStatementProxy;

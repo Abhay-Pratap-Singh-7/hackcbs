@@ -169,7 +169,14 @@ const Auth = () => {
         if (accessToken) localStorage.setItem('accessToken', accessToken);
         if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
         const loggedUser = data.data?.user || data.user;
-        if (loggedUser) localStorage.setItem('user', JSON.stringify(loggedUser));
+        if (loggedUser) {
+          const normalizedUser = {
+            ...loggedUser,
+            id: loggedUser.id || loggedUser._id,
+            _id: loggedUser._id || loggedUser.id
+          };
+          localStorage.setItem('user', JSON.stringify(normalizedUser));
+        }
         if (loggedUser?.role === 'INSTITUTE_ADMIN' || loggedUser?.role === 'UNIVERSITY') {
           navigate('/university/dashboard');
         } else if (loggedUser?.role === 'INDUSTRY_PARTNER' || loggedUser?.role === 'INDUSTRY') {

@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import {
@@ -105,6 +105,15 @@ const IndustryDashboard = () => {
     }
   };
 
+  const normalizeItem = (item: any) => {
+    if (!item || typeof item !== 'object') return item;
+    return {
+      ...item,
+      _id: item._id || item.id,
+      id: item.id || item._id
+    };
+  };
+
   const fetchAllocatedSolutions = async (token: string) => {
     setAllocatedLoading(true);
     try {
@@ -113,7 +122,7 @@ const IndustryDashboard = () => {
       });
       if (res.ok) {
         const data = await res.json();
-        setAllocatedSolutions(data.data || []);
+        setAllocatedSolutions((data.data || []).map(normalizeItem));
       }
     } catch (e) {
       console.error(e);
@@ -130,7 +139,7 @@ const IndustryDashboard = () => {
       });
       if (res.ok) {
         const data = await res.json();
-        setAcceptedSolutions(data.data || []);
+        setAcceptedSolutions((data.data || []).map(normalizeItem));
       }
     } catch (e) {
       console.error(e);
