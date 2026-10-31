@@ -23,8 +23,8 @@ const Sidebar = () => {
     { name: 'Explore Map', path: '/explore', icon: <MapPin size={20} /> },
     { name: 'Submit Problem', path: '/submit-problem', icon: <PlusCircle size={20} /> },
     { name: 'Public Feed', path: '/feed', icon: <Globe size={20} /> },
-    { name: 'Bulk Ingest', path: '/bulk-ingest', icon: <UploadCloud size={20} /> },
   ];
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>

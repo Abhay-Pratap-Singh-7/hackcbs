@@ -178,7 +178,7 @@ const ProblemSubmission = () => {
         },
         imagesAndMedia: uploadedMedia,
         supportingInfo: {
-          existingInterventions
+          existingInterventions: ''
         }
       };
 

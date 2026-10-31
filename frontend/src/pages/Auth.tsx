@@ -162,8 +162,16 @@ const Auth = () => {
         const refreshToken = data.data?.tokens?.refreshToken || data.refreshToken || data.data?.refreshToken;
         if (accessToken) localStorage.setItem('accessToken', accessToken);
         if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
-        if (data.data?.user || data.user) localStorage.setItem('user', JSON.stringify(data.data?.user || data.user));
-        navigate('/dashboard');
+        if (userObj) {
+          localStorage.setItem('user', JSON.stringify(userObj));
+          if (userObj.role === 'INSTITUTE_ADMIN') {
+            navigate('/university/dashboard');
+          } else {
+            navigate('/dashboard');
+          }
+        } else {
+          navigate('/dashboard');
+        }
       } catch (err: any) {
         showToast(err.message || 'An error occurred', 'error');
       } finally {
@@ -508,6 +516,10 @@ const Auth = () => {
             <div className="input-pill">
               <input type="text" placeholder="Institution Name" required onChange={e => handleProfileChange('institutionName', e.target.value)} />
               <div className="input-icon-right"><Building size={17} /></div>
+            </div>
+            <div className="input-pill">
+              <input type="email" placeholder="Official Institute Email" required onChange={e => handleProfileChange('officialInstituteEmail', e.target.value)} />
+              <div className="input-icon-right"><Mail size={17} /></div>
             </div>
             <div className="input-pill">
               <input type="text" placeholder="AISHE Code" required onChange={e => handleProfileChange('aisheCode', e.target.value)} />
