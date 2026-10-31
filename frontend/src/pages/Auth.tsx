@@ -1,33 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Auth.css';
-import { 
-  ChevronDown, 
-  Lock, 
-  Check, 
-  User, 
-  MapPin, 
-  Map, 
-  Hash, 
-  Users, 
-  Building, 
-  UserCheck, 
-  Briefcase, 
-  Layers, 
-  Home, 
-  Landmark, 
-  FileCode, 
-  Award, 
-  Shield, 
-  Mail, 
-  BadgeCheck, 
-  Eye, 
-  EyeOff, 
-  Globe, 
-  Calendar,
-  AlertCircle,
-  AlertTriangle
-} from 'lucide-react';
+import { ChevronDown, Phone, Lock, Check, User, MapPin, Map, Hash, Users, Building, UserCheck, Briefcase, Layers, Home, Landmark, FileCode, Award, Shield, Mail, BadgeCheck, Eye, EyeOff, Globe, Calendar } from 'lucide-react';
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -47,24 +21,14 @@ const Auth = () => {
     if (formColumnRef.current) {
       formColumnRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    setFormError('');
     setView(targetView);
     navigate(`/${targetView}`);
   };
 
-  const [toast, setToast] = useState<{ show: boolean; msg: string; type: 'success' | 'error' | 'warning' }>({
-    show: false,
-    msg: '',
-    type: 'success'
-  });
-  const [formError, setFormError] = useState('');
-
-  const showToast = (msg: string, type: 'success' | 'error' | 'warning' = 'error') => {
-    setToast({ show: true, msg, type });
-    if (type === 'error' || type === 'warning') {
-      setFormError(msg);
-    }
-    setTimeout(() => setToast({ show: false, msg: '', type: 'success' }), 4000);
+  const [toast, setToast] = useState({ show: false, msg: '' });
+  const showToast = (msg: string) => {
+    setToast({ show: true, msg });
+    setTimeout(() => setToast({ show: false, msg: '' }), 3000);
   };
 
   // Login State
@@ -89,9 +53,8 @@ const Auth = () => {
   // Profile Details State
   const [profileDetails, setProfileDetails] = useState<any>({});
 
-  const handleProfileChange = (key: string, value: any) => {
+  const handleProfileChange = (key: string, value: string) => {
     setProfileDetails((prev: any) => ({ ...prev, [key]: value }));
-    setFormError('');
   };
 
   // Timers
@@ -111,15 +74,14 @@ const Auth = () => {
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormError('');
 
     if (loginStep === 1) {
       if (!loginEmail.trim() || !/\S+@\S+\.\S+/.test(loginEmail)) {
-        showToast('Please enter a valid email address', 'warning');
+        showToast('Please enter a valid email address');
         return;
       }
       if (!loginPassword.trim()) {
-        showToast('Please enter your password', 'warning');
+        showToast('Please enter your password');
         return;
       }
 
@@ -133,17 +95,17 @@ const Auth = () => {
         const data = await response.json();
         if (!response.ok) throw new Error(data.message || 'Login failed');
         
-        showToast(data.message || 'OTP Sent!', 'success');
+        showToast(data.message || 'OTP Sent!');
         setLoginStep(2);
         setLoginResendTimer(60);
       } catch (err: any) {
-        showToast(err.message || 'An error occurred', 'error');
+        showToast(err.message || 'An error occurred');
       } finally {
         setLoading(false);
       }
     } else {
       if (!loginOtp || loginOtp.length !== 6 || !/^\d+$/.test(loginOtp)) {
-        showToast('Please enter a valid 6-digit OTP', 'warning');
+        showToast('Please enter a valid 6-digit OTP');
         return;
       }
 
@@ -157,22 +119,15 @@ const Auth = () => {
         const data = await response.json();
         if (!response.ok) throw new Error(data.message || 'Verification failed');
         
-        showToast('Login successful!', 'success');
+        showToast('Login successful!');
         const accessToken = data.data?.tokens?.accessToken || data.accessToken || data.data?.accessToken;
         const refreshToken = data.data?.tokens?.refreshToken || data.refreshToken || data.data?.refreshToken;
         if (accessToken) localStorage.setItem('accessToken', accessToken);
         if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
-        const loggedUser = data.data?.user || data.user;
-        if (loggedUser) localStorage.setItem('user', JSON.stringify(loggedUser));
-        if (loggedUser?.role === 'INSTITUTE_ADMIN' || loggedUser?.role === 'UNIVERSITY') {
-          navigate('/university/dashboard');
-        } else if (loggedUser?.role === 'INDUSTRY_PARTNER' || loggedUser?.role === 'INDUSTRY') {
-          navigate('/industry/dashboard');
-        } else {
-          navigate('/dashboard');
-        }
+        if (data.data?.user || data.user) localStorage.setItem('user', JSON.stringify(data.data?.user || data.user));
+        navigate('/dashboard');
       } catch (err: any) {
-        showToast(err.message || 'An error occurred', 'error');
+        showToast(err.message || 'An error occurred');
       } finally {
         setLoading(false);
       }
@@ -181,87 +136,32 @@ const Auth = () => {
 
   const handleSignUpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormError('');
 
     if (signupStep === 1) {
       if (!signupRole) {
-        showToast('Please select your role', 'warning');
+        showToast('Please select your role');
         return;
       }
       if (!signupEmail.trim() || !/\S+@\S+\.\S+/.test(signupEmail)) {
-        showToast('Please enter a valid email address', 'warning');
+        showToast('Please enter a valid email address');
         return;
       }
 
       const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$/;
       if (!passwordRegex.test(password)) {
-        showToast('Password must have 8+ chars, 1 uppercase, 1 lowercase, 1 number, and 1 special char.', 'warning');
+        showToast('Password must have 8+ chars, 1 uppercase, 1 lowercase, 1 number, and 1 special char.');
         return;
       }
 
       if (password !== confirmPassword) {
-        showToast('Passwords do not match', 'warning');
+        showToast('Passwords do not match');
         return;
-      }
-
-      // Format & sanitize profile details for backend
-      const formattedDetails = { ...profileDetails };
-
-      // Helper to format URI
-      const formatUri = (uri?: string) => {
-        if (!uri || !uri.trim()) return undefined;
-        const trimmed = uri.trim();
-        if (!/^https?:\/\//i.test(trimmed)) {
-          return `https://${trimmed}`;
-        }
-        return trimmed;
-      };
-
-      if (signupRole === 'INSTITUTE_ADMIN') {
-        if (!formattedDetails.officialInstituteEmail) {
-          formattedDetails.officialInstituteEmail = signupEmail;
-        }
-        if (formattedDetails.website) {
-          formattedDetails.website = formatUri(formattedDetails.website);
-        }
-      } else if (signupRole === 'FACULTY_MENTOR') {
-        if (!formattedDetails.officialInstitutionalEmail) {
-          formattedDetails.officialInstitutionalEmail = signupEmail;
-        }
-      } else if (signupRole === 'GOVT_OFFICER') {
-        if (!formattedDetails.officialGovEmail) {
-          formattedDetails.officialGovEmail = signupEmail;
-        }
-      } else if (signupRole === 'INDUSTRY_PARTNER') {
-        if (!formattedDetails.officialWorkEmail) {
-          formattedDetails.officialWorkEmail = signupEmail;
-        }
-        if (formattedDetails.companyWebsite) {
-          formattedDetails.companyWebsite = formatUri(formattedDetails.companyWebsite);
-        }
-        if (formattedDetails.panNumber) {
-          formattedDetails.panNumber = formattedDetails.panNumber.toUpperCase().trim();
-        }
-      } else if (signupRole === 'STUDENT_INNOVATOR') {
-        if (formattedDetails.graduationYear) {
-          formattedDetails.graduationYear = parseInt(formattedDetails.graduationYear, 10);
-        }
       }
 
       setLoading(true);
       try {
         // Derive name from profile details
-        const backendName = 
-          formattedDetails.fullName || 
-          formattedDetails.authorizedContactPersonName ||
-          formattedDetails.authorizedRepresentativeName ||
-          formattedDetails.authorizedOfficialName ||
-          formattedDetails.primarySpocName ||
-          formattedDetails.organizationName || 
-          formattedDetails.institutionName || 
-          formattedDetails.companyName || 
-          formattedDetails.localBodyName || 
-          "New User";
+        const backendName = profileDetails.fullName || profileDetails.organizationName || profileDetails.institutionName || profileDetails.companyName || profileDetails.localBodyName || "New User";
 
         const payload = {
           name: backendName,
@@ -269,35 +169,27 @@ const Auth = () => {
           password,
           confirmPassword,
           role: signupRole,
-          profileDetails: formattedDetails
+          profileDetails
         };
-
         const response = await fetch('https://sih-26-jarr.onrender.com/api/auth/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         });
         const data = await response.json();
-        if (!response.ok) {
-          // Format validation message
-          let message = data.message || 'Signup failed';
-          if (data.errors && Array.isArray(data.errors)) {
-            message = data.errors.map((err: any) => err.message || err).join(', ');
-          }
-          throw new Error(message);
-        }
+        if (!response.ok) throw new Error(data.message || 'Signup failed');
         
-        showToast(data.message || 'OTP sent to email!', 'success');
+        showToast(data.message || 'OTP sent to email!');
         setSignupStep(2);
         setSignupResendTimer(60);
       } catch (err: any) {
-        showToast(err.message || 'An error occurred', 'error');
+        showToast(err.message || 'An error occurred');
       } finally {
         setLoading(false);
       }
     } else {
       if (!loginOtp || loginOtp.length !== 6 || !/^\d+$/.test(loginOtp)) {
-        showToast('Please enter a valid 6-digit OTP', 'warning');
+        showToast('Please enter a valid 6-digit OTP');
         return;
       }
 
@@ -311,11 +203,11 @@ const Auth = () => {
         const data = await response.json();
         if (!response.ok) throw new Error(data.message || 'Verification failed');
         
-        showToast('Account verified successfully!', 'success');
+        showToast('Account verified successfully!');
         switchView('login');
         setSignupStep(1);
       } catch (err: any) {
-        showToast(err.message || 'An error occurred', 'error');
+        showToast(err.message || 'An error occurred');
       } finally {
         setLoading(false);
       }
@@ -332,10 +224,10 @@ const Auth = () => {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || 'Failed to resend');
-      showToast('OTP Resent!', 'success');
+      showToast('OTP Resent!');
       setSignupResendTimer(60);
     } catch (err: any) {
-      showToast(err.message || 'Error resending OTP', 'error');
+      showToast(err.message || 'Error resending OTP');
     }
   };
 
@@ -349,10 +241,10 @@ const Auth = () => {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || 'Failed to resend');
-      showToast('OTP Resent!', 'success');
+      showToast('OTP Resent!');
       setLoginResendTimer(60);
     } catch (err: any) {
-      showToast(err.message || 'Error resending OTP', 'error');
+      showToast(err.message || 'Error resending OTP');
     }
   };
 
@@ -361,7 +253,7 @@ const Auth = () => {
       case 'INDIVIDUAL_CITIZEN':
         return (
           <>
-            <div className="role-section-tag"><User size={14} /> Individual Citizen Details</div>
+            <div className="role-section-tag"><User size={14} /> Citizen Details</div>
             <div className="input-pill">
               <input type="text" placeholder="Full Name" required onChange={e => handleProfileChange('fullName', e.target.value)} />
               <div className="input-icon-right"><User size={17} /></div>
@@ -371,11 +263,11 @@ const Auth = () => {
               <div className="input-icon-right"><MapPin size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="State (e.g. Jharkhand)" required onChange={e => handleProfileChange('state', e.target.value)} />
+              <input type="text" placeholder="State" required onChange={e => handleProfileChange('state', e.target.value)} />
               <div className="input-icon-right"><Map size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="Pincode (6 digits)" maxLength={6} pattern="[0-9]{6}" required onChange={e => handleProfileChange('pincode', e.target.value)} />
+              <input type="text" placeholder="Pincode" required onChange={e => handleProfileChange('pincode', e.target.value)} />
               <div className="input-icon-right"><Hash size={17} /></div>
             </div>
           </>
@@ -397,7 +289,7 @@ const Auth = () => {
               <div className="input-icon-right"><Briefcase size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="Focus Area / Domains (e.g. Water, Sanitation)" required onChange={e => handleProfileChange('focusAreas', e.target.value)} />
+              <input type="text" placeholder="Focus Area / Domains" required onChange={e => handleProfileChange('focusAreas', e.target.value)} />
               <div className="input-icon-right"><Layers size={17} /></div>
             </div>
             <div className="input-pill">
@@ -413,12 +305,12 @@ const Auth = () => {
               <div className="input-icon-right"><Map size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="Pincode (6 digits)" maxLength={6} pattern="[0-9]{6}" required onChange={e => handleProfileChange('pincode', e.target.value)} />
+              <input type="text" placeholder="Pincode" required onChange={e => handleProfileChange('pincode', e.target.value)} />
               <div className="input-icon-right"><Hash size={17} /></div>
             </div>
           </>
         );
-      case 'LOCAL_BODY':
+      case 'LOCAL_BODY_PRI':
         return (
           <>
             <div className="role-section-tag"><Landmark size={14} /> Local Body / PRI / ULB</div>
@@ -444,27 +336,16 @@ const Auth = () => {
               <input type="text" placeholder="Authorized Official Name" required onChange={e => handleProfileChange('authorizedOfficialName', e.target.value)} />
               <div className="input-icon-right"><UserCheck size={17} /></div>
             </div>
-            <div className="input-pill role-highlight">
-              <select required onChange={e => handleProfileChange('officialDesignation', e.target.value)} defaultValue="">
-                <option value="" disabled>Select Official Designation</option>
-                <option value="Sarpanch">Sarpanch</option>
-                <option value="Ward Officer">Ward Officer</option>
-                <option value="Commissioner">Commissioner</option>
-                <option value="Block Development Officer">Block Development Officer</option>
-                <option value="Other">Other</option>
-              </select>
-              <div className="input-icon-right"><ChevronDown size={17} /></div>
+            <div className="input-pill">
+              <input type="text" placeholder="Official Designation" required onChange={e => handleProfileChange('officialDesignation', e.target.value)} />
+              <div className="input-icon-right"><Briefcase size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="District" required onChange={e => handleProfileChange('district', e.target.value)} />
-              <div className="input-icon-right"><MapPin size={17} /></div>
-            </div>
-            <div className="input-pill">
-              <input type="text" placeholder="State" required onChange={e => handleProfileChange('state', e.target.value)} />
+              <input type="text" placeholder="District & State" required onChange={e => handleProfileChange('districtState', e.target.value)} />
               <div className="input-icon-right"><Map size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="Pincode (6 digits)" maxLength={6} pattern="[0-9]{6}" required onChange={e => handleProfileChange('pincode', e.target.value)} />
+              <input type="text" placeholder="Pincode" required onChange={e => handleProfileChange('pincode', e.target.value)} />
               <div className="input-icon-right"><Hash size={17} /></div>
             </div>
           </>
@@ -476,15 +357,6 @@ const Auth = () => {
             <div className="input-pill">
               <input type="text" placeholder="Full Name" required onChange={e => handleProfileChange('fullName', e.target.value)} />
               <div className="input-icon-right"><User size={17} /></div>
-            </div>
-            <div className="input-pill">
-              <input 
-                type="email" 
-                placeholder="Official Gov Email (@gov.in or @nic.in)" 
-                required 
-                onChange={e => handleProfileChange('officialGovEmail', e.target.value)} 
-              />
-              <div className="input-icon-right"><Mail size={17} /></div>
             </div>
             <div className="input-pill">
               <input type="text" placeholder="Employee ID / Cadre Code" required onChange={e => handleProfileChange('employeeId', e.target.value)} />
@@ -499,12 +371,8 @@ const Auth = () => {
               <div className="input-icon-right"><Briefcase size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="Jurisdiction District" required onChange={e => handleProfileChange('jurisdictionDistrict', e.target.value)} />
+              <input type="text" placeholder="Jurisdiction State / District" required onChange={e => handleProfileChange('jurisdiction', e.target.value)} />
               <div className="input-icon-right"><MapPin size={17} /></div>
-            </div>
-            <div className="input-pill">
-              <input type="text" placeholder="Jurisdiction State" required onChange={e => handleProfileChange('jurisdictionState', e.target.value)} />
-              <div className="input-icon-right"><Map size={17} /></div>
             </div>
           </>
         );
@@ -515,10 +383,6 @@ const Auth = () => {
             <div className="input-pill">
               <input type="text" placeholder="Institution Name" required onChange={e => handleProfileChange('institutionName', e.target.value)} />
               <div className="input-icon-right"><Building size={17} /></div>
-            </div>
-            <div className="input-pill">
-              <input type="email" placeholder="Official Institute Email" required onChange={e => handleProfileChange('officialInstituteEmail', e.target.value)} />
-              <div className="input-icon-right"><Mail size={17} /></div>
             </div>
             <div className="input-pill">
               <input type="text" placeholder="AISHE Code" required onChange={e => handleProfileChange('aisheCode', e.target.value)} />
@@ -543,36 +407,15 @@ const Auth = () => {
               <div className="input-icon-right"><Briefcase size={17} /></div>
             </div>
             <div className="input-pill">
-              <input 
-                type="email" 
-                placeholder="Official Institute Email" 
-                required 
-                onChange={e => handleProfileChange('officialInstituteEmail', e.target.value)} 
-              />
-              <div className="input-icon-right"><Mail size={17} /></div>
-            </div>
-            <div className="input-pill">
-              <input 
-                type="text" 
-                placeholder="Institute Website (e.g. https://bitmesra.ac.in)" 
-                onChange={e => handleProfileChange('website', e.target.value)} 
-              />
+              <input type="text" placeholder="Institute Website" required onChange={e => handleProfileChange('website', e.target.value)} />
               <div className="input-icon-right"><Globe size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="Campus City" required onChange={e => handleProfileChange('campusCity', e.target.value)} />
-              <div className="input-icon-right"><Building size={17} /></div>
-            </div>
-            <div className="input-pill">
-              <input type="text" placeholder="District" required onChange={e => handleProfileChange('district', e.target.value)} />
+              <input type="text" placeholder="Campus City, District & State" required onChange={e => handleProfileChange('campusLocation', e.target.value)} />
               <div className="input-icon-right"><MapPin size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="State" required onChange={e => handleProfileChange('state', e.target.value)} />
-              <div className="input-icon-right"><Map size={17} /></div>
-            </div>
-            <div className="input-pill">
-              <input type="text" placeholder="Pincode (6 digits)" maxLength={6} pattern="[0-9]{6}" required onChange={e => handleProfileChange('pincode', e.target.value)} />
+              <input type="text" placeholder="Pincode" required onChange={e => handleProfileChange('pincode', e.target.value)} />
               <div className="input-icon-right"><Hash size={17} /></div>
             </div>
           </>
@@ -594,10 +437,6 @@ const Auth = () => {
               <div className="input-icon-right"><Building size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="AISHE Code (Optional)" onChange={e => handleProfileChange('aisheCode', e.target.value)} />
-              <div className="input-icon-right"><FileCode size={17} /></div>
-            </div>
-            <div className="input-pill">
               <input type="text" placeholder="Department" required onChange={e => handleProfileChange('department', e.target.value)} />
               <div className="input-icon-right"><Layers size={17} /></div>
             </div>
@@ -606,16 +445,7 @@ const Auth = () => {
               <div className="input-icon-right"><Briefcase size={17} /></div>
             </div>
             <div className="input-pill">
-              <input 
-                type="email" 
-                placeholder="Official Institutional Email" 
-                required 
-                onChange={e => handleProfileChange('officialInstitutionalEmail', e.target.value)} 
-              />
-              <div className="input-icon-right"><Mail size={17} /></div>
-            </div>
-            <div className="input-pill">
-              <input type="text" placeholder="Research Domains & Areas of Expertise" required onChange={e => handleProfileChange('researchDomains', e.target.value)} />
+              <input type="text" placeholder="Areas of Expertise" required onChange={e => handleProfileChange('researchDomains', e.target.value)} />
               <div className="input-icon-right"><Award size={17} /></div>
             </div>
           </>
@@ -637,24 +467,19 @@ const Auth = () => {
               <div className="input-icon-right"><Building size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="Current Degree Program (e.g. B.Tech)" required onChange={e => handleProfileChange('currentDegreeProgram', e.target.value)} />
+              <input type="text" placeholder="Current Degree Program" required onChange={e => handleProfileChange('currentDegreeProgram', e.target.value)} />
               <div className="input-icon-right"><Layers size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="Branch / Specialization (e.g. Civil Engg)" required onChange={e => handleProfileChange('branchSpecialization', e.target.value)} />
+              <input type="text" placeholder="Branch / Specialization" required onChange={e => handleProfileChange('branchSpecialization', e.target.value)} />
               <div className="input-icon-right"><Layers size={17} /></div>
             </div>
-            <div className="input-pill role-highlight">
-              <select required onChange={e => handleProfileChange('graduationYear', e.target.value)} defaultValue="">
-                <option value="" disabled>Select Graduation Year</option>
-                {Array.from({ length: 16 }, (_, i) => 2020 + i).map(year => (
-                  <option key={year} value={year}>{year}</option>
-                ))}
-              </select>
+            <div className="input-pill">
+              <input type="text" placeholder="Graduation Year" required onChange={e => handleProfileChange('graduationYear', e.target.value)} />
               <div className="input-icon-right"><Calendar size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="Technical Skills (e.g. IoT, AI, Robotics)" required onChange={e => handleProfileChange('technicalSkills', e.target.value)} />
+              <input type="text" placeholder="Technical Skills" required onChange={e => handleProfileChange('technicalSkills', e.target.value)} />
               <div className="input-icon-right"><Award size={17} /></div>
             </div>
           </>
@@ -668,15 +493,15 @@ const Auth = () => {
               <div className="input-icon-right"><Building size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="Corporate Identification Number (CIN)" required onChange={e => handleProfileChange('cin', e.target.value)} />
+              <input type="text" placeholder="CIN" required onChange={e => handleProfileChange('cin', e.target.value)} />
               <div className="input-icon-right"><FileCode size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="PAN Number (10 alphanumeric)" maxLength={10} required onChange={e => handleProfileChange('panNumber', e.target.value.toUpperCase())} />
+              <input type="text" placeholder="PAN Number" required onChange={e => handleProfileChange('panNumber', e.target.value)} />
               <div className="input-icon-right"><Hash size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="Industry Sector (e.g. Mining, IT, Energy)" required onChange={e => handleProfileChange('industrySector', e.target.value)} />
+              <input type="text" placeholder="Industry Sector" required onChange={e => handleProfileChange('industrySector', e.target.value)} />
               <div className="input-icon-right"><Layers size={17} /></div>
             </div>
             <div className="input-pill">
@@ -688,28 +513,11 @@ const Auth = () => {
               <div className="input-icon-right"><Briefcase size={17} /></div>
             </div>
             <div className="input-pill">
-              <input 
-                type="email" 
-                placeholder="Official Work Email" 
-                required 
-                onChange={e => handleProfileChange('officialWorkEmail', e.target.value)} 
-              />
-              <div className="input-icon-right"><Mail size={17} /></div>
-            </div>
-            <div className="input-pill">
-              <input 
-                type="text" 
-                placeholder="Company Website URL (e.g. https://company.com)" 
-                onChange={e => handleProfileChange('companyWebsite', e.target.value)} 
-              />
+              <input type="text" placeholder="Company Website URL" required onChange={e => handleProfileChange('companyWebsite', e.target.value)} />
               <div className="input-icon-right"><Globe size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="Headquarters City" required onChange={e => handleProfileChange('headquartersCity', e.target.value)} />
-              <div className="input-icon-right"><Building size={17} /></div>
-            </div>
-            <div className="input-pill">
-              <input type="text" placeholder="Headquarters State" required onChange={e => handleProfileChange('headquartersState', e.target.value)} />
+              <input type="text" placeholder="Headquarters City & State" required onChange={e => handleProfileChange('headquarters', e.target.value)} />
               <div className="input-icon-right"><MapPin size={17} /></div>
             </div>
           </>
@@ -722,7 +530,6 @@ const Auth = () => {
   return (
     <div className="auth-page-container">
       <video className="bg-video" autoPlay muted loop playsInline>
-        <source src="/assets/bg.webm" type="video/webm" />
         <source src="/assets/bg.mp4" type="video/mp4" />
       </video>
       <div className="bg-overlay"></div>
@@ -730,7 +537,7 @@ const Auth = () => {
       <div className="auth-card">
         <div className="form-column" id="formColumn" ref={formColumnRef}>
           <div className="form-header">
-            <img src="/assets/logo.webp" alt="Jharkhand Samadhan" className="brand-logo" />
+            <img src="/assets/logo.png" alt="Jharkhand Samadhan" className="brand-logo" />
             <p>Civic Innovation & Grievance Resolution Platform</p>
           </div>
 
@@ -816,17 +623,13 @@ const Auth = () => {
                     <div className="input-pill role-highlight">
                       <select 
                         value={signupRole}
-                        onChange={(e) => {
-                          setSignupRole(e.target.value);
-                          setProfileDetails({});
-                          setFormError('');
-                        }} 
+                        onChange={(e) => setSignupRole(e.target.value)} 
                         required
                       >
                         <option value="" disabled>Select Your Role</option>
                         <option value="INDIVIDUAL_CITIZEN">A. Individual Citizen</option>
                         <option value="NGO_COMMUNITY">B. Community / NGO / Self-Help Group</option>
-                        <option value="LOCAL_BODY">C. Local Body / PRI / ULB</option>
+                        <option value="LOCAL_BODY_PRI">C. Local Body / PRI / ULB</option>
                         <option value="GOVT_OFFICER">D. Government Officer / Department</option>
                         <option value="INSTITUTE_ADMIN">E. University / Institute Administrator</option>
                         <option value="FACULTY_MENTOR">F. Faculty Mentor</option>
@@ -874,6 +677,7 @@ const Auth = () => {
                       </div>
                     )}
 
+
                     <div className="input-pill">
                       <input 
                         type={showConfirmPassword ? "text" : "password"} 
@@ -919,13 +723,6 @@ const Auth = () => {
                   </>
                 )}
 
-                {formError && (
-                  <div className="error-banner">
-                    <AlertCircle size={16} />
-                    <span>{formError}</span>
-                  </div>
-                )}
-
                 <button type="submit" className="btn-submit" disabled={loading}>
                   <span>{loading ? 'Processing...' : (signupStep === 1 ? 'Create Account' : 'Verify & Create Account')}</span>
                 </button>
@@ -940,18 +737,12 @@ const Auth = () => {
         </div>
 
         <div className="image-column">
-          <img src="/assets/RightImage.webp" alt="Jharkhand Samadhan Campus" className="hero-img" />
+          <img src="/assets/RightImage.png" alt="Jharkhand Samadhan Campus" className="hero-img" />
         </div>
       </div>
 
-      <div className={`toast ${toast.show ? 'show' : ''} ${toast.type}`}>
-        {toast.type === 'success' ? (
-          <Check color="#10b981" size={18} />
-        ) : toast.type === 'warning' ? (
-          <AlertTriangle color="#f59e0b" size={18} />
-        ) : (
-          <AlertCircle color="#ef4444" size={18} />
-        )}
+      <div className={`toast ${toast.show ? 'show' : ''}`}>
+        <Check color="#10b981" size={18} />
         <span>{toast.msg}</span>
       </div>
     </div>
