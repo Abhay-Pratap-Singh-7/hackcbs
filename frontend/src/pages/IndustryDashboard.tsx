@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import {
@@ -607,7 +607,7 @@ const IndustryDashboard = () => {
                 onClick={() => setViewingProblemDetails(null)}
                 className="p-1 text-[#7d8c7c] hover:text-[#2c4230] rounded-full"
               >
-                ✕
+                Γ£ò
               </button>
             </div>
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LogOut, LayoutDashboard, PlusCircle, Globe, Sprout, Menu, X, UploadCloud, MapPin } from 'lucide-react';
+import { LogOut, LayoutDashboard, PlusCircle, Globe, Sprout, Menu, X, MapPin } from 'lucide-react';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -29,7 +29,6 @@ const Sidebar = () => {
     { name: 'Submit Problem', path: '/submit-problem', icon: <PlusCircle size={20} /> },
     { name: 'Public Feed', path: '/feed', icon: <Globe size={20} /> },
   ];
-  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>

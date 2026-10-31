@@ -420,7 +420,7 @@ const PublicFeed = () => {
               <span>✓ You have viewed all community challenges in this category</span>
             </div>
           )}
-        </section>
+        </div>
       </main>
     </div>
   );
