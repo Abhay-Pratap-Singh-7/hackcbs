@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LogOut, LayoutDashboard, PlusCircle, Globe, UploadCloud, Trees, Sprout } from 'lucide-react';
+import { LogOut, LayoutDashboard, PlusCircle, Globe, UploadCloud, Sprout } from 'lucide-react';
 
 const Sidebar = () => {
   const location = useLocation();

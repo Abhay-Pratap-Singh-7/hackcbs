@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -40,7 +40,7 @@ const ProblemSubmission = () => {
 
   // Form State
   const [description, setDescription] = useState('');
-  const [existingInterventions, setExistingInterventions] = useState('');
+  const [existingInterventions] = useState('');
   const [mediaFiles, setMediaFiles] = useState<File[]>([]);
   
   // Location State

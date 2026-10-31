@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Auth.css';
-import { ChevronDown, Phone, Lock, Check, User, MapPin, Map, Hash, Users, Building, UserCheck, Briefcase, Layers, Home, Landmark, FileCode, Award, Shield, Mail, BadgeCheck, Eye, EyeOff, Globe, Calendar } from 'lucide-react';
+import { ChevronDown, Lock, Check, User, MapPin, Map, Hash, Users, Building, UserCheck, Briefcase, Layers, Home, Landmark, FileCode, Award, Shield, Mail, BadgeCheck, Eye, EyeOff, Globe, Calendar } from 'lucide-react';
 
 const Auth = () => {
   const navigate = useNavigate();
