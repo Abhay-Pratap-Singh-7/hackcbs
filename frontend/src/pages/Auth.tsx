@@ -517,6 +517,10 @@ const Auth = () => {
               <div className="input-icon-right"><Building size={17} /></div>
             </div>
             <div className="input-pill">
+              <input type="email" placeholder="Official Institute Email" required onChange={e => handleProfileChange('officialInstituteEmail', e.target.value)} />
+              <div className="input-icon-right"><Mail size={17} /></div>
+            </div>
+            <div className="input-pill">
               <input type="text" placeholder="AISHE Code" required onChange={e => handleProfileChange('aisheCode', e.target.value)} />
               <div className="input-icon-right"><FileCode size={17} /></div>
             </div>

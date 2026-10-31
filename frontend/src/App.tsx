@@ -28,7 +28,7 @@ function App() {
         <Route path="/submit-problem" element={<ProblemSubmission />} />
         <Route path="/feed" element={<PublicFeed />} />
         <Route path="/problem/:id" element={<ProblemDetail />} />
-        <Route path="/bulk-ingest" element={<BulkIngest />} />
+        <Route path="/university/dashboard" element={<UniversityDashboard />} />
       </Routes>
     </Router>
   );
