@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, Play } from 'lucide-react';
 
 const TOTAL_FRAMES = 366;
 const MAX_VIRTUAL_SCROLL = 7500;
@@ -8,11 +8,15 @@ const MAX_VIRTUAL_SCROLL = 7500;
 const Landing = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [scrollFraction, setScrollFraction] = useState(0);
+  const [isAutoScrolling, setIsAutoScrolling] = useState(false);
+  const startAutoScrollRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     const frames: HTMLImageElement[] = [];
     let currentFrameIndex = 0;
     let animId: number | null = null;
+    let autoScrollAnimId: number | null = null;
+    let isAutoScrollActive = false;
     let virtualScroll = 0;
     let touchStartY = 0;
 
@@ -62,14 +66,7 @@ const Landing = () => {
       const fraction = Math.max(0, Math.min(1, virtualScroll / MAX_VIRTUAL_SCROLL));
       setScrollFraction(fraction);
 
-      // Frame progression:
-      // 0.00 -> 0.22: Frames 0..183 (Part 1)
-      // 0.22 -> 0.26: Frames 184..191 (Cloud 1 slides in 8 frames early)
-      // 0.26 -> 0.40: Hold at Frame 191 (Cloud 1 intermission)
-      // 0.40 -> 0.44: Frames 192..215 (Video moves actively while Cloud 1 slides out)
-      // 0.44 -> 0.60: Frames 216..357 (Part 2)
-      // 0.60 -> 0.64: Frames 358..365 (Cloud 2 slides in 8 frames early before the end)
-      // 0.64 -> 1.00: Hold at Frame 365 with green footer underneath
+      // Frame progression
       let targetFrame = 0;
       if (fraction < 0.22) {
         targetFrame = Math.floor((fraction / 0.22) * 183);
@@ -100,8 +97,38 @@ const Landing = () => {
       });
     };
 
+    const stopAutoScroll = () => {
+      if (isAutoScrollActive) {
+        isAutoScrollActive = false;
+        setIsAutoScrolling(false);
+        if (autoScrollAnimId) cancelAnimationFrame(autoScrollAnimId);
+      }
+    };
+
+    const stepAutoScroll = () => {
+      if (!isAutoScrollActive) return;
+      if (virtualScroll >= MAX_VIRTUAL_SCROLL) {
+        stopAutoScroll();
+        return;
+      }
+      virtualScroll = Math.min(MAX_VIRTUAL_SCROLL, virtualScroll + 4.5);
+      updateProgress();
+      autoScrollAnimId = requestAnimationFrame(stepAutoScroll);
+    };
+
+    startAutoScrollRef.current = () => {
+      if (virtualScroll >= MAX_VIRTUAL_SCROLL) {
+        virtualScroll = 0;
+      }
+      isAutoScrollActive = true;
+      setIsAutoScrolling(true);
+      if (autoScrollAnimId) cancelAnimationFrame(autoScrollAnimId);
+      autoScrollAnimId = requestAnimationFrame(stepAutoScroll);
+    };
+
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
+      stopAutoScroll();
       virtualScroll += e.deltaY;
       if (virtualScroll < 0) virtualScroll = 0;
       if (virtualScroll > MAX_VIRTUAL_SCROLL) virtualScroll = MAX_VIRTUAL_SCROLL;
@@ -109,11 +136,13 @@ const Landing = () => {
     };
 
     const handleTouchStart = (e: TouchEvent) => {
+      stopAutoScroll();
       touchStartY = e.touches[0].clientY;
     };
 
     const handleTouchMove = (e: TouchEvent) => {
       e.preventDefault();
+      stopAutoScroll();
       const touchY = e.touches[0].clientY;
       const deltaY = (touchStartY - touchY) * 2;
       touchStartY = touchY;
@@ -127,10 +156,12 @@ const Landing = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
         e.preventDefault();
+        stopAutoScroll();
         virtualScroll = Math.min(MAX_VIRTUAL_SCROLL, virtualScroll + 140);
         updateProgress();
       } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
         e.preventDefault();
+        stopAutoScroll();
         virtualScroll = Math.max(0, virtualScroll - 140);
         updateProgress();
       }
@@ -174,6 +205,7 @@ const Landing = () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('resize', handleResize);
       if (animId) cancelAnimationFrame(animId);
+      if (autoScrollAnimId) cancelAnimationFrame(autoScrollAnimId);
     };
   }, []);
 
@@ -228,37 +260,35 @@ const Landing = () => {
   }
 
   // Background switches to green footer while cloud 2 is closed, so parting clouds reveal the footer
-  const isFooterActive = scrollFraction >= 0.64;
+  const isFooterActive = scrollFraction >= 0.82;
 
   const activeCloudPercent = isCloud2Active ? cloud2Percent : isCloud1Active ? cloud1Percent : 0;
 
   return (
     <div className="fixed inset-0 w-screen h-screen bg-[#061a14] text-white select-none overflow-hidden touch-none font-sans">
-      {/* Minimal Logo Fixed at Top Left */}
+      {/* Top Left Branding Logo */}
       <Link
         to="/"
-        className="fixed top-7 left-9 md:top-5 md:left-5 z-[100] inline-block transition-transform duration-200 hover:scale-105"
+        className="fixed top-6 left-8 md:top-6 md:left-8 z-[100] inline-block transition-transform duration-200 hover:scale-105"
       >
         <img
           src="/assets/logo.webp"
           alt="Jharkhand Samadhan"
-          className="h-14 md:h-11 w-auto object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.4)]"
+          className="h-24 md:h-20 sm:h-16 w-auto object-contain drop-shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
         />
       </Link>
 
-      {/* Top Right Portal Link */}
-      <Link
-        to="/login"
-        className={`fixed top-7 right-9 md:top-5 md:right-5 z-[100] py-2.5 px-6 md:py-2 md:px-4 rounded-full text-[13px] font-semibold tracking-wide inline-flex items-center gap-2 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.4)] hover:-translate-y-0.5 ${
-          activeCloudPercent > 0.6
-            ? 'bg-black text-white border border-black/30 hover:bg-neutral-800'
-            : 'bg-[#09261e]/80 backdrop-blur-xl border border-white/20 text-white hover:bg-white hover:text-black hover:border-white'
-        }`}
-        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-      >
-        <span>Sign In / Enter Portal</span>
-        <ArrowRight className="w-[14px] h-[14px] stroke-[2]" />
-      </Link>
+      {/* Top Right Auto Scroll Button */}
+      {!isAutoScrolling && (
+        <button
+          onClick={() => startAutoScrollRef.current?.()}
+          className="fixed top-6 right-8 md:top-6 md:right-8 z-[100] px-3.5 py-1.5 rounded-full text-xs font-medium tracking-wide bg-white/10 hover:bg-white/20 text-white/80 hover:text-white backdrop-blur-md border border-white/15 transition-all duration-300 shadow-[0_2px_12px_rgba(0,0,0,0.3)] inline-flex items-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95"
+          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+        >
+          <Play className="w-3 h-3 fill-current text-amber-400" />
+          <span>Auto Scroll</span>
+        </button>
+      )}
 
       {/* Hero Canvas Container */}
       <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
@@ -271,13 +301,21 @@ const Landing = () => {
 
         {/* ================= BACKGROUND SWITCHES TO GREEN FOOTER UNDER CLOUD 2 ================= */}
         {isFooterActive && (
-          <div className="absolute inset-0 z-40 bg-[#061a14] flex flex-col items-center justify-center text-center px-6 pointer-events-auto">
+          <div className="absolute inset-0 z-40 bg-[#061a14] flex flex-col items-center justify-center text-center px-6 pointer-events-auto gap-6">
             <Link
               to="/login"
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-normal text-white hover:text-amber-400 transition-colors tracking-tight leading-none drop-shadow-lg capitalize"
-              style={{ fontFamily: "'Instrument Serif', 'Cormorant Garamond', Georgia, serif" }}
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-white/90 hover:text-white transition-all tracking-widest leading-none drop-shadow-md capitalize hover:scale-105"
+              style={{ fontFamily: "'Cormorant Garamond', 'Instrument Serif', Georgia, serif", fontWeight: 300 }}
             >
               Got a Problem?
+            </Link>
+            <Link
+              to="/login"
+              className="py-3 px-8 rounded-full text-sm font-semibold tracking-wide inline-flex items-center gap-2 bg-[#09261e]/90 border border-white/20 text-white hover:bg-white hover:text-black hover:border-white transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.4)] hover:-translate-y-0.5"
+              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+            >
+              <span>Sign In / Enter Portal</span>
+              <ArrowRight className="w-4 h-4 stroke-[2]" />
             </Link>
           </div>
         )}

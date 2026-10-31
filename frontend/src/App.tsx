@@ -5,7 +5,8 @@ import Dashboard from './pages/Dashboard';
 import ProblemSubmission from './pages/ProblemSubmission';
 import PublicFeed from './pages/PublicFeed';
 import ProblemDetail from './pages/ProblemDetail';
-import UniversityDashboard from './pages/UniversityDashboard';
+import BulkIngest from './pages/BulkIngest';
+import ExploreMap from './pages/ExploreMap';
 
 function App() {
   return (
@@ -17,10 +18,11 @@ function App() {
         
         {/* Portal Pages */}
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/explore" element={<ExploreMap />} />
         <Route path="/submit-problem" element={<ProblemSubmission />} />
         <Route path="/feed" element={<PublicFeed />} />
         <Route path="/problem/:id" element={<ProblemDetail />} />
-        <Route path="/university/dashboard" element={<UniversityDashboard />} />
+        <Route path="/bulk-ingest" element={<BulkIngest />} />
       </Routes>
     </Router>
   );
