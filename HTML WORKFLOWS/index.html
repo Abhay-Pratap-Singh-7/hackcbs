@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HackCBS Workflow Diagram</title>
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Mermaid.js for Vector Diagram Rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body, html {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #f8fafc;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    /* Subtle dot-grid background */
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: radial-gradient(#cbd5e1 1.2px, transparent 1.2px);
+      background-size: 24px 24px;
+      opacity: 0.6;
+    }
+
+    #viewport {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      user-select: none;
+      cursor: grab;
+    }
+
+    #viewport:active, #viewport.dragging {
+      cursor: grabbing;
+    }
+
+    #canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 0;
+      padding: 0;
+      transform-origin: 0 0;
+      will-change: transform;
+    }
+
+    /* ===== Premium Node & Text Styling Overrides ===== */
+    .mermaid {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    }
+
+    /* Node Cards */
+    .mermaid .node rect,
+    .mermaid .node polygon {
+      rx: 10px !important;
+      ry: 10px !important;
+      fill: #ffffff !important;
+      stroke: #cbd5e1 !important;
+      stroke-width: 1.5px !important;
+      filter: drop-shadow(0 3px 6px rgba(15, 23, 42, 0.05)) !important;
+      transition: all 0.2s ease !important;
+    }
+
+    .mermaid .node:hover rect,
+    .mermaid .node:hover polygon {
+      stroke: #3b82f6 !important;
+      stroke-width: 2px !important;
+      filter: drop-shadow(0 6px 16px rgba(59, 130, 246, 0.15)) !important;
+    }
+
+    /* Decision Diamond Nodes */
+    .mermaid .node.decision polygon {
+      fill: #fffbeb !important;
+      stroke: #f59e0b !important;
+      stroke-width: 2px !important;
+    }
+
+    /* Text Formatting inside Nodes */
+    .mermaid .node .label {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      color: #0f172a !important;
+      line-height: 1.5 !important;
+      padding: 10px 16px !important;
+    }
+
+    .mermaid .node foreignObject {
+      overflow: visible !important;
+    }
+
+    .mermaid .node foreignObject div {
+      padding: 6px 12px !important;
+      text-align: center !important;
+      line-height: 1.45 !important;
+      font-size: 12.5px !important;
+      color: #1e293b !important;
+      font-weight: 500 !important;
+    }
+
+    /* Subgraph Containers (Frames) */
+    .mermaid .cluster rect {
+      rx: 16px !important;
+      ry: 16px !important;
+      stroke-width: 2px !important;
+      filter: drop-shadow(0 8px 24px rgba(15, 23, 42, 0.04)) !important;
+    }
+
+    /* Subgraph Header / Frame Title Padding & Styling */
+    .mermaid .cluster .label {
+      transform: translateY(22px) !important;
+    }
+
+    .mermaid .cluster .nodeLabel,
+    .mermaid .cluster text,
+    .mermaid .cluster .label text {
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+      font-size: 14px !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.01em !important;
+    }
+
+    .mermaid .cluster .label foreignObject div {
+      padding: 18px 24px 10px 24px !important;
+      font-weight: 700 !important;
+      font-size: 14.5px !important;
+      box-sizing: border-box !important;
+    }
+
+    /* Edge Links & Arrows */
+    .mermaid .edgePath .path {
+      stroke: #64748b !important;
+      stroke-width: 2px !important;
+      opacity: 0.85 !important;
+    }
+
+    .mermaid .edgePath .path:hover {
+      stroke: #2563eb !important;
+      stroke-width: 2.5px !important;
+      opacity: 1 !important;
+    }
+
+    .mermaid .marker {
+      fill: #64748b !important;
+      stroke: #64748b !important;
+    }
+
+    .mermaid .edgeLabel {
+      background-color: #ffffff !important;
+      padding: 3px 8px !important;
+      border-radius: 6px !important;
+      border: 1px solid #e2e8f0 !important;
+      font-size: 11px !important;
+      font-weight: 600 !important;
+      color: #475569 !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    /* Floating Legend Card */
+    .legend-card {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px 18px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04);
+      backdrop-filter: blur(12px);
+      z-index: 1000;
+      max-width: 280px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .legend-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .legend-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-toggle-btn {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 2px;
+      border-radius: 4px;
+      transition: transform 0.2s;
+    }
+
+    .legend-card.collapsed .legend-body {
+      display: none;
+    }
+
+    .legend-card.collapsed .legend-toggle-btn {
+      transform: rotate(-90deg);
+    }
+
+    .legend-body {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .legend-section-title {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #94a3b8;
+      margin-bottom: 6px;
+    }
+
+    .legend-items {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #334155;
+      font-weight: 500;
+    }
+
+    .legend-color-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .legend-node-shape {
+      width: 14px;
+      height: 10px;
+      border-radius: 3px;
+      border: 1.5px solid #64748b;
+      background: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .legend-node-shape.diamond {
+      width: 10px;
+      height: 10px;
+      transform: rotate(45deg);
+      border-color: #f59e0b;
+      background: #fffbeb;
+    }
+
+    .legend-node-shape.dashed {
+      border-style: dashed;
+      border-color: #94a3b8;
+    }
+
+    /* Floating Toolbar (Light Theme) */
+    .controls-toolbar {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 6px 10px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1), 0 1px 3px rgba(15, 23, 42, 0.06);
+      backdrop-filter: blur(12px);
+      z-index: 1000;
+    }
+
+    .tool-btn {
+      background: transparent;
+      border: none;
+      color: #475569;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .tool-btn:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .tool-btn.active {
+      background: #3b82f6;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+    }
+
+    .divider {
+      width: 1px;
+      height: 20px;
+      background: #e2e8f0;
+      margin: 0 4px;
+    }
+
+    .zoom-text {
+      color: #64748b;
+      font-size: 12px;
+      font-family: monospace;
+      font-weight: 600;
+      min-width: 46px;
+      text-align: center;
+    }
+
+    /* Floating Top App Bar Tabs */
+    .app-bar {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 5px 6px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04);
+      backdrop-filter: blur(12px);
+      z-index: 1100;
+    }
+
+    .app-tab {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #475569;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+    }
+
+    .app-tab:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .app-tab.active {
+      background: #3b82f6;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+    }
+
+    .app-tab i, .app-tab svg {
+      width: 15px;
+      height: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+
+  <!-- Top App Bar Tabs -->
+  <nav class="app-bar">
+    <a href="index.html" class="app-tab active">
+      <i data-lucide="network"></i>
+      <span>Overall System</span>
+    </a>
+    <a href="master.html" class="app-tab">
+      <i data-lucide="git-merge"></i>
+      <span>Unified Master Flow</span>
+    </a>
+    <a href="ml.html" class="app-tab">
+      <i data-lucide="cpu"></i>
+      <span>Machine Learning</span>
+    </a>
+    <a href="backend.html" class="app-tab">
+      <i data-lucide="server"></i>
+      <span>Node.js Backend</span>
+    </a>
+    <a href="mobile.html" class="app-tab">
+      <i data-lucide="smartphone"></i>
+      <span>Mobile App</span>
+    </a>
+    <a href="web.html" class="app-tab">
+      <i data-lucide="layout"></i>
+      <span>Web Portal</span>
+    </a>
+  </nav>
+
+  <!-- Floating Collapsible Legend -->
+  <div class="legend-card" id="legendCard">
+    <div class="legend-header" onclick="toggleLegend()">
+      <div class="legend-title">
+        <i data-lucide="layers" style="width: 16px; height: 16px; color: #3b82f6;"></i>
+        <span>Workflow Legend</span>
+      </div>
+      <button class="legend-toggle-btn" title="Toggle Legend">
+        <i data-lucide="chevron-down" style="width: 16px; height: 16px;"></i>
+      </button>
+    </div>
+
+    <div class="legend-body">
+      <div>
+        <div class="legend-section-title">Architecture Frames</div>
+        <div class="legend-items">
+          <div class="legend-item"><div class="legend-color-dot" style="background: #3b82f6;"></div><span>Frame 1: Multi-Stakeholder Login</span></div>
+          <div class="legend-item"><div class="legend-color-dot" style="background: #10b981;"></div><span>Frame 2: Problem Submission</span></div>
+          <div class="legend-item"><div class="legend-color-dot" style="background: #eab308;"></div><span>Frame 3: AI/ML Classification</span></div>
+          <div class="legend-item"><div class="legend-color-dot" style="background: #f97316;"></div><span>Frame 4: ML University Routing</span></div>
+          <div class="legend-item"><div class="legend-color-dot" style="background: #ef4444;"></div><span>Frame 5: University Portal & Teams</span></div>
+          <div class="legend-item"><div class="legend-color-dot" style="background: #a855f7;"></div><span>Frame 6: Industry Collaboration Hub</span></div>
+          <div class="legend-item"><div class="legend-color-dot" style="background: #64748b;"></div><span>Frame 7: Workflow & Milestones</span></div>
+          <div class="legend-item"><div class="legend-color-dot" style="background: #14b8a6;"></div><span>Frame 8: Dashboards & Analytics</span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="legend-section-title">Node & Connector Types</div>
+        <div class="legend-items">
+          <div class="legend-item"><div class="legend-node-shape"></div><span>Process / Action Node</span></div>
+          <div class="legend-item"><div class="legend-node-shape diamond"></div><span>Decision / Approval Gate</span></div>
+          <div class="legend-item"><div class="legend-node-shape dashed"></div><span>Cross-Cutting Notification</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="viewport">
+    <div id="canvas">
+      <pre class="mermaid">
+%%{ init: { 'theme': 'default', 'themeVariables': { 'primaryColor': '#eff6ff', 'primaryTextColor': '#0f172a', 'primaryBorderColor': '#3b82f6', 'lineColor': '#64748b', 'secondaryColor': '#f0fdf4', 'tertiaryColor': '#fff7ed', 'fontFamily': 'system-ui, sans-serif' } } }%%
+
+flowchart LR
+
+    %% ===== FRAME 1: LOGIN =====
+    subgraph F1["🔵 FRAME 1 — Multi-Stakeholder Login"]
+        direction TB
+        U1["👤 Individual Citizen"]
+        U2["👥 Community Groups"]
+        U3["🏛️ Panchayati Raj Institutions"]
+        U4["🏢 Urban Local Bodies"]
+        U5["🏗️ Government Departments"]
+        U6["🔑 Admin / Super Admin"]
+
+        U1 & U2 & U3 & U4 & U5 & U6 --> AUTH["🔐 Authentication\nOTP / Aadhaar / DigiLocker"]
+        AUTH --> RBAC["🛡️ Role-Based Access Control"]
+        RBAC --> DASH["📱 Role-Specific Dashboard"]
+    end
+
+    %% ===== FRAME 2: SUBMISSION =====
+    subgraph F2["🟢 FRAME 2 — Problem Statement Submission"]
+        direction TB
+        FORM["📝 Submission Form"]
+        MEDIA["📎 Multimedia Evidence\nImages | Videos | Docs | Audio"]
+        GEO["📍 Geographical Location\nGPS Auto-detect | Manual Pin\nState → District → Block → Village"]
+        SUPPORT["📋 Supporting Information\nAffected Population | Urgency\nExisting Interventions | Schemes"]
+        TAGS["🏷️ Self-Tags\nSuggested Domain | Keywords"]
+
+        FORM --> MEDIA
+        FORM --> GEO
+        FORM --> SUPPORT
+        FORM --> TAGS
+
+        MEDIA & GEO & SUPPORT & TAGS --> VALIDATE["✅ Auto + Manual Validation\nSpam Check | Duplicate Detection"]
+    end
+
+    %% ===== FRAME 3: AI CLASSIFICATION =====
+    subgraph F3["🟡 FRAME 3 — AI/ML Classification Engine"]
+        direction TB
+        NLP["🧠 NLP Preprocessing\nTokenization | NER | TF-IDF\nSentiment Analysis | Translation"]
+        MODEL["🤖 Multi-Label Classifier\nBERT / IndicBERT\nTop-3 Domain Probabilities"]
+
+        subgraph DOMAINS["🏷️ 10 Thematic Domains"]
+            D1["🎓 Education"]
+            D2["🌾 Agriculture"]
+            D3["🏥 Healthcare"]
+            D4["💧 Water Resources"]
+            D5["🌿 Environment"]
+            D6["⚡ Energy"]
+            D7["🏙️ Urban Development"]
+            D8["♿ Accessibility"]
+            D9["🏛️ Public Administration"]
+            D10["🌾 Rural Livelihoods"]
+        end
+
+        CONFIDENCE{"🎯 Confidence Check"}
+
+        NLP --> MODEL
+        MODEL --> DOMAINS
+        DOMAINS --> CONFIDENCE
+
+        CONFIDENCE -->|"≥ 85%"| AUTO_CLASS["✅ Auto-Classify"]
+        CONFIDENCE -->|"60–84%"| HUMAN_REV["⚠️ Flag for Human Review"]
+        CONFIDENCE -->|"< 60%"| MANUAL_CLASS["🔴 Manual Classification"]
+
+        AUTO_CLASS & HUMAN_REV & MANUAL_CLASS --> CLASSIFIED["📦 Classified Problem Statement\ndomain | sub-domain | urgency\nkeywords | geo_cluster | score"]
+    end
+
+    %% ===== FRAME 4: UNIVERSITY ROUTING =====
+    subgraph F4["🟠 FRAME 4 — ML-Based University Routing"]
+        direction TB
+        UNI_KB["📚 University Knowledge Base\nDisciplines | Faculty Profiles\nResearch Papers | Patents\nInnovation Centres | Incubators\nNIRF/NAAC Rank | Workload"]
+
+        REC_MODEL["🎯 Recommendation Engine\nXGBoost + Collaborative Filtering\n\nFeatures:\n• Domain Match Score\n• Faculty Expertise Overlap\n• Infrastructure Readiness\n• Geographic Proximity\n• Past Success Rate\n• Current Capacity"]
+
+        ALLOC{"📊 Allocation Decision"}
+
+        UNI_KB --> REC_MODEL
+        REC_MODEL --> ALLOC
+
+        ALLOC -->|"> 90% match"| AUTO_ASSIGN["✅ Auto-Assign"]
+        ALLOC -->|"70–90%"| ADMIN_PICK["⚠️ Admin Picks from Top-3"]
+        ALLOC -->|"< 70%"| MANUAL_ASSIGN["🔴 Manual Assignment"]
+
+        AUTO_ASSIGN & ADMIN_PICK & MANUAL_ASSIGN --> ROUTED["📨 Routed to University"]
+    end
+
+    %% ===== FRAME 5: UNIVERSITY PORTAL =====
+    subgraph F5["🔴 FRAME 5 — University Evaluation & Team Formation"]
+        direction TB
+        NOTIF_UNI["🔔 University Notified\nIn-App | Email | SMS"]
+        REVIEW["🔍 Step 1: Review & Decision\nProblem Details | Evidence\nML Reasoning for Selection"]
+
+        DECISION{"Accept?"}
+
+        TEAM["👥 Step 2: Team Constitution\nStudents (UG/PG/PhD)\nFaculty Members\nRoles: Lead | Dev | Research | Field\nSize: 3–8 members"]
+
+        MENTOR["🧑‍🏫 Step 3: Assign Mentor\nInternal Faculty Mentor\nExternal Industry Mentor\nDomain Expert Advisor"]
+
+        PROPOSAL["📄 Step 4: Solution Proposal\nApproach & Methodology\nTech Stack | Timeline\nBudget | Expected Outcomes\nImpact Metrics"]
+
+        NOTIF_UNI --> REVIEW
+        REVIEW --> DECISION
+        DECISION -->|"✅ Accept"| TEAM
+        DECISION -->|"❌ Reject"| REJECT_REASON["📝 Reject with Reason\n→ Re-route (Frame 4)"]
+        DECISION -->|"🔄 Reassign"| REASSIGN["🔄 Request Reassignment\n→ Re-route (Frame 4)"]
+        TEAM --> MENTOR
+        MENTOR --> PROPOSAL
+    end
+
+    %% ===== FRAME 6: INDUSTRY =====
+    subgraph F6["🟣 FRAME 6 — Industry Collaboration Hub"]
+        direction TB
+
+        subgraph PARTNERS["🏭 Industry Partner Registry"]
+            P1["🚀 Startups"]
+            P2["🏭 MSMEs"]
+            P3["💼 CSR Organizations"]
+            P4["🔬 Research Labs"]
+            P5["💡 Innovation Ecosystems"]
+            P6["🏢 Large Corporates"]
+        end
+
+        IND_ML["🤖 ML Industry Matching\nDomain Alignment | Tech Capability\nCSR Focus | Funding Capacity\nPast Collaboration | Geography"]
+
+        subgraph COLLAB_MODES["🤝 Collaboration Modes"]
+            C1["🧑‍🏫 Mentorship"]
+            C2["💰 Funding"]
+            C3["🔧 Prototyping"]
+            C4["🧪 Testing"]
+            C5["🚀 Deployment"]
+            C6["📜 IP & Licensing"]
+        end
+
+        IND_PORTAL["🖥️ Industry Portal\nView Matches | Express Interest\nSign MoU | Track Progress\nProvide Resources | Rate Teams"]
+
+        PARTNERS --> IND_ML
+        IND_ML --> COLLAB_MODES
+        COLLAB_MODES --> IND_PORTAL
+    end
+
+    %% ===== FRAME 7: WORKFLOW =====
+    subgraph F7["⬛ FRAME 7 — Workflow Management"]
+        direction TB
+
+        subgraph LIFECYCLE["📋 Lifecycle Stages"]
+            direction LR
+            S1["📥 Submitted"]
+            S2["🔍 Classified"]
+            S3["🏫 Allocated"]
+            S4["🤝 Accepted"]
+            S5["🔧 In Progress"]
+            S6["📝 Proposal"]
+            S7["🧪 Prototype"]
+            S8["✅ Validated"]
+            S9["🚀 Deployed"]
+            S1 --> S2 --> S3 --> S4 --> S5 --> S6 --> S7 --> S8 --> S9
+        end
+
+        MILESTONE["📅 Milestone Tracking\nGantt Chart | Deliverable Uploads\nDeadline Alerts | Progress %"]
+
+        COMMS["💬 Stakeholder Communication\nThreaded Comments | @Mentions\nFile Sharing | Weekly Reports\nSLA Breach Escalation"]
+
+        SOLUTION_VAL["✅ Solution Validation\nExpert Panel Review\nField Testing Report\nImpact Assessment\nGovt Sign-off | Deployment Approval"]
+
+        LIFECYCLE --> MILESTONE
+        MILESTONE --> COMMS
+        COMMS --> SOLUTION_VAL
+    end
+
+    %% ===== FRAME 8: DASHBOARDS =====
+    subgraph F8["📊 FRAME 8 — Government Dashboards & Analytics"]
+        direction TB
+
+        subgraph KPI["📊 KPI Cards"]
+            K1["📥 Total Challenges\nReceived"]
+            K2["📊 Domain-wise\nDistribution"]
+            K3["🏫 University\nParticipation"]
+            K4["🏭 Industry\nEngagement"]
+            K5["⏱️ Avg Resolution\nTime"]
+            K6["⭐ Social Impact\nScore"]
+        end
+
+        ANALYTICS["📈 Analytics Views\n• Heatmap: Geo distribution\n• Trend: Monthly rates\n• Bar: Domain × University\n• Funnel: Submit → Deploy\n• Sankey: Citizen → Outcome\n• Leaderboard: Top Unis"]
+
+        REPORTS["📋 Reports\nAuto PDF Weekly/Monthly\nCSV/Excel Export\nState/District Breakdown\nSDG Alignment | Budget Tracker"]
+
+        KPI --> ANALYTICS
+        ANALYTICS --> REPORTS
+    end
+
+    %% ===== NOTIFICATION ENGINE =====
+    subgraph NOTIF["🔔 Cross-Cutting Notification & Communication Engine"]
+        direction LR
+        CH1["📱 In-App Push"]
+        CH2["📧 Email"]
+        CH3["📲 SMS Gateway"]
+        CH4["💬 WhatsApp API"]
+        CH5["🔔 Dashboard Alerts"]
+        CHAT["💬 Real-time Chat\nVideo Conferencing\nDiscussion Forums\nFeedback Forms\nGrievance Channel"]
+    end
+
+    %% ===== PRIMARY FLOW CONNECTORS =====
+    DASH --> FORM
+    VALIDATE --> NLP
+    CLASSIFIED --> UNI_KB
+    ROUTED --> NOTIF_UNI
+    PROPOSAL --> IND_ML
+    PROPOSAL --> LIFECYCLE
+    IND_PORTAL --> LIFECYCLE
+    SOLUTION_VAL --> KPI
+    REJECT_REASON --> UNI_KB
+    REASSIGN --> UNI_KB
+
+    %% ===== NOTIFICATION CONNECTORS =====
+    NOTIF -.->|"triggers"| F1
+    NOTIF -.->|"triggers"| F2
+    NOTIF -.->|"triggers"| F3
+    NOTIF -.->|"triggers"| F4
+    NOTIF -.->|"triggers"| F5
+    NOTIF -.->|"triggers"| F6
+    NOTIF -.->|"triggers"| F7
+    NOTIF -.->|"triggers"| F8
+
+    %% ===== LIGHT THEME SUBGRAPH STYLES =====
+    style F1 fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e3a8a
+    style F2 fill:#f0fdf4,stroke:#10b981,stroke-width:2px,color:#065f46
+    style F3 fill:#fefce8,stroke:#eab308,stroke-width:2px,color:#854d0e
+    style F4 fill:#fff7ed,stroke:#f97316,stroke-width:2px,color:#9a3412
+    style F5 fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#991b1b
+    style F6 fill:#faf5ff,stroke:#a855f7,stroke-width:2px,color:#6b21a8
+    style F7 fill:#f8fafc,stroke:#64748b,stroke-width:2px,color:#334155
+    style F8 fill:#f0fdfa,stroke:#14b8a6,stroke-width:2px,color:#115e59
+    style NOTIF fill:#f1f5f9,stroke:#94a3b8,stroke-width:2px,stroke-dasharray: 5 5,color:#334155
+    style DOMAINS fill:#fef9c3,stroke:#ca8a04,stroke-width:1.5px,color:#854d0e
+    style PARTNERS fill:#f3e8ff,stroke:#9333ea,stroke-width:1.5px,color:#6b21a8
+    style COLLAB_MODES fill:#f3e8ff,stroke:#9333ea,stroke-width:1.5px,color:#6b21a8
+    style LIFECYCLE fill:#f1f5f9,stroke:#475569,stroke-width:1.5px,color:#334155
+    style KPI fill:#ccfbf1,stroke:#0d9488,stroke-width:1.5px,color:#115e59
+      </pre>
+    </div>
+  </div>
+
+  <!-- Floating Controls Toolbar -->
+  <div class="controls-toolbar">
+    <button class="tool-btn active" id="handToolBtn" onclick="toggleHandTool()" title="Hand Tool: Hold & Drag (H)">
+      <i data-lucide="hand" style="width: 17px; height: 17px;"></i>
+    </button>
+    <div class="divider"></div>
+    <button class="tool-btn" onclick="zoomButton(false)" title="Zoom Out (−)">
+      <i data-lucide="minus" style="width: 17px; height: 17px;"></i>
+    </button>
+    <span class="zoom-text" id="zoomVal">45%</span>
+    <button class="tool-btn" onclick="zoomButton(true)" title="Zoom In (+)">
+      <i data-lucide="plus" style="width: 17px; height: 17px;"></i>
+    </button>
+    <div class="divider"></div>
+    <button class="tool-btn" onclick="resetInitialView()" title="Reset to Start (R)">
+      <i data-lucide="rotate-ccw" style="width: 17px; height: 17px;"></i>
+    </button>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    const viewport = document.getElementById('viewport');
+    const canvas = document.getElementById('canvas');
+    const zoomVal = document.getElementById('zoomVal');
+    const handToolBtn = document.getElementById('handToolBtn');
+
+    let scale = 0.45; // Clean zoomed out overview
+    let panX = 0;
+    let panY = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let handToolActive = true;
+
+    function updateTransform() {
+      canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+      zoomVal.textContent = Math.round(scale * 100) + '%';
+    }
+
+    /**
+     * Pure, exact mathematical zoom anchoring around any screen coordinate (focalX, focalY).
+     * Guaranteed 0-offset drift!
+     */
+    function zoomAroundPoint(newScale, focalX, focalY) {
+      newScale = Math.min(Math.max(newScale, 0.05), 4.0);
+      panX = focalX - (focalX - panX) * (newScale / scale);
+      panY = focalY - (focalY - panY) * (newScale / scale);
+      scale = newScale;
+      updateTransform();
+    }
+
+    function zoomButton(zoomIn) {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      const factor = zoomIn ? 1.25 : 0.8;
+      zoomAroundPoint(scale * factor, centerX, centerY);
+    }
+
+    function resetInitialView() {
+      const svg = canvas.querySelector('svg');
+      if (!svg) return;
+
+      const firstTarget = 
+        svg.querySelector('g.cluster[id*="F1"]') || 
+        svg.querySelector('g[id*="F1"]') || 
+        svg.querySelector('g.node') || 
+        svg;
+
+      let bbox;
+      try {
+        bbox = firstTarget.getBBox();
+      } catch (e) {
+        bbox = firstTarget.getBoundingClientRect();
+      }
+
+      // Initial zoomed-out comfortable scale
+      scale = 0.45;
+
+      const nodeCenterX = bbox.x + bbox.width / 2;
+      const nodeCenterY = bbox.y + bbox.height / 2;
+
+      // Center Frame 1 / first node in the exact middle of the screen
+      panX = (window.innerWidth / 2) - (nodeCenterX * scale);
+      panY = (window.innerHeight / 2) - (nodeCenterY * scale);
+
+      updateTransform();
+    }
+
+    function toggleHandTool() {
+      handToolActive = !handToolActive;
+      handToolBtn.classList.toggle('active', handToolActive);
+      viewport.style.cursor = handToolActive ? 'grab' : 'default';
+    }
+
+    // Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'h' || e.key === 'H') toggleHandTool();
+      if (e.key === 'r' || e.key === 'R') resetInitialView();
+      if (e.key === '+' || e.key === '=') zoomButton(true);
+      if (e.key === '-' || e.key === '_') zoomButton(false);
+    });
+
+    // Mouse Drag Pan
+    viewport.addEventListener('mousedown', (e) => {
+      if (!handToolActive) return;
+      isDragging = true;
+      dragStartX = e.clientX - panX;
+      dragStartY = e.clientY - panY;
+      viewport.classList.add('dragging');
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      panX = e.clientX - dragStartX;
+      panY = e.clientY - dragStartY;
+      updateTransform();
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      viewport.classList.remove('dragging');
+    });
+
+    // Mouse Wheel Zoom (strictly anchored to center of screen)
+    viewport.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      const factor = e.deltaY < 0 ? 1.08 : 0.92;
+      zoomAroundPoint(scale * factor, centerX, centerY);
+    }, { passive: false });
+
+    // Double Tap / Double Click to zoom around clicked spot
+    viewport.addEventListener('dblclick', (e) => {
+      e.preventDefault();
+      if (scale > 0.9) {
+        resetInitialView();
+      } else {
+        zoomAroundPoint(scale * 1.6, e.clientX, e.clientY);
+      }
+    });
+
+    // Touch Support for mobile/tablets
+    let initialTouchDist = null;
+    let initialTouchScale = null;
+
+    viewport.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1 && handToolActive) {
+        isDragging = true;
+        dragStartX = e.touches[0].clientX - panX;
+        dragStartY = e.touches[0].clientY - panY;
+      } else if (e.touches.length === 2) {
+        isDragging = false;
+        initialTouchDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        initialTouchScale = scale;
+      }
+    }, { passive: true });
+
+    viewport.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 1 && isDragging) {
+        panX = e.touches[0].clientX - dragStartX;
+        panY = e.touches[0].clientY - dragStartY;
+        updateTransform();
+      } else if (e.touches.length === 2 && initialTouchDist) {
+        const dist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+        const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+        zoomAroundPoint(initialTouchScale * (dist / initialTouchDist), midX, midY);
+      }
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', () => {
+      isDragging = false;
+      initialTouchDist = null;
+    });
+
+    function toggleLegend() {
+      const card = document.getElementById('legendCard');
+      card.classList.toggle('collapsed');
+    }
+
+    // Mermaid Initialization & Setup
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'default',
+      themeVariables: {
+        background: '#f8fafc',
+        primaryColor: '#ffffff',
+        primaryTextColor: '#0f172a',
+        lineColor: '#64748b',
+        secondaryColor: '#f0fdf4',
+        tertiaryColor: '#fff7ed',
+        fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
+        fontSize: '13px'
+      },
+      flowchart: {
+        curve: 'basis',
+        htmlLabels: true,
+        useMaxWidth: false,
+        nodeSpacing: 45,
+        rankSpacing: 65,
+        padding: 20
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      lucide.createIcons();
+      await mermaid.run();
+
+      // Post-render: Expand cluster frame rects upward so titles sit with generous padding
+      const svg = canvas.querySelector('svg');
+      if (svg) {
+        svg.querySelectorAll('.cluster').forEach(cluster => {
+          const rect = cluster.querySelector('rect');
+          if (rect) {
+            const currentY = parseFloat(rect.getAttribute('y') || 0);
+            const currentH = parseFloat(rect.getAttribute('height') || 0);
+            // Move top boundary up by 24px and increase height by 34px
+            rect.setAttribute('y', (currentY - 24).toString());
+            rect.setAttribute('height', (currentH + 34).toString());
+          }
+        });
+      }
+
+      resetInitialView();
+    });
+  </script>
+</body>
+</html>

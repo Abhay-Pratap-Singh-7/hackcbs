@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Domain-Wise Machine Learning Workflow</title>
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Mermaid.js for Vector Diagram Rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body, html {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #f8fafc;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    /* Subtle dot-grid background */
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: radial-gradient(#cbd5e1 1.2px, transparent 1.2px);
+      background-size: 24px 24px;
+      opacity: 0.6;
+    }
+
+    #viewport {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      user-select: none;
+      cursor: grab;
+    }
+
+    #viewport:active, #viewport.dragging {
+      cursor: grabbing;
+    }
+
+    #canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 0;
+      padding: 0;
+      transform-origin: 0 0;
+      will-change: transform;
+    }
+
+    /* ===== Node & Text Styling ===== */
+    .mermaid {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    }
+
+    /* Node Cards */
+    .mermaid .node rect,
+    .mermaid .node polygon {
+      rx: 10px !important;
+      ry: 10px !important;
+      fill: #ffffff !important;
+      stroke: #cbd5e1 !important;
+      stroke-width: 1.5px !important;
+      filter: drop-shadow(0 3px 6px rgba(15, 23, 42, 0.05)) !important;
+      transition: all 0.2s ease !important;
+    }
+
+    .mermaid .node:hover rect,
+    .mermaid .node:hover polygon {
+      stroke: #2563eb !important;
+      stroke-width: 2px !important;
+      filter: drop-shadow(0 6px 16px rgba(37, 99, 235, 0.18)) !important;
+    }
+
+    /* Decision Diamond Nodes */
+    .mermaid .node.decision polygon {
+      fill: #fffbeb !important;
+      stroke: #f59e0b !important;
+      stroke-width: 2px !important;
+    }
+
+    /* Text inside Nodes */
+    .mermaid .node .label {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+      font-size: 12.5px !important;
+      font-weight: 600 !important;
+      color: #0f172a !important;
+      line-height: 1.45 !important;
+      padding: 8px 14px !important;
+    }
+
+    .mermaid .node foreignObject div {
+      padding: 6px 12px !important;
+      text-align: center !important;
+      line-height: 1.4 !important;
+      font-size: 12px !important;
+      color: #1e293b !important;
+      font-weight: 500 !important;
+    }
+
+    /* Subgraph Containers */
+    .mermaid .cluster rect {
+      rx: 16px !important;
+      ry: 16px !important;
+      stroke-width: 2px !important;
+      filter: drop-shadow(0 8px 24px rgba(15, 23, 42, 0.04)) !important;
+    }
+
+    .mermaid .cluster .nodeLabel,
+    .mermaid .cluster text,
+    .mermaid .cluster .label text {
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+      font-size: 13.5px !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.01em !important;
+    }
+
+    /* Edge Links & Arrows */
+    .mermaid .edgePath .path {
+      stroke: #64748b !important;
+      stroke-width: 2px !important;
+      opacity: 0.85 !important;
+    }
+
+    .mermaid .edgePath .path:hover {
+      stroke: #2563eb !important;
+      stroke-width: 2.5px !important;
+      opacity: 1 !important;
+    }
+
+    .mermaid .marker {
+      fill: #64748b !important;
+      stroke: #64748b !important;
+    }
+
+    .mermaid .edgeLabel {
+      background-color: #ffffff !important;
+      padding: 3px 8px !important;
+      border-radius: 6px !important;
+      border: 1px solid #e2e8f0 !important;
+      font-size: 11px !important;
+      font-weight: 600 !important;
+      color: #475569 !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    /* Floating Legend Card */
+    .legend-card {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px 18px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04);
+      backdrop-filter: blur(12px);
+      z-index: 1000;
+      max-width: 300px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .legend-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .legend-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-toggle-btn {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 2px;
+      border-radius: 4px;
+      transition: transform 0.2s;
+    }
+
+    .legend-card.collapsed .legend-body {
+      display: none;
+    }
+
+    .legend-card.collapsed .legend-toggle-btn {
+      transform: rotate(-90deg);
+    }
+
+    .legend-body {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .legend-section-title {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #94a3b8;
+      margin-bottom: 6px;
+    }
+
+    .legend-items {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5px;
+      color: #334155;
+      font-weight: 500;
+    }
+
+    .legend-color-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .legend-node-shape {
+      width: 14px;
+      height: 10px;
+      border-radius: 3px;
+      border: 1.5px solid #64748b;
+      background: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .legend-node-shape.diamond {
+      width: 10px;
+      height: 10px;
+      transform: rotate(45deg);
+      border-color: #f59e0b;
+      background: #fffbeb;
+    }
+
+    /* Floating Toolbar */
+    .controls-toolbar {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 6px 10px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1), 0 1px 3px rgba(15, 23, 42, 0.06);
+      backdrop-filter: blur(12px);
+      z-index: 1000;
+    }
+
+    .tool-btn {
+      background: transparent;
+      border: none;
+      color: #475569;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .tool-btn:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .tool-btn.active {
+      background: #3b82f6;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+    }
+
+    .divider {
+      width: 1px;
+      height: 20px;
+      background: #e2e8f0;
+      margin: 0 4px;
+    }
+
+    .zoom-text {
+      color: #64748b;
+      font-size: 12px;
+      font-family: monospace;
+      font-weight: 600;
+      min-width: 46px;
+      text-align: center;
+    }
+
+    /* Floating Top App Bar Tabs */
+    .app-bar {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 5px 6px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04);
+      backdrop-filter: blur(12px);
+      z-index: 1100;
+    }
+
+    .app-tab {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #475569;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+    }
+
+    .app-tab:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .app-tab.active {
+      background: #3b82f6;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+    }
+
+    .app-tab i, .app-tab svg {
+      width: 15px;
+      height: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+
+  <!-- Top App Bar Tabs -->
+  <nav class="app-bar">
+    <a href="index.html" class="app-tab">
+      <i data-lucide="network"></i>
+      <span>Overall System</span>
+    </a>
+    <a href="master.html" class="app-tab">
+      <i data-lucide="git-merge"></i>
+      <span>Unified Master Flow</span>
+    </a>
+    <a href="ml.html" class="app-tab active">
+      <i data-lucide="cpu"></i>
+      <span>Machine Learning</span>
+    </a>
+    <a href="backend.html" class="app-tab">
+      <i data-lucide="server"></i>
+      <span>Node.js Backend</span>
+    </a>
+    <a href="mobile.html" class="app-tab">
+      <i data-lucide="smartphone"></i>
+      <span>Mobile App</span>
+    </a>
+    <a href="web.html" class="app-tab">
+      <i data-lucide="layout"></i>
+      <span>Web Portal</span>
+    </a>
+  </nav>
+
+  <!-- Floating Collapsible Legend -->
+  <div class="legend-card" id="legendCard">
+    <div class="legend-header" onclick="toggleLegend()">
+      <div class="legend-title">
+        <i data-lucide="cpu" style="width: 16px; height: 16px; color: #2563eb;"></i>
+        <span>ML Workflow Legend</span>
+      </div>
+      <button class="legend-toggle-btn" title="Toggle Legend">
+        <i data-lucide="chevron-down" style="width: 16px; height: 16px;"></i>
+      </button>
+    </div>
+
+    <div class="legend-body">
+      <div>
+        <div class="legend-section-title">ML Pipeline Stages</div>
+        <div class="legend-items">
+          <div class="legend-item"><div class="legend-color-dot" style="background: #3b82f6;"></div><span>Frame 1: Ingestion & Preprocessing</span></div>
+          <div class="legend-item"><div class="legend-color-dot" style="background: #06b6d4;"></div><span>Frame 2: Deduplication & Embeddings</span></div>
+          <div class="legend-item"><div class="legend-color-dot" style="background: #eab308;"></div><span>Frame 3: Domain Classification</span></div>
+          <div class="legend-item"><div class="legend-color-dot" style="background: #ef4444;"></div><span>Frame 4: Urgency & Impact Scoring</span></div>
+          <div class="legend-item"><div class="legend-color-dot" style="background: #f97316;"></div><span>Frame 5: University Recommender</span></div>
+          <div class="legend-item"><div class="legend-color-dot" style="background: #a855f7;"></div><span>Frame 6: Industry Collaboration Hub</span></div>
+          <div class="legend-item"><div class="legend-color-dot" style="background: #10b981;"></div><span>Frame 7: Validation & Analytics</span></div>
+          <div class="legend-item"><div class="legend-color-dot" style="background: #64748b;"></div><span>Frame 8: MLOps & Monitoring</span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="legend-section-title">Node Types</div>
+        <div class="legend-items">
+          <div class="legend-item"><div class="legend-node-shape"></div><span>Processing / Model Node</span></div>
+          <div class="legend-item"><div class="legend-node-shape diamond"></div><span>Decision / Approval Gate</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="viewport">
+    <div id="canvas">
+      <pre class="mermaid">
+%%{ init: { 'theme': 'default', 'themeVariables': { 'primaryColor': '#eff6ff', 'primaryTextColor': '#0f172a', 'primaryBorderColor': '#3b82f6', 'lineColor': '#64748b', 'secondaryColor': '#f0fdf4', 'tertiaryColor': '#fff7ed', 'fontFamily': 'system-ui, sans-serif' } } }%%
+
+flowchart LR
+
+    %% ===== FRAME 1: INGESTION & PREPROCESSING =====
+    subgraph F1["🔵 FRAME 1 — Data Ingestion & Preprocessing"]
+        direction TB
+        IN_TXT["📝 Multilingual Text Submissions"]
+        IN_AUD["🎙️ Audio Notes — Bhashini / Whisper-v3"]
+        IN_IMG["📷 Images & Docs — OCR / CLIP"]
+        IN_GEO["📍 Spatial Location — GPS & H3 Index"]
+        PREPROC["⚙️ IndicTrans2 Normalizer & PII Redactor"]
+
+        IN_TXT --> PREPROC
+        IN_AUD --> PREPROC
+        IN_IMG --> PREPROC
+        IN_GEO --> PREPROC
+    end
+
+    %% ===== FRAME 2: DEDUPLICATION & EMBEDDINGS =====
+    subgraph F2["💠 FRAME 2 — Embeddings & Deduplication"]
+        direction TB
+        EMBED["🧠 Multilingual Transformer Embedder\n1024-d Dense Feature Vector"]
+        FAISS["⚡ FAISS Vector Similarity Index"]
+        DEDUP{"🎯 Duplicate Match?\nSim >= 0.88 & Dist <= 25km"}
+        CLUSTER["🔗 Link with Master Ticket"]
+        UNIQUE["📦 Verified Unique Problem Payload"]
+
+        EMBED --> FAISS
+        FAISS --> DEDUP
+        DEDUP -->|"Duplicate"| CLUSTER
+        DEDUP -->|"Unique"| UNIQUE
+    end
+
+    %% ===== FRAME 3: THEMATIC CLASSIFICATION =====
+    subgraph F3["🟡 FRAME 3 — Thematic Classification"]
+        direction TB
+        MODEL["🤖 IndicBERT Multi-Label Classifier"]
+        DOMAINS["🏷️ 10 Thematic Domain Models\nEdu | Agri | Health | Water | Env\nEnergy | Urban | Access | Admin | Rural"]
+        CONF_CHECK{"🎯 Confidence Check"}
+        AUTO_C["✅ Auto-Classified (>=85%)"]
+        REVIEW_C["⚠️ Human Review (60-84%)"]
+        MANUAL_C["🔴 Manual Triage (<60%)"]
+
+        MODEL --> DOMAINS
+        DOMAINS --> CONF_CHECK
+        CONF_CHECK -->|"High"| AUTO_C
+        CONF_CHECK -->|"Medium"| REVIEW_C
+        CONF_CHECK -->|"Low"| MANUAL_C
+    end
+
+    %% ===== FRAME 4: URGENCY & SEVERITY SCORING =====
+    subgraph F4["🔴 FRAME 4 — Urgency & Severity Scoring"]
+        direction TB
+        TAB_FEATS["📊 Demographic & Urgency Feature Assembly\nAffected Pop | Critical Infra | Delay"]
+        REGRESSOR["⚡ LightGBM / CatBoost Regressor"]
+        SCORE_OUT["📈 Composite Severity Score\nLevel: Low | Medium | High (1-10)"]
+
+        TAB_FEATS --> REGRESSOR
+        REGRESSOR --> SCORE_OUT
+    end
+
+    %% ===== FRAME 5: UNIVERSITY ROUTING =====
+    subgraph F5["🟠 FRAME 5 — University Recommendation"]
+        direction TB
+        UNI_KB["📚 University Knowledge Base\nFaculty Research | NIRF Rank | Labs"]
+        RANKER["🎯 XGBoost LambdaMART Ranker\nDomain Match + Patents + Proximity - Workload"]
+        ALLOC_GATE{"📊 Match Decision"}
+        AUTO_U["✅ Auto-Assign (>90%)"]
+        TOP3_U["⚠️ Admin Picks Top-3 (70-90%)"]
+        OPEN_U["🔴 Open Pool (<70%)"]
+
+        UNI_KB --> RANKER
+        RANKER --> ALLOC_GATE
+        ALLOC_GATE -->|"High"| AUTO_U
+        ALLOC_GATE -->|"Medium"| TOP3_U
+        ALLOC_GATE -->|"Low"| OPEN_U
+    end
+
+    %% ===== FRAME 6: INDUSTRY MATCHING =====
+    subgraph F6["🟣 FRAME 6 — Industry Partner Matching"]
+        direction TB
+        PARTNERS["🏭 Industry Registry\nStartups | MSMEs | CSR Funds | Labs"]
+        MATCH_ENG["🤖 Semantic Match Engine\nCosine Sim(Solution, Industry)\nx CSR Budget & Tech Fit"]
+        COLLAB["🤝 Collaboration Modes\nMentorship | Funding | Prototyping | IP"]
+
+        PARTNERS --> MATCH_ENG
+        MATCH_ENG --> COLLAB
+    end
+
+    %% ===== FRAME 7: VALIDATION & ANALYTICS =====
+    subgraph F7["🟢 FRAME 7 — Validation & Impact Analytics"]
+        direction TB
+        PROPOSAL["📄 Solution Proposal & Milestones"]
+        VALIDATION["🔬 Expert Panel & Field Validation"]
+        DASHBOARD["📊 Executive KPI Dashboard\nGeo Heatmaps | Leaderboards | SLA"]
+
+        PROPOSAL --> VALIDATION
+        VALIDATION --> DASHBOARD
+    end
+
+    %% ===== FRAME 8: MLOPS & DRIFT MONITORING =====
+    subgraph F8["⬛ FRAME 8 — MLOps & Model Monitoring"]
+        direction TB
+        F_STORE["🗄️ Hopsworks Feature Store"]
+        DRIFT["📡 Drift Monitor — Evidently AI\nKS-Test & PSI > 0.2"]
+        RETRAIN["🔄 Automated Retraining Pipeline\nTriggered Monthly or on Drift"]
+
+        F_STORE --> DRIFT
+        DRIFT --> RETRAIN
+    end
+
+    %% ===== CLEAN LINEAR PIPELINE FLOW =====
+    PREPROC --> EMBED
+    UNIQUE --> MODEL
+    AUTO_C & REVIEW_C & MANUAL_C --> TAB_FEATS
+    SCORE_OUT --> RANKER
+    AUTO_U & TOP3_U & OPEN_U --> PARTNERS
+    COLLAB --> PROPOSAL
+    DASHBOARD -.-> F_STORE
+    RETRAIN -.->|"Update Model"| MODEL
+
+    %% ===== FRAME STYLING =====
+    style F1 fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e3a8a
+    style F2 fill:#ecfeff,stroke:#06b6d4,stroke-width:2px,color:#155e75
+    style F3 fill:#fefce8,stroke:#eab308,stroke-width:2px,color:#854d0e
+    style F4 fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#991b1b
+    style F5 fill:#fff7ed,stroke:#f97316,stroke-width:2px,color:#9a3412
+    style F6 fill:#faf5ff,stroke:#a855f7,stroke-width:2px,color:#6b21a8
+    style F7 fill:#f0fdf4,stroke:#10b981,stroke-width:2px,color:#065f46
+    style F8 fill:#f8fafc,stroke:#64748b,stroke-width:2px,color:#334155
+      </pre>
+    </div>
+  </div>
+
+  <!-- Floating Controls Toolbar -->
+  <div class="controls-toolbar">
+    <button class="tool-btn active" id="handToolBtn" onclick="toggleHandTool()" title="Hand Tool: Hold & Drag (H)">
+      <i data-lucide="hand" style="width: 17px; height: 17px;"></i>
+    </button>
+    <div class="divider"></div>
+    <button class="tool-btn" onclick="zoomButton(false)" title="Zoom Out (−)">
+      <i data-lucide="minus" style="width: 17px; height: 17px;"></i>
+    </button>
+    <span class="zoom-text" id="zoomVal">45%</span>
+    <button class="tool-btn" onclick="zoomButton(true)" title="Zoom In (+)">
+      <i data-lucide="plus" style="width: 17px; height: 17px;"></i>
+    </button>
+    <div class="divider"></div>
+    <button class="tool-btn" onclick="resetInitialView()" title="Reset to Start (R)">
+      <i data-lucide="rotate-ccw" style="width: 17px; height: 17px;"></i>
+    </button>
+  </div>
+
+  <script>
+    const viewport = document.getElementById('viewport');
+    const canvas = document.getElementById('canvas');
+    const zoomVal = document.getElementById('zoomVal');
+    const handToolBtn = document.getElementById('handToolBtn');
+
+    let scale = 0.45;
+    let panX = 0;
+    let panY = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let handToolActive = true;
+
+    function updateTransform() {
+      canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+      zoomVal.textContent = Math.round(scale * 100) + '%';
+    }
+
+    function zoomAroundPoint(newScale, focalX, focalY) {
+      newScale = Math.min(Math.max(newScale, 0.05), 4.0);
+      panX = focalX - (focalX - panX) * (newScale / scale);
+      panY = focalY - (focalY - panY) * (newScale / scale);
+      scale = newScale;
+      updateTransform();
+    }
+
+    function zoomButton(zoomIn) {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      const factor = zoomIn ? 1.25 : 0.8;
+      zoomAroundPoint(scale * factor, centerX, centerY);
+    }
+
+    function resetInitialView() {
+      const svg = canvas.querySelector('svg');
+      if (!svg) return;
+
+      const firstTarget = 
+        svg.querySelector('g.cluster[id*="F1"]') || 
+        svg.querySelector('g[id*="F1"]') || 
+        svg.querySelector('g.node') || 
+        svg;
+
+      let bbox;
+      try {
+        bbox = firstTarget.getBBox();
+      } catch (e) {
+        bbox = firstTarget.getBoundingClientRect();
+      }
+
+      scale = 0.45;
+      const nodeCenterX = bbox.x + bbox.width / 2;
+      const nodeCenterY = bbox.y + bbox.height / 2;
+
+      panX = (window.innerWidth / 2) - (nodeCenterX * scale);
+      panY = (window.innerHeight / 2) - (nodeCenterY * scale);
+
+      updateTransform();
+    }
+
+    function toggleLegend() {
+      const card = document.getElementById('legendCard');
+      card.classList.toggle('collapsed');
+    }
+
+    function toggleHandTool() {
+      handToolActive = !handToolActive;
+      handToolBtn.classList.toggle('active', handToolActive);
+      viewport.style.cursor = handToolActive ? 'grab' : 'default';
+    }
+
+    // Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'h' || e.key === 'H') toggleHandTool();
+      if (e.key === 'r' || e.key === 'R') resetInitialView();
+      if (e.key === '+' || e.key === '=') zoomButton(true);
+      if (e.key === '-' || e.key === '_') zoomButton(false);
+    });
+
+    // Mouse Drag Pan
+    viewport.addEventListener('mousedown', (e) => {
+      if (!handToolActive) return;
+      isDragging = true;
+      dragStartX = e.clientX - panX;
+      dragStartY = e.clientY - panY;
+      viewport.classList.add('dragging');
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      panX = e.clientX - dragStartX;
+      panY = e.clientY - dragStartY;
+      updateTransform();
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      viewport.classList.remove('dragging');
+    });
+
+    // Mouse Wheel Zoom
+    viewport.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      const factor = e.deltaY < 0 ? 1.08 : 0.92;
+      zoomAroundPoint(scale * factor, centerX, centerY);
+    }, { passive: false });
+
+    // Double Click to zoom
+    viewport.addEventListener('dblclick', (e) => {
+      e.preventDefault();
+      if (scale > 0.9) {
+        resetInitialView();
+      } else {
+        zoomAroundPoint(scale * 1.6, e.clientX, e.clientY);
+      }
+    });
+
+    // Mermaid Initialization & Setup
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'default',
+      themeVariables: {
+        background: '#f8fafc',
+        primaryColor: '#ffffff',
+        primaryTextColor: '#0f172a',
+        lineColor: '#64748b',
+        secondaryColor: '#f0fdf4',
+        tertiaryColor: '#fff7ed',
+        fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
+        fontSize: '13px'
+      },
+      flowchart: {
+        curve: 'basis',
+        htmlLabels: true,
+        useMaxWidth: false,
+        nodeSpacing: 50,
+        rankSpacing: 80,
+        padding: 24
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      lucide.createIcons();
+      await mermaid.run();
+      resetInitialView();
+    });
+  </script>
+</body>
+</html>
