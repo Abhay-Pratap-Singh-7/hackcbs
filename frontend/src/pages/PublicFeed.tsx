@@ -72,7 +72,7 @@ const PublicFeed = () => {
     }
     
     try {
-      let url = `https://sih-26-jarr.onrender.com/api/problems?page=${pageNumber}&limit=12`;
+      let url = `https://hackcbs-cjno.onrender.com/api/problems?page=${pageNumber}&limit=12`;
       if (categoryFilter) {
         url += `&category=${encodeURIComponent(categoryFilter)}`;
       }
@@ -168,7 +168,7 @@ const PublicFeed = () => {
     try {
       const token = localStorage.getItem('accessToken');
       if (!token) return;
-      const res = await fetch(`https://sih-26-jarr.onrender.com/api/problems/${problemId}/upvote`, {
+      const res = await fetch(`https://hackcbs-cjno.onrender.com/api/problems/${problemId}/upvote`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });

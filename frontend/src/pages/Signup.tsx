@@ -17,7 +17,7 @@ const Signup = () => {
     setError('');
 
     try {
-      const response = await fetch('https://sih-26-jarr.onrender.com/api/auth/signup', {
+      const response = await fetch('https://hackcbs-cjno.onrender.com/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

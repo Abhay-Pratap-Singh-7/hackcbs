@@ -43,7 +43,7 @@ const GovtDashboard = () => {
   const fetchMasterDashboard = async (token: string) => {
     setLoading(true);
     try {
-      const res = await fetch('https://sih-26-jarr.onrender.com/api/govt/dashboard', {
+      const res = await fetch('https://hackcbs-cjno.onrender.com/api/govt/dashboard', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 

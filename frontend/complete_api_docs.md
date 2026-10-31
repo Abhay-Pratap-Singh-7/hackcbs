@@ -1,5 +1,5 @@
 # 📘 HackCBS Backend — Complete API Documentation
-**Base URL:** `https://sih-26-jarr.onrender.com`  
+**Base URL:** `https://hackcbs-cjno.onrender.com`  
 **Auth:** All protected routes require `Authorization: Bearer <access_token>`
 
 ---

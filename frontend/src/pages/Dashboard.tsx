@@ -72,7 +72,7 @@ const Dashboard = () => {
           return;
         }
 
-        const response = await fetch('https://sih-26-jarr.onrender.com/api/problems?my=true', {
+        const response = await fetch('https://hackcbs-cjno.onrender.com/api/problems?my=true', {
           headers: {
             'Authorization': `Bearer ${token}`
           }

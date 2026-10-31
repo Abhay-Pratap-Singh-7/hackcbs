@@ -125,7 +125,7 @@ const Auth = () => {
 
       setLoading(true);
       try {
-        const response = await fetch('https://sih-26-jarr.onrender.com/api/auth/login', {
+        const response = await fetch('https://hackcbs-cjno.onrender.com/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: loginEmail, password: loginPassword }),
@@ -149,7 +149,7 @@ const Auth = () => {
 
       setLoading(true);
       try {
-        const response = await fetch('https://sih-26-jarr.onrender.com/api/auth/verify-login-otp', {
+        const response = await fetch('https://hackcbs-cjno.onrender.com/api/auth/verify-login-otp', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: loginEmail, otp: loginOtp, purpose: 'LOGIN_VERIFY' }),
@@ -272,7 +272,7 @@ const Auth = () => {
           profileDetails: formattedDetails
         };
 
-        const response = await fetch('https://sih-26-jarr.onrender.com/api/auth/signup', {
+        const response = await fetch('https://hackcbs-cjno.onrender.com/api/auth/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -303,7 +303,7 @@ const Auth = () => {
 
       setLoading(true);
       try {
-        const response = await fetch('https://sih-26-jarr.onrender.com/api/auth/verify-signup-otp', {
+        const response = await fetch('https://hackcbs-cjno.onrender.com/api/auth/verify-signup-otp', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: signupEmail, otp: loginOtp, purpose: 'SIGNUP_VERIFY' }),
@@ -325,7 +325,7 @@ const Auth = () => {
   const resendSignupOtp = async () => {
     if (signupResendTimer > 0) return;
     try {
-      const response = await fetch('https://sih-26-jarr.onrender.com/api/auth/resend-otp', {
+      const response = await fetch('https://hackcbs-cjno.onrender.com/api/auth/resend-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: signupEmail, purpose: 'SIGNUP_VERIFY' }),
@@ -342,7 +342,7 @@ const Auth = () => {
   const resendLoginOtp = async () => {
     if (loginResendTimer > 0) return;
     try {
-      const response = await fetch('https://sih-26-jarr.onrender.com/api/auth/resend-otp', {
+      const response = await fetch('https://hackcbs-cjno.onrender.com/api/auth/resend-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: loginEmail, purpose: 'LOGIN_VERIFY' }),

@@ -1,6 +1,6 @@
 # 📘 HackCBS Backend — Complete API Documentation
 **Local Test URL:** `http://localhost:5001`  
-**Production URL:** `https://sih-26-jarr.onrender.com`  
+**Production URL:** `https://hackcbs-cjno.onrender.com`  
 **Auth:** All protected routes require `Authorization: Bearer <access_token>`
 
 ---

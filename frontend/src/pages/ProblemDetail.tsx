@@ -63,7 +63,7 @@ const ProblemDetail = () => {
         }
         
         // Fetch problem details via GET /api/problems/:id
-        const response = await fetch(`https://sih-26-jarr.onrender.com/api/problems/${id}`, {
+        const response = await fetch(`https://hackcbs-cjno.onrender.com/api/problems/${id}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -87,7 +87,7 @@ const ProblemDetail = () => {
 
         // Fetch real comments from backend
         try {
-          const commentsRes = await fetch(`https://sih-26-jarr.onrender.com/api/problems/${id}/comments`, {
+          const commentsRes = await fetch(`https://hackcbs-cjno.onrender.com/api/problems/${id}/comments`, {
             headers: { 'Authorization': `Bearer ${token}` }
           });
           if (commentsRes.ok) {
@@ -118,7 +118,7 @@ const ProblemDetail = () => {
     try {
       const token = localStorage.getItem('accessToken');
       if (token && id) {
-        const res = await fetch(`https://sih-26-jarr.onrender.com/api/problems/${id}/upvote`, {
+        const res = await fetch(`https://hackcbs-cjno.onrender.com/api/problems/${id}/upvote`, {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -146,7 +146,7 @@ const ProblemDetail = () => {
         return;
       }
 
-      const res = await fetch(`https://sih-26-jarr.onrender.com/api/problems/${id}/comments`, {
+      const res = await fetch(`https://hackcbs-cjno.onrender.com/api/problems/${id}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

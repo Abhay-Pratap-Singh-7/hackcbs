@@ -129,7 +129,7 @@ const UniversityDashboard = () => {
 
   const fetchSummary = async (token: string) => {
     try {
-      const res = await fetch('https://sih-26-jarr.onrender.com/api/university/dashboard', {
+      const res = await fetch('https://hackcbs-cjno.onrender.com/api/university/dashboard', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
@@ -145,7 +145,7 @@ const UniversityDashboard = () => {
     setAllocatedLoading(true);
     try {
       // Changed from /api/university/allocated-problems to /api/problems to ensure citizen problems are visible
-      const res = await fetch('https://sih-26-jarr.onrender.com/api/problems?status=CLASSIFIED&duplicate=false&limit=50', {
+      const res = await fetch('https://hackcbs-cjno.onrender.com/api/problems?status=CLASSIFIED&duplicate=false&limit=50', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
@@ -162,7 +162,7 @@ const UniversityDashboard = () => {
   const fetchAcceptedProblems = async (token: string) => {
     setAcceptedLoading(true);
     try {
-      const res = await fetch('https://sih-26-jarr.onrender.com/api/university/accepted-problems?limit=50', {
+      const res = await fetch('https://hackcbs-cjno.onrender.com/api/university/accepted-problems?limit=50', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
@@ -179,7 +179,7 @@ const UniversityDashboard = () => {
   const fetchTeams = async (token: string) => {
     setTeamsLoading(true);
     try {
-      const res = await fetch('https://sih-26-jarr.onrender.com/api/university/teams?limit=50', {
+      const res = await fetch('https://hackcbs-cjno.onrender.com/api/university/teams?limit=50', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
@@ -210,7 +210,7 @@ const UniversityDashboard = () => {
     }
 
     try {
-      const res = await fetch(`https://sih-26-jarr.onrender.com/api/university/problems/${problemId}/status`, {
+      const res = await fetch(`https://hackcbs-cjno.onrender.com/api/university/problems/${problemId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -322,7 +322,7 @@ const UniversityDashboard = () => {
         members: teamForm.members.map(m => ({ name: m.name.trim(), gender: m.gender }))
       };
 
-      const res = await fetch('https://sih-26-jarr.onrender.com/api/university/teams', {
+      const res = await fetch('https://hackcbs-cjno.onrender.com/api/university/teams', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -417,7 +417,7 @@ const UniversityDashboard = () => {
         prototypeLink: prototypeLink || undefined
       };
 
-      const res = await fetch(`https://sih-26-jarr.onrender.com/api/university/teams/${selectedTeamForSolution._id}/solution`, {
+      const res = await fetch(`https://hackcbs-cjno.onrender.com/api/university/teams/${selectedTeamForSolution._id}/solution`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

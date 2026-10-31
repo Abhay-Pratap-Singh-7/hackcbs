@@ -93,7 +93,7 @@ const IndustryDashboard = () => {
 
   const fetchSummary = async (token: string) => {
     try {
-      const res = await fetch('https://sih-26-jarr.onrender.com/api/industry/dashboard', {
+      const res = await fetch('https://hackcbs-cjno.onrender.com/api/industry/dashboard', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
@@ -108,7 +108,7 @@ const IndustryDashboard = () => {
   const fetchAllocatedSolutions = async (token: string) => {
     setAllocatedLoading(true);
     try {
-      const res = await fetch('https://sih-26-jarr.onrender.com/api/industry/allocated-solutions?limit=50', {
+      const res = await fetch('https://hackcbs-cjno.onrender.com/api/industry/allocated-solutions?limit=50', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
@@ -125,7 +125,7 @@ const IndustryDashboard = () => {
   const fetchAcceptedSolutions = async (token: string) => {
     setAcceptedLoading(true);
     try {
-      const res = await fetch('https://sih-26-jarr.onrender.com/api/industry/accepted-solutions?limit=50', {
+      const res = await fetch('https://hackcbs-cjno.onrender.com/api/industry/accepted-solutions?limit=50', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
@@ -145,7 +145,7 @@ const IndustryDashboard = () => {
     if (!token) return;
 
     try {
-      const res = await fetch(`https://sih-26-jarr.onrender.com/api/industry/solutions/${id}/status`, {
+      const res = await fetch(`https://hackcbs-cjno.onrender.com/api/industry/solutions/${id}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

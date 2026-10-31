@@ -196,7 +196,7 @@ app.get('/issue/:id', async (req, res) => {
   <meta property="og:title" content="${title}" />
   <meta property="og:description" content="${description}" />
   <meta property="og:image" content="${image}" />
-  <meta property="og:url" content="https://sih-26-jarr.onrender.com/issue/${problemId}" />
+  <meta property="og:url" content="https://hackcbs-cjno.onrender.com/issue/${problemId}" />
   <meta property="al:android:url" content="${appSchemeUrl}" />
   <meta property="al:android:package" content="com.example.sih_2026" />
   <meta property="al:android:app_name" content="Jharkhand Samadhan" />

@@ -88,7 +88,7 @@ const ExploreMap = () => {
           return;
         }
 
-        const response = await fetch('https://sih-26-jarr.onrender.com/api/problems', {
+        const response = await fetch('https://hackcbs-cjno.onrender.com/api/problems', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
 

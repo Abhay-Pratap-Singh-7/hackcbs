@@ -147,7 +147,7 @@ const ProblemSubmission = () => {
           formData.append('files', file);
         });
 
-        const uploadRes = await fetch('https://sih-26-jarr.onrender.com/api/upload', {
+        const uploadRes = await fetch('https://hackcbs-cjno.onrender.com/api/upload', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -188,7 +188,7 @@ const ProblemSubmission = () => {
         }
       };
 
-      const response = await fetch('https://sih-26-jarr.onrender.com/api/problems', {
+      const response = await fetch('https://hackcbs-cjno.onrender.com/api/problems', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
