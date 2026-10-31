@@ -1,12 +1,10 @@
-import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LogOut, LayoutDashboard, PlusCircle, Globe, Sprout, Menu, X, UploadCloud } from 'lucide-react';
+import { LogOut, LayoutDashboard, PlusCircle, Globe, UploadCloud, Sprout } from 'lucide-react';
 
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const path = location.pathname;
-  const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
@@ -22,8 +20,8 @@ const Sidebar = () => {
         : [{ name: 'Home', path: '/dashboard', icon: <LayoutDashboard size={20} /> }]),
     { name: 'Submit', path: '/submit-problem', icon: <PlusCircle size={20} /> },
     { name: 'Public Feed', path: '/feed', icon: <Globe size={20} /> },
-    { name: 'Bulk Ingest', path: '/bulk-ingest', icon: <UploadCloud size={20} /> },
   ];
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>

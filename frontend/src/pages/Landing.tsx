@@ -274,8 +274,8 @@ const Landing = () => {
           <div className="absolute inset-0 z-40 bg-[#061a14] flex flex-col items-center justify-center text-center px-6 pointer-events-auto">
             <Link
               to="/login"
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-white/90 hover:text-white transition-all tracking-widest leading-none drop-shadow-md capitalize hover:scale-105"
-              style={{ fontFamily: "'Cormorant Garamond', 'Instrument Serif', Georgia, serif", fontWeight: 300 }}
+              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-normal text-white hover:text-amber-400 transition-colors tracking-tight leading-none drop-shadow-lg capitalize"
+              style={{ fontFamily: "'Instrument Serif', 'Cormorant Garamond', Georgia, serif" }}
             >
               Got a Problem?
             </Link>

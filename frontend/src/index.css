@@ -3,8 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-  html,
-  body {
+  html, body {
     @apply bg-[#061a14] text-white antialiased m-0 p-0;
     overscroll-behavior: none;
     overscroll-behavior-y: none;
@@ -17,7 +16,6 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
-
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
