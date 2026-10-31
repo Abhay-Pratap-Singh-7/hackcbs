@@ -40,6 +40,9 @@ const CardEvidenceImage = ({ url }: { url?: string }) => {
 const PublicFeed = () => {
   const [problems, setProblems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState('');
   
   // Filter & Search states
@@ -54,16 +57,24 @@ const PublicFeed = () => {
 
   const filterTabs = ['All', 'Nearby', 'Trending', 'Needs Support', 'Solved'];
 
+  // Reset and fetch first page on filter change
   useEffect(() => {
-    fetchFeed();
+    setPage(1);
+    setHasMore(true);
+    fetchFeed(1, true);
   }, [categoryFilter]);
 
-  const fetchFeed = async () => {
-    setLoading(true);
+  const fetchFeed = async (pageNumber: number, isInitial: boolean = false) => {
+    if (isInitial) {
+      setLoading(true);
+    } else {
+      setLoadingMore(true);
+    }
+    
     try {
-      let url = 'https://sih-26-jarr.onrender.com/api/problems';
+      let url = `https://sih-26-jarr.onrender.com/api/problems?page=${pageNumber}&limit=12`;
       if (categoryFilter) {
-        url += `?category=${encodeURIComponent(categoryFilter)}`;
+        url += `&category=${encodeURIComponent(categoryFilter)}`;
       }
       
       const token = localStorage.getItem('accessToken');
@@ -89,21 +100,58 @@ const PublicFeed = () => {
       
       const data = await response.json();
       const rawProblems = data.data || [];
-      setProblems(rawProblems);
+      const pagination = data.pagination;
+
+      if (isInitial) {
+        setProblems(rawProblems);
+      } else {
+        setProblems(prev => {
+          // Avoid duplicate problems by _id
+          const existingIds = new Set(prev.map(p => p._id));
+          const newItems = rawProblems.filter((p: any) => !existingIds.has(p._id));
+          return [...prev, ...newItems];
+        });
+      }
+
+      // Check if more pages exist
+      if (pagination) {
+        setHasMore(pagination.page < pagination.pages && rawProblems.length > 0);
+      } else {
+        setHasMore(rawProblems.length === 12);
+      }
 
       // Initialize upvotes state strictly from backend
-      const initialUpvoted: { [id: string]: boolean } = {};
-      const initialCounts: { [id: string]: number } = {};
-      rawProblems.forEach((p: any) => {
-        initialUpvoted[p._id] = p.upvotedBy?.includes(user._id || user.id) || false;
-        initialCounts[p._id] = p.upvotesCount ?? (Array.isArray(p.upvotedBy) ? p.upvotedBy.length : 0);
+      setUpvotedMap(prev => {
+        const next = { ...prev };
+        rawProblems.forEach((p: any) => {
+          next[p._id] = p.upvotedBy?.includes(user._id || user.id) || false;
+        });
+        return next;
       });
-      setUpvotedMap(initialUpvoted);
-      setUpvotesCountMap(initialCounts);
+
+      setUpvotesCountMap(prev => {
+        const next = { ...prev };
+        rawProblems.forEach((p: any) => {
+          next[p._id] = p.upvotesCount ?? (Array.isArray(p.upvotedBy) ? p.upvotedBy.length : 0);
+        });
+        return next;
+      });
+
+      setPage(pageNumber);
     } catch (err: any) {
       setError(err.message);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
+    }
+  };
+
+  const handleScroll = (e: React.UIEvent<HTMLElement>) => {
+    const target = e.currentTarget;
+    const isNearBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 250;
+
+    if (isNearBottom && !loading && !loadingMore && hasMore) {
+      fetchFeed(page + 1, false);
     }
   };
 
@@ -176,7 +224,10 @@ const PublicFeed = () => {
     <div className="flex h-screen w-screen bg-[#f4f1e1] font-sans text-[#2c4230] overflow-hidden">
       <Sidebar />
 
-      <main className="flex-1 flex flex-col overflow-y-auto relative bg-[#f4f1e1]">
+      <main 
+        onScroll={handleScroll}
+        className="flex-1 flex flex-col overflow-y-auto relative bg-[#f4f1e1]"
+      >
         {/* Thematic Header Bar */}
         <header className="sticky top-0 z-20 bg-white/95 backdrop-blur-md border-b border-[#e2ded0] px-8 py-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
           <div>
@@ -353,6 +404,20 @@ const PublicFeed = () => {
                   </div>
                 );
               })}
+            </div>
+          )}
+
+          {/* Bottom Pagination Loading Spinner / End status */}
+          {loadingMore && (
+            <div className="py-8 flex items-center justify-center gap-2 text-xs font-bold text-[#4a6b4e]">
+              <Sparkles className="animate-spin" size={18} />
+              <span>Loading more civic challenges...</span>
+            </div>
+          )}
+
+          {!hasMore && problems.length > 0 && !loading && (
+            <div className="py-8 text-center text-xs text-[#7d8c7c] font-medium border-t border-[#e2ded0]/60 mt-4">
+              <span>✓ You have viewed all community challenges in this category</span>
             </div>
           )}
         </div>

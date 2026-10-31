@@ -54,6 +54,10 @@ const Dashboard = () => {
     if (userStr) {
       try {
         const user = JSON.parse(userStr);
+        if (user.role === 'INSTITUTE_ADMIN') {
+          navigate('/university/dashboard');
+          return;
+        }
         if (user.name) setUserName(user.name);
       } catch (e) {
         console.error("Error parsing user data", e);
