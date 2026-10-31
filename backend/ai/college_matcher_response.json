@@ -1,0 +1,85 @@
+{
+    "success": true,
+    "data": [
+        {
+            "college_name": "DORANDA COLLEGE RANCHI",
+            "district": "Ranchi",
+            "latitude": 23.334701,
+            "longitude": 85.313707,
+            "distance_km": 1.13,
+            "domain": "water resources",
+            "faculty_expertise": "Wastewater Treatment, Environmental Hydrology, River Basin Modeling",
+            "infrastructure": "Environmental Engineering Lab, Water Sampling & Analysis Unit, Smart Flow Monitoring Setup",
+            "match_score": 92.97,
+            "match_breakdown": {
+                "domain_score": 1.0,
+                "geo_score": 0.98,
+                "semantic_score": 0.79
+            }
+        },
+        {
+            "college_name": "Uttari Karnpura Shramik Mahavidyalaya, Dakra, Ranchi",
+            "district": "Ranchi",
+            "latitude": 23.3489,
+            "longitude": 85.3272,
+            "distance_km": 1.87,
+            "domain": "water resources",
+            "faculty_expertise": "Wastewater Treatment, Environmental Hydrology, River Basin Modeling",
+            "infrastructure": "Environmental Engineering Lab, Water Sampling & Analysis Unit, Smart Flow Monitoring Setup",
+            "match_score": 92.46,
+            "match_breakdown": {
+                "domain_score": 1.0,
+                "geo_score": 0.96,
+                "semantic_score": 0.79
+            }
+        },
+        {
+            "college_name": "S.G.M. College, Ranchi",
+            "district": "Ranchi",
+            "latitude": 23.370235,
+            "longitude": 85.320065,
+            "distance_km": 3.1,
+            "domain": "water resources",
+            "faculty_expertise": "Watershed Management, Rainwater Harvesting Systems, Irrigation Engineering",
+            "infrastructure": "Hydrogeology Lab, Fluid Mechanics Lab, Meteorological Station, Water Treatment Pilot Plant",
+            "match_score": 91.71,
+            "match_breakdown": {
+                "domain_score": 1.0,
+                "geo_score": 0.94,
+                "semantic_score": 0.79
+            }
+        },
+        {
+            "college_name": "DEGREE COLLEGE, BARHI",
+            "district": "Hazaribagh",
+            "latitude": 23.9745,
+            "longitude": 85.3743,
+            "distance_km": 70.41,
+            "domain": "water resources",
+            "faculty_expertise": "Wastewater Treatment, Environmental Hydrology, River Basin Modeling",
+            "infrastructure": "Environmental Engineering Lab, Water Sampling & Analysis Unit, Smart Flow Monitoring Setup",
+            "match_score": 67.31,
+            "match_breakdown": {
+                "domain_score": 1.0,
+                "geo_score": 0.24,
+                "semantic_score": 0.79
+            }
+        },
+        {
+            "college_name": "HOLY CROSS COLLEGE (EVENING), HAZARIBAG",
+            "district": "Hazaribagh",
+            "latitude": 23.9905,
+            "longitude": 85.3663,
+            "distance_km": 72.11,
+            "domain": "water resources",
+            "faculty_expertise": "Hydrology, Hydrogeology, Groundwater Assessment, Water Quality Analysis",
+            "infrastructure": "Water Quality Testing Lab, GIS & Hydrological Modeling Center, Rainwater Harvesting Facility",
+            "match_score": 67.14,
+            "match_breakdown": {
+                "domain_score": 1.0,
+                "geo_score": 0.24,
+                "semantic_score": 0.8
+            }
+        }
+    ]
+}

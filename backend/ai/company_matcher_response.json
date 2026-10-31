@@ -1,0 +1,90 @@
+{
+    "success": true,
+    "data": [
+        {
+            "id": "JH-IND-115",
+            "company_name": "Adityapur Common Effluent Pre-Treatment",
+            "domain": "water resources",
+            "expertise": "Coagulation, flocculation & primary clarifier dosing skids",
+            "latitude": 22.78451,
+            "longitude": 86.15521,
+            "distance_km": 0.0,
+            "is_verified": true,
+            "source": "dataset_csv",
+            "match_score": 94.35,
+            "match_breakdown": {
+                "domain_score": 1.0,
+                "geo_score": 1.0,
+                "semantic_score": 0.81
+            }
+        },
+        {
+            "id": "JH-IND-025",
+            "company_name": "Chotanagpur Water Solutions",
+            "domain": "water resources",
+            "expertise": "Industrial reverse osmosis & clarifier automation",
+            "latitude": 22.783412,
+            "longitude": 86.154231,
+            "distance_km": 0.16,
+            "is_verified": true,
+            "source": "dataset_csv",
+            "match_score": 93.6,
+            "match_breakdown": {
+                "domain_score": 1.0,
+                "geo_score": 1.0,
+                "semantic_score": 0.79
+            }
+        },
+        {
+            "id": "JH-IND-090",
+            "company_name": "Chotanagpur SensorWorks",
+            "domain": "water resources",
+            "expertise": "Hydrostatic tank level transmitters & flow meters",
+            "latitude": 22.79512,
+            "longitude": 86.16841,
+            "distance_km": 1.8,
+            "is_verified": true,
+            "source": "dataset_csv",
+            "match_score": 92.76,
+            "match_breakdown": {
+                "domain_score": 1.0,
+                "geo_score": 0.96,
+                "semantic_score": 0.8
+            }
+        },
+        {
+            "id": "JH-IND-026",
+            "company_name": "Eastern Aqua Filtration Works",
+            "domain": "water resources",
+            "expertise": "Industrial sludge press dewatering & aeration",
+            "latitude": 22.79154,
+            "longitude": 86.18241,
+            "distance_km": 2.9,
+            "is_verified": true,
+            "source": "dataset_csv",
+            "match_score": 91.85,
+            "match_breakdown": {
+                "domain_score": 1.0,
+                "geo_score": 0.94,
+                "semantic_score": 0.79
+            }
+        },
+        {
+            "id": "JH-IND-098",
+            "company_name": "JMT Auto Limited Plant-2",
+            "domain": "livelihood",
+            "expertise": "Automotive ring gears & machined oil pump bodies",
+            "latitude": 22.78651,
+            "longitude": 86.15941,
+            "distance_km": 0.49,
+            "is_verified": true,
+            "source": "dataset_csv",
+            "match_score": 65.52,
+            "match_breakdown": {
+                "domain_score": 0.2,
+                "geo_score": 0.99,
+                "semantic_score": 0.8
+            }
+        }
+    ]
+}

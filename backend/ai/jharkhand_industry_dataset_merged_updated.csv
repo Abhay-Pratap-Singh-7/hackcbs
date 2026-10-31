@@ -1,0 +1,116 @@
+id,name,location,domain,expertise,is_verified
+JH-IND-001,3 A.P. Polymers,"(22.784512, 86.155210)",environment,Industrial rubber mouldings & polymer compounding,TRUE
+JH-IND-002,A K Industries,"(22.781240, 86.151240)",livelihood,Precision machining & automotive sheet metal presswork,TRUE
+JH-IND-003,A.G Auto Pvt Ltd,"(22.791540, 86.162410)",livelihood,Heavy commercial vehicle chassis frames & brackets,TRUE
+JH-IND-004,A.L.P Colours & Chemicals Industries,"(22.782410, 86.153410)",environment,Industrial paints & anticorrosive coatings,TRUE
+JH-IND-005,A.R. Enterprises,"(22.785610, 86.157810)",livelihood,Commercial automotive fasteners & cold forging,TRUE
+JH-IND-006,AA Craft Arch Tech Solutions,"(22.801240, 86.172410)",urban development,Structural steel fabrication & PEB components,TRUE
+JH-IND-007,Aarvik Engineering Shops LLP,"(22.789120, 86.159810)",livelihood,Industrial tooling jigs & machining fixtures,TRUE
+JH-IND-008,Castle Cement Industries,"(22.795410, 86.165410)",urban development,Portland slag cement & geopolymer fly-ash bricks,TRUE
+JH-IND-009,M/s J.J. Innojet,"(22.802140, 86.174510)",urban development,High-tensile industrial nails & binding wire,TRUE
+JH-IND-010,Bhalotia Engineering Works Pvt Ltd,"(22.783410, 86.154210)",livelihood,Heavy steel castings & industrial forging,TRUE
+JH-IND-011,South Bihar Plastic Pvt Ltd,"(22.781940, 86.152840)",environment,HDPE blow-moulded industrial containers,TRUE
+JH-IND-012,Deepak Engineering Company,"(22.803410, 86.176510)",livelihood,High-precision industrial lathe & milling jobs,TRUE
+JH-IND-013,Prakash Industries,"(22.786510, 86.158410)",energy,Industrial electrical switchgear panels & wiring,TRUE
+JH-IND-014,RSB Transmissions (I) Ltd Unit-1,"(22.793410, 86.164210)",livelihood,Propeller shafts & differential axle assemblies,TRUE
+JH-IND-015,Highco Engineers Pvt Ltd,"(22.798120, 86.169120)",livelihood,Automotive sheet metal stampings & sub-assemblies,TRUE
+JH-IND-016,Ramkrishna Forgings Ltd Plant-1,"(22.781520, 86.149810)",livelihood,Heavy closed-die carbon steel forgings,TRUE
+JH-IND-017,Multitech Auto Pvt Ltd,"(22.792410, 86.163120)",livelihood,SG iron ductile castings for axle housings,TRUE
+JH-IND-018,Bebbco Mandi Auto Components,"(22.787120, 86.158910)",livelihood,Tipper body fabrication & heavy hydraulic rams,TRUE
+JH-IND-019,Metaldyne Industries Ltd,"(22.794510, 86.165810)",livelihood,Powertrain vibration dampers & precision shafts,TRUE
+JH-IND-020,Adityapur Autoparts Pvt Ltd,"(22.788510, 86.160120)",livelihood,Suspension leaf springs & parabolic assemblies,TRUE
+JH-IND-021,Bokaro Clean Water Systems,"(23.668512, 85.992410)",water resources,Industrial effluent filtration & mine water recycling,TRUE
+JH-IND-022,Damodar Waste Management Industries,"(23.791240, 86.442110)",water resources,Acid mine drainage neutralization & heavy metal removal,TRUE
+JH-IND-023,Subarnarekha Enviro Systems,"(23.342110, 85.312450)",water resources,Fluoride & arsenic adsorption filtration columns,TRUE
+JH-IND-024,Jharkhand Green Aquatech,"(23.682144, 86.012354)",water resources,Zero liquid discharge (ZLD) skids & effluent plants,TRUE
+JH-IND-025,Chotanagpur Water Solutions,"(22.783412, 86.154231)",water resources,Industrial reverse osmosis & clarifier automation,TRUE
+JH-IND-026,Eastern Aqua Filtration Works,"(22.791540, 86.182410)",water resources,Industrial sludge press dewatering & aeration,TRUE
+JH-IND-027,Tribal Belt PureWater Enterprises,"(24.281240, 85.431250)",water resources,Solar-powered community water filtration kiosks,TRUE
+JH-IND-028,Sanitation Engineering Works,"(23.771250, 86.415240)",water resources,Decentralized sewage treatment plants (STP),TRUE
+JH-IND-029,Ranchi Hydrological Labs,"(23.315240, 85.294150)",water resources,BOD/COD monitoring & groundwater isotopic testing,TRUE
+JH-IND-030,Adityapur Water Tech,"(24.482100, 86.654320)",water resources,Micro-filtration membranes & chemical dosing skids,TRUE
+JH-IND-031,Logiclens Innovations,"(23.344120, 85.309610)",public administration,AI-driven edge video analytics & industrial safety,TRUE
+JH-IND-032,My Galla Retail Technologies,"(23.352140, 85.321450)",livelihood,Cloud POS & rural inventory billing automation,TRUE
+JH-IND-033,MillaVita Foods,"(23.365410, 85.334120)",agriculture,Millet-based ready-to-eat fortified food products,TRUE
+JH-IND-034,Weintel Labs,"(23.341250, 85.315420)",urban development,Industrial IoT gateways & LoRaWAN sensor networks,TRUE
+JH-IND-035,Mentamind Solutions,"(23.355120, 85.328910)",healthcare,Cognitive wellness software & tele-consulting,TRUE
+JH-IND-036,Natureship Agro,"(23.332140, 85.302140)",agriculture,Rural women-led cold pressed edible oils & superfoods,TRUE
+JH-IND-037,Prasad Ji Udyog,"(23.371240, 85.342150)",agriculture,Pre-packaged culinary gravies & aseptic packing,TRUE
+JH-IND-038,Sammat India Technologies,"(23.348910, 85.318910)",public administration,Financial reconciliation & dispute automation SaaS,TRUE
+JH-IND-039,Birsa Agro-Tech Solutions,"(23.365412, 85.321045)",agriculture,Solar cold rooms & grain sorting conveyors,TRUE
+JH-IND-040,Jharkhand Lac & Agro Organics,"(22.801245, 86.174320)",agriculture,Natural shellac processing & bio-fertilizers,TRUE
+JH-IND-041,Chotanagpur Herbal Labs,"(23.332140, 85.321450)",healthcare,Supercritical CO2 extraction of herbal medicines,TRUE
+JH-IND-042,Jharkhand BioExtracts,"(24.261240, 85.421540)",healthcare,Solid-state fermentation & microbial fungal cultures,TRUE
+JH-IND-043,Bokaro Medical Gases,"(23.661240, 86.011240)",healthcare,Liquid medical oxygen tankers & hospital pipelines,TRUE
+JH-IND-044,Adityapur Diagnostics,"(22.781240, 86.151240)",healthcare,Lateral flow malaria & typhoid rapid test cassettes,TRUE
+JH-IND-045,Tribal Health Telemetrics,"(23.361240, 85.345120)",healthcare,12-lead portable ECG with cellular sync,TRUE
+JH-IND-046,Santhal Bio-Pharma,"(24.481240, 86.661240)",healthcare,Phytochemical cough syrups & sterile liquid bottles,TRUE
+JH-IND-047,Jamshedpur Surgical Auxiliaries,"(22.815410, 86.195120)",healthcare,Orthopedic stainless steel screws & forceps,TRUE
+JH-IND-048,Dhanbad Life Sciences,"(23.774510, 86.425120)",healthcare,Industrial N95 respirators & portable spirometers,TRUE
+JH-IND-049,Hazaribagh Botanicals,"(24.291240, 85.451240)",healthcare,Steam distilled lemongrass oil & bio-repellents,TRUE
+JH-IND-050,Birsa Accessibility Labs,"(23.342150, 85.312450)",accessibility,Tactile Braille displays & vernacular screen readers,TRUE
+JH-IND-051,Jharkhand EdTech Works,"(23.356120, 85.328910)",education,Low-cost STEM electronic prototyping kits,TRUE
+JH-IND-052,Chotanagpur Tactile Tech,"(22.784510, 86.155210)",accessibility,Ergonomic 3D printed prosthetic limbs,TRUE
+JH-IND-053,Ranchi Adaptive Hardware,"(23.315410, 85.295120)",accessibility,Assistive hearing screening hardware kits,TRUE
+JH-IND-054,Adityapur STEM Kits,"(22.805120, 86.185420)",education,Solar-powered off-grid educational tablets,TRUE
+JH-IND-055,Bokaro Heavy Engineering,"(23.654120, 85.981240)",livelihood,Heavy slurry pumps & pipeline wear liners,TRUE
+JH-IND-056,Adityapur Mining Spares,"(22.789120, 86.160120)",livelihood,Earthmover bucket teeth & hardened pins,TRUE
+JH-IND-057,Dhanbad Colliery Auxiliaries,"(23.781240, 86.421540)",energy,Flameproof underground conveyor idlers & rollers,TRUE
+JH-IND-058,Ranchi Foundry & Forging,"(23.308510, 85.294510)",livelihood,High manganese steel crusher jaw plates,TRUE
+JH-IND-059,Ramgarh Concast Steels,"(23.615410, 85.518410)",urban development,Continuous casting billets & wire rods,TRUE
+JH-IND-060,Giridih Industrial Spares,"(24.195120, 86.312450)",energy,Mica sheet punching & heavy refractory spares,TRUE
+JH-IND-061,Chaibasa Mineral Processing,"(22.561240, 85.812450)",livelihood,Iron ore grinding balls & classifier spirals,TRUE
+JH-IND-062,Kandra Foundry Works,"(23.754120, 86.415240)",livelihood,Heavy grey cast iron industrial valve bodies,TRUE
+JH-IND-063,Vananchal Mining Machinery,"(23.661240, 86.012450)",water resources,Mine dewatering high-head centrifugal pumps,TRUE
+JH-IND-064,Eastern Heavy Castings,"(22.812450, 86.195410)",livelihood,Alloy steel gears & mill trunnion bearings,TRUE
+JH-IND-065,Dhanbad Refractories Ltd,"(23.771240, 86.421540)",environment,Alumina silica refractory firebricks for furnaces,TRUE
+JH-IND-066,Jharkhand Specialty Chemicals,"(23.361240, 85.345120)",water resources,Industrial water treatment anti-scalants & biocides,TRUE
+JH-IND-067,Adityapur Polymer Works,"(22.781240, 86.151240)",environment,Polyurethane bushes & high-abrasion seals,TRUE
+JH-IND-068,Bokaro Tar Derivatives,"(23.674510, 86.024510)",environment,Coal tar pitch distilment & carbon black feedstock,TRUE
+JH-IND-069,Ranchi Advanced Materials,"(23.324510, 85.312450)",urban development,Geopolymer binders & industrial fly-ash polymers,TRUE
+JH-IND-070,Jasidih Resins & Binders,"(24.471250, 86.621540)",environment,Foundry grade phenol formaldehyde resins,TRUE
+JH-IND-071,Ramgarh Chemical Corp,"(23.621540, 85.524510)",environment,Sodium silicate & industrial bleaching earth,TRUE
+JH-IND-072,Chotanagpur Coatings,"(22.795410, 86.171240)",environment,High-temperature epoxy zinc-rich primer paints,TRUE
+JH-IND-073,Kandra Chemical Synthesis,"(23.765410, 86.428910)",environment,Industrial flotation reagents & xanthates,TRUE
+JH-IND-074,Eastern Refractory Works,"(23.681240, 86.035410)",environment,Basic magnesite bricks & ramming masses,TRUE
+JH-IND-075,Bundu Lac & Food Clusters,"(23.181240, 85.584120)",livelihood,Sticklac washing refining & seedlac grades,TRUE
+JH-IND-076,Lohardaga Honey Processing,"(23.441240, 84.681240)",agriculture,Forest honey moisture reduction & filtration skids,TRUE
+JH-IND-077,Kuru Agro Foods,"(23.481240, 84.812450)",agriculture,Paddy de-husking & automated parboiling,TRUE
+JH-IND-078,Hazaribagh Oilseed Works,"(24.271240, 85.412450)",agriculture,Mustard oil cold extraction & filter pressing,TRUE
+JH-IND-079,Palamu Cashew Processors,"(24.041240, 84.071240)",agriculture,Raw cashew steaming peeling & vacuum packing,TRUE
+JH-IND-080,Ranchi Mushroom Biotech,"(23.345120, 85.318910)",agriculture,Oyster mushroom spawn production & drying,TRUE
+JH-IND-081,Dumka Agro Packagers,"(24.281240, 87.261240)",agriculture,Pulse sorting destoning & multi-head packing,TRUE
+JH-IND-082,Chotanagpur Food Skids,"(23.361240, 85.351240)",agriculture,Stainless steel food sanitization piping,TRUE
+JH-IND-083,Vananchal Natural Foods,"(22.791240, 86.161240)",agriculture,Moringa leaf pulverizing & capsule filling,TRUE
+JH-IND-084,Kolhan Honey Refining,"(22.805120, 86.181240)",agriculture,Centrifugal honey clarifiers & bottling skids,TRUE
+JH-IND-085,Ranchi Embedded Networks,"(23.334510, 85.311240)",public administration,Industrial microcontrollers & firmware development,TRUE
+JH-IND-086,Adityapur IoT Devices,"(22.784510, 86.155210)",livelihood,Wireless vibration sensors for CNC spindle health,TRUE
+JH-IND-087,Dhanbad MineTelemetrics,"(23.784510, 86.425120)",energy,Intrinsically safe explosive gas telemetry modules,TRUE
+JH-IND-088,Bokaro Automation Solutions,"(23.668510, 85.998410)",livelihood,PLC panels & rolling mill automation programming,TRUE
+JH-IND-089,Jharkhand LoRa Systems,"(23.351240, 85.328910)",urban development,Long-range low-power smart city street nodes,TRUE
+JH-IND-090,Chotanagpur SensorWorks,"(22.795120, 86.168410)",water resources,Hydrostatic tank level transmitters & flow meters,TRUE
+JH-IND-091,Eastern Edge Analytics,"(23.341250, 85.318910)",livelihood,Edge computing enclosures for conveyor belt CV,TRUE
+JH-IND-092,Vananchal IoT Skids,"(23.671240, 86.015410)",water resources,Smart water pump starters with SMS alert links,TRUE
+JH-IND-093,Kandra Communications,"(23.761240, 86.418910)",urban development,Industrial RS485 to Ethernet network convertors,TRUE
+JH-IND-094,SmartColliery Systems,"(23.791240, 86.435120)",energy,Underground miner tracking RFID badge networks,TRUE
+JH-IND-095,Tata Steel Utilities & Infrastructure,"(22.801240, 86.195120)",urban development,City municipal water supply & wastewater networks,TRUE
+JH-IND-096,Tata Cummins Pvt Ltd,"(22.785410, 86.221540)",livelihood,High-horsepower diesel & alternative fuel engines,TRUE
+JH-IND-097,JMT Auto Limited Plant-1,"(22.781240, 86.151240)",livelihood,Transmission gears pinions & synchronizer cones,TRUE
+JH-IND-098,JMT Auto Limited Plant-2,"(22.786510, 86.159410)",livelihood,Automotive ring gears & machined oil pump bodies,TRUE
+JH-IND-099,Bhilai Engineering Corp Adityapur,"(22.791240, 86.164510)",livelihood,Rolling mill equipment & heavy ingot handling,TRUE
+JH-IND-100,Tayo Rolls Limited,"(22.774510, 86.141250)",livelihood,Cast iron & forged steel rolls for steel mills,TRUE
+JH-IND-101,Timken India Ltd Jamshedpur,"(22.781240, 86.231240)",livelihood,Tapered roller bearings & railway bearing boxes,TRUE
+JH-IND-102,TRF Limited Heavy Engg,"(22.789120, 86.211240)",energy,Stacker reclaimers & heavy coal wagon tipplers,TRUE
+JH-IND-103,Jamipol Limited,"(22.802140, 86.215410)",environment,Hot metal desulphurizing compounds for steel,TRUE
+JH-IND-104,Adityapur Tool Room (IDTR),"(22.795410, 86.168510)",education,High-precision die design & CNC workforce training,TRUE
+JH-IND-105,Tata Pigments Limited,"(22.784510, 86.205120)",environment,Synthetic iron oxide pigments & construction oxides,TRUE
+JH-IND-106,Bokaro Steel Auxiliary Unit-1,"(23.665410, 85.998410)",livelihood,Blast furnace tuyeres & heavy copper cooling staves,TRUE
+JH-IND-107,Electrosteel Castings Bokaro,"(23.645120, 86.081240)",water resources,Ductile iron pressure pipes for water mains,TRUE
+JH-IND-108,Dalmia Cement Bharat Bokaro,"(23.671240, 86.035120)",urban development,Slag cement grinding & automated bagging lines,TRUE
+JH-IND-109,ONGC CBM Asset Bokaro,"(23.631240, 86.012450)",energy,Coal bed methane gas extraction & drying units,TRUE
+JH-IND-110,Usha Martin Wire Ropes Ranchi,"(23.361240, 85.371240)",livelihood,High-tensile locked coil mining wire ropes,TRUE
+JH-IND-111,Heavy Engineering Corp (HEC) Foundries,"(23.315410, 85.295120)",livelihood,Massive steel forgings for mining & space launch,TRUE
+JH-IND-112,MECON Engineering Labs Ranchi,"(23.324510, 85.312450)",energy,Metallurgical plant design & green hydrogen engineering,TRUE
+JH-IND-113,Central Mine Planning & Design (CMPDI),"(23.351240, 85.334120)",energy,Geological borehole logging & mine safety modeling,TRUE
+JH-IND-114,SAIL RDCIS Ranchi,"(23.342110, 85.318910)",environment,Automotive grade advanced high-strength steels (AHSS),TRUE
+JH-IND-115,Adityapur Common Effluent Pre-Treatment,"(22.784510, 86.155210)",water resources,"Coagulation, flocculation & primary clarifier dosing skids",TRUE
