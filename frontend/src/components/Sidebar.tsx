@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LogOut, LayoutDashboard, PlusCircle, Globe, Sprout, Menu, X, UploadCloud, MapPin } from 'lucide-react';
+import { LogOut, LayoutDashboard, PlusCircle, Globe, Sprout, Menu, X, MapPin } from 'lucide-react';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -19,12 +19,15 @@ const Sidebar = () => {
   const navItems = [
     ...(user.role === 'INSTITUTE_ADMIN' 
         ? [{ name: 'University Portal', path: '/university/dashboard', icon: <LayoutDashboard size={20} /> }] 
+        : user.role === 'GOVT_OFFICER'
+        ? [{ name: 'Govt Master Portal', path: '/govt/dashboard', icon: <LayoutDashboard size={20} /> }]
+        : user.role === 'INDUSTRY_PARTNER'
+        ? [{ name: 'Industry Portal', path: '/industry/dashboard', icon: <LayoutDashboard size={20} /> }]
         : [{ name: 'Home', path: '/dashboard', icon: <LayoutDashboard size={20} /> }]),
     { name: 'Explore Map', path: '/explore', icon: <MapPin size={20} /> },
     { name: 'Submit Problem', path: '/submit-problem', icon: <PlusCircle size={20} /> },
     { name: 'Public Feed', path: '/feed', icon: <Globe size={20} /> },
   ];
-  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>

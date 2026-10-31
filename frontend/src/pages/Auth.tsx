@@ -162,6 +162,7 @@ const Auth = () => {
         const refreshToken = data.data?.tokens?.refreshToken || data.refreshToken || data.data?.refreshToken;
         if (accessToken) localStorage.setItem('accessToken', accessToken);
         if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
+        const userObj = data.data?.user || data.user;
         if (userObj) {
           localStorage.setItem('user', JSON.stringify(userObj));
           if (userObj.role === 'INSTITUTE_ADMIN') {
