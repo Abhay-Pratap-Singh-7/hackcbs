@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "727512589495",
+    "project_id": "samadhan-setu-fd9c8",
+    "storage_bucket": "samadhan-setu-fd9c8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:727512589495:android:77849341f66e5f5cd99932",
+        "android_client_info": {
+          "package_name": "com.example.sih_2026"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJPYFoW-CP3-Dbm-9gf1qS0lCuIiakXZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
