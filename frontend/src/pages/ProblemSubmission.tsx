@@ -142,20 +142,26 @@ const ProblemSubmission = () => {
 
       let uploadedMedia: any[] = [];
       if (mediaFiles.length > 0) {
-        for (let i = 0; i < mediaFiles.length; i++) {
-          const file = mediaFiles[i];
-          const base64 = await new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-          });
-          uploadedMedia.push({
-            url: base64,
-            mediaType: file.type.startsWith('image/') ? 'image' : 'document',
-            name: file.name
-          });
+        const formData = new FormData();
+        mediaFiles.forEach((file) => {
+          formData.append('files', file);
+        });
+
+        const uploadRes = await fetch('https://sih-26-jarr.onrender.com/api/upload', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        });
+
+        if (!uploadRes.ok) {
+          const uploadErr = await uploadRes.json().catch(() => ({}));
+          throw new Error(uploadErr.message || 'Failed to upload evidence to Cloudinary');
         }
+
+        const uploadData = await uploadRes.json();
+        uploadedMedia = uploadData.data || [];
       } else {
         uploadedMedia.push({
           url: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600&q=80',
@@ -178,7 +184,7 @@ const ProblemSubmission = () => {
         },
         imagesAndMedia: uploadedMedia,
         supportingInfo: {
-          existingInterventions: ''
+          existingInterventions
         }
       };
 

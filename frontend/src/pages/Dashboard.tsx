@@ -117,12 +117,13 @@ const Dashboard = () => {
     <div className="flex h-screen w-screen bg-[#f4f1e1] font-sans text-[#2c4230] overflow-hidden">
       <Sidebar />
 
-      <main className="flex-1 flex flex-col overflow-y-auto relative bg-civic-page">
+      <main className="flex-1 flex flex-col overflow-y-auto relative bg-[#f4f1e1]">
         
         {/* Thematic Header Banner */}
         <div className="relative h-48 w-full shrink-0 overflow-hidden bg-[#4a6b4e] flex items-end px-8 sm:px-10 pb-6 rounded-bl-3xl shadow-sm">
           {/* Subtle nature overlay pattern / gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-civic-primary-dark to-transparent opacity-80"></div>
+          <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')] mix-blend-overlay"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#2c4230] to-transparent opacity-80"></div>
           
           <div className="relative z-10 flex w-full justify-between items-end">
             <div className="flex flex-col text-[#f4f1e1]">

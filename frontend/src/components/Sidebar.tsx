@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LogOut, LayoutDashboard, PlusCircle, Globe, Sprout, Menu, X, MapPin } from 'lucide-react';
+import { LogOut, LayoutDashboard, PlusCircle, Globe, Sprout, Menu, X, UploadCloud, MapPin } from 'lucide-react';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -16,17 +16,19 @@ const Sidebar = () => {
 
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   
+  const isUniversity = user.role === 'INSTITUTE_ADMIN' || user.role === 'UNIVERSITY' || user.role === 'COLLEGE';
+  const isIndustry = user.role === 'INDUSTRY_PARTNER' || user.role === 'INDUSTRY';
+
   const navItems = [
-    ...(user.role === 'INSTITUTE_ADMIN' 
+    ...(isUniversity 
         ? [{ name: 'University Portal', path: '/university/dashboard', icon: <LayoutDashboard size={20} /> }] 
-        : user.role === 'GOVT_OFFICER'
-        ? [{ name: 'Govt Master Portal', path: '/govt/dashboard', icon: <LayoutDashboard size={20} /> }]
-        : user.role === 'INDUSTRY_PARTNER'
+        : isIndustry
         ? [{ name: 'Industry Portal', path: '/industry/dashboard', icon: <LayoutDashboard size={20} /> }]
         : [{ name: 'Home', path: '/dashboard', icon: <LayoutDashboard size={20} /> }]),
     { name: 'Explore Map', path: '/explore', icon: <MapPin size={20} /> },
     { name: 'Submit Problem', path: '/submit-problem', icon: <PlusCircle size={20} /> },
     { name: 'Public Feed', path: '/feed', icon: <Globe size={20} /> },
+    { name: 'Bulk Ingest', path: '/bulk-ingest', icon: <UploadCloud size={20} /> },
   ];
 
   return (
@@ -58,9 +60,6 @@ const Sidebar = () => {
           <Link to="/" className="block relative transition-transform hover:scale-105">
             <img src="/assets/logo.webp" alt="Jharkhand Samadhan" className="max-w-[160px] h-auto mx-auto drop-shadow-md" />
           </Link>
-          <span className="text-[11px] font-semibold text-[#a4c2a8] tracking-widest uppercase mt-2 font-mono">
-            Citizen Action Hub
-          </span>
         </div>
 
         {/* Navigation Items */}
@@ -95,8 +94,8 @@ const Sidebar = () => {
               {user.name ? user.name.charAt(0).toUpperCase() : 'C'}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-bold text-[#f4f1e1] truncate">{user.name || 'Citizen'}</p>
-              <p className="text-[10px] text-[#a4c2a8] truncate">{user.district || 'Jharkhand, IN'}</p>
+              <p className="text-xs font-bold text-[#f4f1e1] truncate">{user.name || (isUniversity ? 'University Representative' : isIndustry ? 'Industry Partner' : 'Citizen')}</p>
+              <p className="text-[10px] text-[#a4c2a8] truncate">{user.profileDetails?.companyName || user.profileDetails?.institutionName || user.district || (isUniversity ? 'Academic R&D Portal' : isIndustry ? 'Corporate CSR Hub' : 'Jharkhand, IN')}</p>
             </div>
           </div>
           <button
