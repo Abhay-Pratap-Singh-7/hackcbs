@@ -237,7 +237,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
                                           ),
                                           const SizedBox(width: 8),
                                           Text(
-                                            'JHARKHAND SAMADHAN',
+                                            'INDIA SAMADHAN',
                                             style: GoogleFonts.poppins(
                                               fontSize: 12,
                                               fontWeight: FontWeight.w600,
@@ -276,7 +276,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
                                     FittedBox(
                                       fit: BoxFit.scaleDown,
                                       child: Text(
-                                        'Our People. Our Jharkhand. A Better Tomorrow.',
+                                        'Our People. Our India. A Better Tomorrow.',
                                         textAlign: TextAlign.center,
                                         maxLines: 1,
                                         softWrap: false,
@@ -316,7 +316,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
                           ),
                           const SizedBox(height: 18),
                           Text(
-                            'Government of Jharkhand • Civic Initiative',
+                            'Government of India • Civic Initiative',
                             style: GoogleFonts.poppins(
                               fontSize: 11,
                               color: Colors.white.withValues(alpha: 0.55),

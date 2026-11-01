@@ -78,7 +78,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 'fullName': _nameController.text.trim(),
                 'phone': _phoneController.text.trim(),
                 'district': _selectedDistrict ?? '',
-                'state': 'Jharkhand',
+                'state': 'India',
                 'pincode': _pincodeController.text.trim(),
               },
             ),
@@ -445,7 +445,7 @@ class _SignUpHeader extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          'Register to report problems and track solutions in Jharkhand',
+          'Register to report problems and track solutions in India',
           style: GoogleFonts.poppins(
             fontSize: 12,
             color: AppColors.neutral400,

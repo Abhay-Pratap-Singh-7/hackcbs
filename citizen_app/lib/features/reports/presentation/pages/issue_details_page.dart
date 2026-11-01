@@ -308,7 +308,7 @@ class _IssueDetailsPageState extends State<IssueDetailsPage> {
     final description = _problem.description.isNotEmpty ? _problem.description : context.tr('no_description_provided');
     
     final district = _problem.location?.district?.isNotEmpty == true ? _problem.location!.district! : 'Ranchi';
-    final state = _problem.location?.state?.isNotEmpty == true ? _problem.location!.state! : 'Jharkhand';
+    final state = _problem.location?.state?.isNotEmpty == true ? _problem.location!.state! : 'India';
     final address = _problem.location?.address?.isNotEmpty == true ? _problem.location!.address! : '$district, $state';
     
     final status = _problem.status.toUpperCase();

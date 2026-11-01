@@ -54,7 +54,7 @@ class DistrictDropdown extends StatelessWidget {
             fontWeight: FontWeight.w500,
             color: AppColors.neutral500,
           ),
-          items: AppConstants.jharkhandDistricts.map((district) {
+          items: AppConstants.indiaDistricts.map((district) {
             return DropdownMenuItem<String>(
               value: district,
               child: Text(

@@ -149,7 +149,7 @@ class AppLocalizations {
     // ENGLISH (en)
     // -------------------------------------------------------------
     'en': {
-      'app_name': 'Jharkhand Samadhan',
+      'app_name': 'India Samadhan',
       'tagline': 'Citizen Problem Reporting & R&D Platform',
       'tab_home': 'Home',
       'tab_explore': 'Explore',
@@ -200,12 +200,12 @@ class AppLocalizations {
       'logout': 'Logout',
       
       'civic_feed': 'Civic Feed',
-      'jharkhand_motto': 'Our People. Our Jharkhand. A Better Tomorrow.',
+      'india_motto': 'Our People. Our India. A Better Tomorrow.',
       'good_morning': 'Good Morning',
       'good_afternoon': 'Good Afternoon',
       'good_evening': 'Good Evening',
       'welcome_citizen': 'Hello, Citizen',
-      'home_subtitle': 'Real challenges reported across Jharkhand',
+      'home_subtitle': 'Real challenges reported across India',
       'filter_all': 'All',
       'filter_nearby': 'Nearby',
       'filter_trending': 'Trending',
@@ -461,7 +461,7 @@ class AppLocalizations {
     // HINDI (hi)
     // -------------------------------------------------------------
     'hi': {
-      'app_name': 'झारखण्ड समाधान',
+      'app_name': 'भारत समाधान',
       'tagline': 'नागरिक समस्या निवारण एवं अनुसंधान मंच',
       'tab_home': 'मुख्य पृष्ठ',
       'tab_explore': 'खोजें (मानचित्र)',
@@ -512,12 +512,12 @@ class AppLocalizations {
       'logout': 'लॉग आउट',
       
       'civic_feed': 'नागरिक फ़ीड',
-      'jharkhand_motto': 'हमारे लोग. हमारा झारखण्ड. एक बेहतर कल।',
+      'india_motto': 'हमारे लोग. हमारा भारत. एक बेहतर कल।',
       'good_morning': 'शुभ प्रभात',
       'good_afternoon': 'शुभ दोपहर',
       'good_evening': 'शुभ संध्या',
       'welcome_citizen': 'नमस्ते, नागरिक',
-      'home_subtitle': 'झारखण्ड भर से दर्ज की गई वास्तविक समस्याएं',
+      'home_subtitle': 'भारत भर से दर्ज की गई वास्तविक समस्याएं',
       'filter_all': 'सभी',
       'filter_nearby': 'निकटतम',
       'filter_trending': 'लोकप्रिय',
@@ -773,7 +773,7 @@ class AppLocalizations {
     // SANTHALI (sat) - Ol Chiki & Devanagari
     // -------------------------------------------------------------
     'sat': {
-      'app_name': 'ᱡᱷᱟᱨᱠᱷᱚᱸᱰ ᱥᱚᱢᱟᱫᱷᱟᱱ',
+      'app_name': 'ᱵᱷᱟᱨᱚᱛ ᱥᱚᱢᱟᱫᱷᱟᱱ',
       'tagline': 'ᱟᱹᱛᱩ ᱴᱚᱞᱟ ᱮᱴᱠᱮᱴᱚᱬᱮ ᱞᱟᱹᱭ ᱟᱨ ᱥᱚᱞᱦᱮ ᱢᱮᱞᱟᱝᱠᱤ',
       'tab_home': 'ᱚᱲᱟᱜ (Home)',
       'tab_explore': 'ᱥᱮᱸᱫᱽᱨᱟ (Explore)',
@@ -824,12 +824,12 @@ class AppLocalizations {
       'logout': 'ᱵᱟᱦᱨᱮ (Logout)',
       
       'civic_feed': 'ᱱᱟᱜᱟᱹᱨᱤᱭᱟᱹ ᱯᱷᱤᱰ',
-      'jharkhand_motto': 'ᱟᱵᱚᱣᱟᱜ ᱦᱚᱲ. ᱟᱵᱚᱣᱟᱜ ᱡᱷᱟᱨᱠᱷᱚᱸᱰ. ᱱᱟᱯᱟᱭ ᱜᱟᱯᱟ᱾',
+      'india_motto': 'ᱟᱵᱚᱣᱟᱜ ᱦᱚᱲ. ᱟᱵᱚᱣᱟᱜ ᱵᱷᱟᱨᱚᱛ. ᱱᱟᱯᱟᱭ ᱜᱟᱯᱟ᱾',
       'good_morning': 'ᱥᱟᱹᱜᱩᱱ ᱥᱮᱛᱟᱜ',
       'good_afternoon': 'ᱥᱟᱹᱜᱩᱱ ᱛᱤᱠᱤᱱ',
       'good_evening': 'ᱥᱟᱹᱜᱩᱱ ᱟᱹᱭᱩᱵ',
       'welcome_citizen': 'ᱡᱚᱦᱟᱨ, ᱱᱟᱜᱟᱹᱨᱤᱭᱟᱹ',
-      'home_subtitle': 'ᱡᱷᱟᱨᱠᱷᱚᱸᱰ ᱡᱟᱠᱟᱛ ᱠᱷᱚᱱ ᱦᱮᱡ ᱟᱠᱟᱱ ᱮᱴᱠᱮᱴᱚᱬᱮ ᱠᱚ',
+      'home_subtitle': 'ᱵᱷᱟᱨᱚᱛ ᱡᱟᱠᱟᱛ ᱠᱷᱚᱱ ᱦᱮᱡ ᱟᱠᱟᱱ ᱮᱴᱠᱮᱴᱚᱬᱮ ᱠᱚ',
       'filter_all': 'ᱡᱚᱛᱚ',
       'filter_nearby': 'ᱥᱩᱨ ᱨᱮᱱᱟᱜ',
       'filter_trending': 'ᱪᱚᱲᱛᱤ',
@@ -1085,7 +1085,7 @@ class AppLocalizations {
     // KHORTHA (kht)
     // -------------------------------------------------------------
     'kht': {
-      'app_name': 'झारखण्ड समाधान',
+      'app_name': 'भारत समाधान',
       'tagline': 'नागरिक दुख-तकलीफ बतावा आर समाधान पावा',
       'tab_home': 'घर (Home)',
       'tab_explore': 'खोजा (Explore)',
@@ -1136,12 +1136,12 @@ class AppLocalizations {
       'logout': 'बाहर निकला',
       
       'civic_feed': 'नागरिक फ़ीड',
-      'jharkhand_motto': 'हमर मानुष. हमर झारखण्ड. सुग्घर बिहान।',
+      'india_motto': 'हमर मानुष. हमर भारत. सुग्घर बिहान।',
       'good_morning': 'शुभ बिहान',
       'good_afternoon': 'शुभ दुपहरिया',
       'good_evening': 'शुभ संझा',
       'welcome_citizen': 'जोहार, नागरिक',
-      'home_subtitle': 'गोटे झारखण्ड से आवल समस्या सभ',
+      'home_subtitle': 'गोटे भारत से आवल समस्या सभ',
       'filter_all': 'सभे',
       'filter_nearby': 'सटले वाला',
       'filter_trending': 'चहल-पहल',
@@ -1397,7 +1397,7 @@ class AppLocalizations {
     // NAGPURI / SADRI (sck)
     // -------------------------------------------------------------
     'sck': {
-      'app_name': 'झारखण्ड समाधान',
+      'app_name': 'भारत समाधान',
       'tagline': 'नागरिक समस्या निवारण आर अनुसंधान मंच',
       'tab_home': 'घर (Home)',
       'tab_explore': 'खोजा (Explore)',
@@ -1448,12 +1448,12 @@ class AppLocalizations {
       'logout': 'बाहरे निकसू',
       
       'civic_feed': 'नागरिक फ़ीड',
-      'jharkhand_motto': 'हमर मनई. हमर झारखण्ड. एक सुग्घर बिहान।',
+      'india_motto': 'हमर मनई. हमर भारत. एक सुग्घर बिहान।',
       'good_morning': 'शुभ बिहान',
       'good_afternoon': 'शुभ दुपहरी',
       'good_evening': 'शुभ संझा',
       'welcome_citizen': 'जोहार, नागरिक',
-      'home_subtitle': 'गोटे झारखण्ड से आवल समस्या मन',
+      'home_subtitle': 'गोटे भारत से आवल समस्या मन',
       'filter_all': 'सभे',
       'filter_nearby': 'सटले वाला',
       'filter_trending': 'चहल-पहल',
@@ -1709,7 +1709,7 @@ class AppLocalizations {
     // BENGALI (bn)
     // -------------------------------------------------------------
     'bn': {
-      'app_name': 'ঝাড়খণ্ড সমাধান',
+      'app_name': 'ভারত সমাধান',
       'tagline': 'নাগরিক সমস্যা নিরসন ও গবেষণা মঞ্চ',
       'tab_home': 'হোম (Home)',
       'tab_explore': 'অনুসন্ধান (Explore)',
@@ -1760,12 +1760,12 @@ class AppLocalizations {
       'logout': 'লগ আউট',
       
       'civic_feed': 'নাগরিক ফিড',
-      'jharkhand_motto': 'আমাদের মানুষ. আমাদের ঝাড়খণ্ড. এক সুন্দর আগামী।',
+      'india_motto': 'আমাদের মানুষ. আমাদের ভারত. এক সুন্দর আগামী।',
       'good_morning': 'শুভ সকাল',
       'good_afternoon': 'শুভ দুপুর',
       'good_evening': 'শুভ সন্ধ্যা',
       'welcome_citizen': 'নমস্কার, নাগরিক',
-      'home_subtitle': 'ঝাড়খণ্ড জুড়ে নাগরিকদের জানানো বাস্তব সমস্যাগুলি',
+      'home_subtitle': 'ভারত জুড়ে নাগরিকদের জানানো বাস্তব সমস্যাগুলি',
       'filter_all': 'সকল',
       'filter_nearby': 'কাছাকাছি',
       'filter_trending': 'জনপ্রিয়',
@@ -2021,7 +2021,7 @@ class AppLocalizations {
     // ODIA (or)
     // -------------------------------------------------------------
     'or': {
-      'app_name': 'ଝାଡ଼ଖଣ୍ଡ ସମାଧାନ',
+      'app_name': 'ଭାରତ ସମାଧାନ',
       'tagline': 'ନାଗରିକ ସମସ୍ୟା ଓ ଗବେଷଣା ମଞ୍ଚ',
       'tab_home': 'ମୁଖ୍ୟ ପୃଷ୍ଠା (Home)',
       'tab_explore': 'ଅନୁସନ୍ଧାନ (Explore)',
@@ -2072,12 +2072,12 @@ class AppLocalizations {
       'logout': 'ଲଗ୍ ଆଉଟ୍',
       
       'civic_feed': 'ନାଗରିକ ଫିଡ୍',
-      'jharkhand_motto': 'ଆମର ଲୋକ. ଆମର ଝାଡ଼ଖଣ୍ଡ. ଏକ ଉନ୍ନତ ଆଗାମୀ।',
+      'india_motto': 'ଆମର ଲୋକ. ଆମର ଭାରତ. ଏକ ଉନ୍ନତ ଆଗାମୀ।',
       'good_morning': 'ଶୁଭ ସକାଳ',
       'good_afternoon': 'ଶୁଭ ଅପରାହ୍ନ',
       'good_evening': 'ଶୁଭ ସନ୍ଧ୍ୟା',
       'welcome_citizen': 'ନମସ୍କାର, ନାଗରିକ',
-      'home_subtitle': 'ସମଗ୍ର ଝାଡ଼ଖଣ୍ଡରୁ ଆସିଥିବା ବାସ୍ତବ ସମସ୍ୟାଗୁଡ଼ିକ',
+      'home_subtitle': 'ସମଗ୍ର ଭାରତରୁ ଆସିଥିବା ବାସ୍ତବ ସମସ୍ୟାଗୁଡ଼ିକ',
       'filter_all': 'ସମସ୍ତ',
       'filter_nearby': 'ନିକଟସ୍ଥ',
       'filter_trending': 'ଲୋକପ୍ରିୟ',
@@ -2333,7 +2333,7 @@ class AppLocalizations {
     // KURUKH / ORAON (kru)
     // -------------------------------------------------------------
     'kru': {
-      'app_name': 'झारखण्ड समाधान',
+      'app_name': 'भारत समाधान',
       'tagline': 'नागरिक दुख-तकलीफ ब्योरा आर समाधान अड्डा',
       'tab_home': 'एड़पा (Home)',
       'tab_explore': 'बेद्दा (Explore)',
@@ -2384,12 +2384,12 @@ class AppLocalizations {
       'logout': 'बाहरी काला',
       
       'civic_feed': 'नागरिक फ़ीड',
-      'jharkhand_motto': 'नम्हय आल. नम्हय झारखण्ड. बेस पहला।',
+      'india_motto': 'नम्हय आल. नम्हय भारत. बेस पहला।',
       'good_morning': 'शुभ बिहान',
       'good_afternoon': 'शुभ बेड़ा',
       'good_evening': 'शुभ पुत्तो',
       'welcome_citizen': 'जोहार, नागरिक',
-      'home_subtitle': 'गोटे झारखण्ड ती बरचका समस्या',
+      'home_subtitle': 'गोटे भारत ती बरचका समस्या',
       'filter_all': 'हुर्मी',
       'filter_nearby': 'सटले वाला',
       'filter_trending': 'चहल-पहल',
@@ -2645,7 +2645,7 @@ class AppLocalizations {
     // MUNDARI (unr)
     // -------------------------------------------------------------
     'unr': {
-      'app_name': 'झारखण्ड समाधान',
+      'app_name': 'भारत समाधान',
       'tagline': 'हातू-टोला एटकटोणे ओलोर समाधान मंचा',
       'tab_home': 'ओड़ाः (Home)',
       'tab_explore': 'नमोः (Explore)',
@@ -2696,12 +2696,12 @@ class AppLocalizations {
       'logout': 'बाहरे ओलोंग',
       
       'civic_feed': 'नागरिक फ़ीड',
-      'jharkhand_motto': 'आबुवाः होड़ो. आबुवाः झारखण्ड. सुग्घर गापा।',
+      'india_motto': 'आबुवाः होड़ो. आबुवाः भारत. सुग्घर गापा।',
       'good_morning': 'शुभ सेताः',
       'good_afternoon': 'शुभ टिकिन',
       'good_evening': 'शुभ अयूब',
       'welcome_citizen': 'जोहार, नागरिक',
-      'home_subtitle': 'गोटे झारखण्ड एते हिजुः एटकटोणे को',
+      'home_subtitle': 'गोटे भारत एते हिजुः एटकटोणे को',
       'filter_all': 'हुर्मी',
       'filter_nearby': 'जापाः रेयाः',
       'filter_trending': 'चहल-पहल',
@@ -2957,7 +2957,7 @@ class AppLocalizations {
     // HO (hoc)
     // -------------------------------------------------------------
     'hoc': {
-      'app_name': 'ᱡᱷᱟᱨᱠᱷᱚᱸᱰ ᱥᱚᱢᱟᱫᱷᱟᱱ',
+      'app_name': 'ᱵᱷᱟᱨᱚᱛ ᱥᱚᱢᱟᱫᱷᱟᱱ',
       'tagline': 'ᱦᱟᱛᱩ-ᱴᱚᱞᱟ ᱮᱴᱠᱮᱴᱚᱬᱮ ᱞᱟᱹᱭ ᱟᱨ ᱥᱚᱞᱦᱮ ᱟᱰᱰᱟ',
       'tab_home': 'ᱚᱲᱟᱜ (Home)',
       'tab_explore': 'ᱱᱟᱢ (Explore)',
@@ -3008,12 +3008,12 @@ class AppLocalizations {
       'logout': 'ᱵᱟᱦᱨᱮ (Logout)',
       
       'civic_feed': 'ᱱᱟᱜᱟᱹᱨᱤᱭᱟᱹ ᱯᱷᱤᱰ',
-      'jharkhand_motto': 'ᱟᱵᱩᱣᱟᱜ ᱦᱚᱲ. ᱟᱵᱩᱣᱟᱜ ᱡᱷᱟᱨᱠᱷᱚᱸᱰ. ᱱᱟᱯᱟᱭ ᱜᱟᱯᱟ᱾',
+      'india_motto': 'ᱟᱵᱩᱣᱟᱜ ᱦᱚᱲ. ᱟᱵᱩᱣᱟᱜ ᱵᱷᱟᱨᱚᱛ. ᱱᱟᱯᱟᱭ ᱜᱟᱯᱟ᱾',
       'good_morning': 'ᱥᱟᱹᱜᱩᱱ ᱥᱮᱛᱟᱜ',
       'good_afternoon': 'ᱥᱟᱹᱜᱩᱱ ᱛᱤᱠᱤᱱ',
       'good_evening': 'ᱥᱟᱹᱜᱩᱱ ᱟᱹᱭᱩᱵ',
       'welcome_citizen': 'ᱡᱚᱦᱟᱨ, ᱱᱟᱜᱟᱹᱨᱤᱭᱟᱹ',
-      'home_subtitle': 'ᱡᱷᱟᱨᱠᱷᱚᱸᱰ ᱡᱟᱠᱟᱛ ᱠᱷᱚᱱ ᱦᱤᱡᱩᱜ ᱠᱟᱱ ᱮᱴᱠᱮᱴᱚᱬᱮ ᱠᱚ',
+      'home_subtitle': 'ᱵᱷᱟᱨᱚᱛ ᱡᱟᱠᱟᱛ ᱠᱷᱚᱱ ᱦᱤᱡᱩᱜ ᱠᱟᱱ ᱮᱴᱠᱮᱴᱚᱬᱮ ᱠᱚ',
       'filter_all': 'ᱡᱚᱛᱚ',
       'filter_nearby': 'ᱥᱩᱨ ᱨᱮᱭᱟᱜ',
       'filter_trending': 'ᱪᱚᱲᱛᱤ',

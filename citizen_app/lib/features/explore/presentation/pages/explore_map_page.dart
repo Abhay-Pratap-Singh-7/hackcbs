@@ -30,7 +30,7 @@ class _ExploreMapPageState extends State<ExploreMapPage> with TickerProviderStat
   bool _isLoading = true;
   final MapController _mapController = MapController();
   
-  // Default center: Ranchi, Jharkhand
+  // Default center: Ranchi, India
   final LatLng _defaultCenter = const LatLng(23.3441, 85.3096);
   LatLng? _userLocation;
   
@@ -658,7 +658,7 @@ class _ExploreMapPageState extends State<ExploreMapPage> with TickerProviderStat
   Widget _buildBottomProblemCard(Map<String, dynamic> problem) {
     final title = problem['title'] ?? context.tr('civic_concern');
     final desc = problem['description'] ?? '';
-    final locationName = problem['location']?['address'] ?? problem['location']?['district'] ?? 'Jharkhand';
+    final locationName = problem['location']?['address'] ?? problem['location']?['district'] ?? 'India';
     final urgency = (problem['supportingInfo']?['urgency'] ?? 'MEDIUM').toString().toUpperCase();
 
     // Distance calculation

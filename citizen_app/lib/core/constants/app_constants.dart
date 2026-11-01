@@ -12,8 +12,8 @@ class AppConstants {
     r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
   );
 
-  // Jharkhand Districts (24 Districts)
-  static const List<String> jharkhandDistricts = [
+  // India Districts (24 Districts)
+  static const List<String> indiaDistricts = [
     'Bokaro',
     'Chatra',
     'Deoghar',

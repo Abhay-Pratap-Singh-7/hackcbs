@@ -200,7 +200,7 @@ class _MyAppState extends State<MyApp> {
         child: BlocBuilder<LanguageCubit, AppLanguage>(
           builder: (context, currentLanguage) {
             return MaterialApp.router(
-              title: 'Jharkhand Samadhan',
+              title: 'India Samadhan',
               debugShowCheckedModeBanner: false,
               theme: AppTheme.lightTheme,
               locale: Locale(currentLanguage.code),

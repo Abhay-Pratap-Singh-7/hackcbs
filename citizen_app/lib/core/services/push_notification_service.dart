@@ -160,7 +160,7 @@ class PushNotificationService {
       'type': notifType ?? '',
     });
 
-    String displayTitle = notification.title ?? 'Jharkhand Samadhan';
+    String displayTitle = notification.title ?? 'India Samadhan';
     String displayBody = notification.body ?? '';
 
     try {

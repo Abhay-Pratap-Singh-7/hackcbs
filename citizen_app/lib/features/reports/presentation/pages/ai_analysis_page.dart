@@ -325,7 +325,7 @@ class AiAnalysisPage extends StatelessWidget {
                             style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold, color: const Color(0xFF1E293B)),
                           ),
                           Text(
-                            'Matched with $matchedColleges Jharkhand institute(s) for engineering review and solutions.',
+                            'Matched with $matchedColleges India institute(s) for engineering review and solutions.',
                             style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF64748B)),
                           ),
                         ],

@@ -16,7 +16,7 @@ class ShareHelper {
     final shareMessage =
         '🚨 Civic Report: "$title"\n'
         '📍 Location: $location\n\n'
-        '🔗 View in Jharkhand Samadhan App:\n$deepLinkUrl\n\n'
+        '🔗 View in India Samadhan App:\n$deepLinkUrl\n\n'
         '📲 Don\'t have the app? Get it on Google Play:\n$playStoreUrl';
 
     showModalBottomSheet(

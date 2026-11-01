@@ -48,16 +48,18 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
-            <!-- Deep linking: Custom Scheme jharkhandsamadhan://issue/{id} and jharkhandsamadhan:///issue/{id} -->
+            <!-- Deep linking: Custom Schemes indiasamadhan:// and jharkhandsamadhan:// -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="indiasamadhan" android:host="issue" />
+                <data android:scheme="indiasamadhan" android:pathPrefix="/issue" />
                 <data android:scheme="jharkhandsamadhan" android:host="issue" />
                 <data android:scheme="jharkhandsamadhan" android:pathPrefix="/issue" />
             </intent-filter>
 
-            <!-- App Links / Universal Links: https://jharkhand-samadhan.gov.in/issue/{id} -->
+            <!-- App Links / Universal Links: https://india-samadhan.gov.in/issue/{id} -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -69,6 +71,14 @@
                 <data
                     android:scheme="http"
                     android:host="sih-26-jarr.onrender.com"
+                    android:pathPrefix="/issue" />
+                <data
+                    android:scheme="https"
+                    android:host="india-samadhan.gov.in"
+                    android:pathPrefix="/issue" />
+                <data
+                    android:scheme="http"
+                    android:host="india-samadhan.gov.in"
                     android:pathPrefix="/issue" />
                 <data
                     android:scheme="https"
