@@ -41,7 +41,7 @@ Content-Type: application/json
   "profileDetails": {
     "fullName": "Rohan Kumar",
     "district": "Ranchi",
-    "state": "Jharkhand",
+    "state": "Delhi",
     "pincode": "834001"
   }
 }

@@ -221,7 +221,7 @@ const ExploreMap = () => {
             >
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; OpenStreetMap contributors | Jharkhand Civic GIS'
+                attribution='&copy; OpenStreetMap contributors | Civic GIS'
               />
 
               <MapRecenter center={mapCenter} />
@@ -291,7 +291,7 @@ const ExploreMap = () => {
             </h3>
             <p className="text-xs text-[#556958] flex items-center gap-1 mb-3">
               <MapPin size={13} className="text-[#4a6b4e]" />
-              {selectedProblem.location?.district || 'Ranchi'}, {selectedProblem.location?.state || 'Jharkhand'}
+              {selectedProblem.location?.district || 'Central Delhi'}, {selectedProblem.location?.state || 'Delhi'}
               {selectedProblem.location?.village && ` • ${selectedProblem.location.village}`}
             </p>
 

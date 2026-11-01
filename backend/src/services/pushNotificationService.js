@@ -35,7 +35,7 @@ const sendPushToUser = async (userId, { title, body, data = {} }) => {
     const message = {
       tokens,
       notification: {
-        title: title || 'Jharkhand Samadhan',
+        title: title || 'HackCBS Portal',
         body: body || ''
       },
       data: formatDataPayload(data),

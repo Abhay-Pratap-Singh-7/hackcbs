@@ -328,7 +328,7 @@ const PublicFeed = () => {
                 const classification = problem.ai_analysis?.problem_classification || problem.aiAnalysis?.problem_classification || problem.category || 'Civic Problem';
                 const summary = problem.ai_analysis?.summary || problem.aiAnalysis?.summary || problem.description;
                 const district = problem.district || problem.location?.district || 'Ranchi';
-                const state = problem.state || problem.location?.state || 'Jharkhand';
+                const state = problem.state || problem.location?.state || 'Delhi';
 
                 return (
                   <div 

@@ -64,7 +64,7 @@ const Login = () => {
       </div>
       
       <div className="login-image">
-        <img src="/theme.jpg" alt="Jharkhand Societal Innovation Platform Theme" />
+        <img src="/theme.jpg" alt="Societal Innovation Platform Theme" />
       </div>
     </div>
   );

@@ -22,7 +22,7 @@ JH-IND-020,Adityapur Autoparts Pvt Ltd,"(22.788510, 86.160120)",livelihood,Suspe
 JH-IND-021,Bokaro Clean Water Systems,"(23.668512, 85.992410)",water resources,Industrial effluent filtration & mine water recycling,TRUE
 JH-IND-022,Damodar Waste Management Industries,"(23.791240, 86.442110)",water resources,Acid mine drainage neutralization & heavy metal removal,TRUE
 JH-IND-023,Subarnarekha Enviro Systems,"(23.342110, 85.312450)",water resources,Fluoride & arsenic adsorption filtration columns,TRUE
-JH-IND-024,Jharkhand Green Aquatech,"(23.682144, 86.012354)",water resources,Zero liquid discharge (ZLD) skids & effluent plants,TRUE
+JH-IND-024,Green Aquatech,"(23.682144, 86.012354)",water resources,Zero liquid discharge (ZLD) skids & effluent plants,TRUE
 JH-IND-025,Chotanagpur Water Solutions,"(22.783412, 86.154231)",water resources,Industrial reverse osmosis & clarifier automation,TRUE
 JH-IND-026,Eastern Aqua Filtration Works,"(22.791540, 86.182410)",water resources,Industrial sludge press dewatering & aeration,TRUE
 JH-IND-027,Tribal Belt PureWater Enterprises,"(24.281240, 85.431250)",water resources,Solar-powered community water filtration kiosks,TRUE
@@ -38,9 +38,9 @@ JH-IND-036,Natureship Agro,"(23.332140, 85.302140)",agriculture,Rural women-led 
 JH-IND-037,Prasad Ji Udyog,"(23.371240, 85.342150)",agriculture,Pre-packaged culinary gravies & aseptic packing,TRUE
 JH-IND-038,Sammat India Technologies,"(23.348910, 85.318910)",public administration,Financial reconciliation & dispute automation SaaS,TRUE
 JH-IND-039,Birsa Agro-Tech Solutions,"(23.365412, 85.321045)",agriculture,Solar cold rooms & grain sorting conveyors,TRUE
-JH-IND-040,Jharkhand Lac & Agro Organics,"(22.801245, 86.174320)",agriculture,Natural shellac processing & bio-fertilizers,TRUE
+JH-IND-040,Lac & Agro Organics,"(22.801245, 86.174320)",agriculture,Natural shellac processing & bio-fertilizers,TRUE
 JH-IND-041,Chotanagpur Herbal Labs,"(23.332140, 85.321450)",healthcare,Supercritical CO2 extraction of herbal medicines,TRUE
-JH-IND-042,Jharkhand BioExtracts,"(24.261240, 85.421540)",healthcare,Solid-state fermentation & microbial fungal cultures,TRUE
+JH-IND-042,BioExtracts,"(24.261240, 85.421540)",healthcare,Solid-state fermentation & microbial fungal cultures,TRUE
 JH-IND-043,Bokaro Medical Gases,"(23.661240, 86.011240)",healthcare,Liquid medical oxygen tankers & hospital pipelines,TRUE
 JH-IND-044,Adityapur Diagnostics,"(22.781240, 86.151240)",healthcare,Lateral flow malaria & typhoid rapid test cassettes,TRUE
 JH-IND-045,Tribal Health Telemetrics,"(23.361240, 85.345120)",healthcare,12-lead portable ECG with cellular sync,TRUE
@@ -49,7 +49,7 @@ JH-IND-047,Jamshedpur Surgical Auxiliaries,"(22.815410, 86.195120)",healthcare,O
 JH-IND-048,Dhanbad Life Sciences,"(23.774510, 86.425120)",healthcare,Industrial N95 respirators & portable spirometers,TRUE
 JH-IND-049,Hazaribagh Botanicals,"(24.291240, 85.451240)",healthcare,Steam distilled lemongrass oil & bio-repellents,TRUE
 JH-IND-050,Birsa Accessibility Labs,"(23.342150, 85.312450)",accessibility,Tactile Braille displays & vernacular screen readers,TRUE
-JH-IND-051,Jharkhand EdTech Works,"(23.356120, 85.328910)",education,Low-cost STEM electronic prototyping kits,TRUE
+JH-IND-051,EdTech Works,"(23.356120, 85.328910)",education,Low-cost STEM electronic prototyping kits,TRUE
 JH-IND-052,Chotanagpur Tactile Tech,"(22.784510, 86.155210)",accessibility,Ergonomic 3D printed prosthetic limbs,TRUE
 JH-IND-053,Ranchi Adaptive Hardware,"(23.315410, 85.295120)",accessibility,Assistive hearing screening hardware kits,TRUE
 JH-IND-054,Adityapur STEM Kits,"(22.805120, 86.185420)",education,Solar-powered off-grid educational tablets,TRUE
@@ -64,7 +64,7 @@ JH-IND-062,Kandra Foundry Works,"(23.754120, 86.415240)",livelihood,Heavy grey c
 JH-IND-063,Vananchal Mining Machinery,"(23.661240, 86.012450)",water resources,Mine dewatering high-head centrifugal pumps,TRUE
 JH-IND-064,Eastern Heavy Castings,"(22.812450, 86.195410)",livelihood,Alloy steel gears & mill trunnion bearings,TRUE
 JH-IND-065,Dhanbad Refractories Ltd,"(23.771240, 86.421540)",environment,Alumina silica refractory firebricks for furnaces,TRUE
-JH-IND-066,Jharkhand Specialty Chemicals,"(23.361240, 85.345120)",water resources,Industrial water treatment anti-scalants & biocides,TRUE
+JH-IND-066,Specialty Chemicals,"(23.361240, 85.345120)",water resources,Industrial water treatment anti-scalants & biocides,TRUE
 JH-IND-067,Adityapur Polymer Works,"(22.781240, 86.151240)",environment,Polyurethane bushes & high-abrasion seals,TRUE
 JH-IND-068,Bokaro Tar Derivatives,"(23.674510, 86.024510)",environment,Coal tar pitch distilment & carbon black feedstock,TRUE
 JH-IND-069,Ranchi Advanced Materials,"(23.324510, 85.312450)",urban development,Geopolymer binders & industrial fly-ash polymers,TRUE
@@ -87,7 +87,7 @@ JH-IND-085,Ranchi Embedded Networks,"(23.334510, 85.311240)",public administrati
 JH-IND-086,Adityapur IoT Devices,"(22.784510, 86.155210)",livelihood,Wireless vibration sensors for CNC spindle health,TRUE
 JH-IND-087,Dhanbad MineTelemetrics,"(23.784510, 86.425120)",energy,Intrinsically safe explosive gas telemetry modules,TRUE
 JH-IND-088,Bokaro Automation Solutions,"(23.668510, 85.998410)",livelihood,PLC panels & rolling mill automation programming,TRUE
-JH-IND-089,Jharkhand LoRa Systems,"(23.351240, 85.328910)",urban development,Long-range low-power smart city street nodes,TRUE
+JH-IND-089,LoRa Systems,"(23.351240, 85.328910)",urban development,Long-range low-power smart city street nodes,TRUE
 JH-IND-090,Chotanagpur SensorWorks,"(22.795120, 86.168410)",water resources,Hydrostatic tank level transmitters & flow meters,TRUE
 JH-IND-091,Eastern Edge Analytics,"(23.341250, 85.318910)",livelihood,Edge computing enclosures for conveyor belt CV,TRUE
 JH-IND-092,Vananchal IoT Skids,"(23.671240, 86.015410)",water resources,Smart water pump starters with SMS alert links,TRUE

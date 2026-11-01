@@ -109,7 +109,7 @@ app.post('/api/test-direct-push', async (req, res) => {
     const message = {
       token: targetToken,
       notification: {
-        title: 'Jharkhand Samadhan Live Test 🔔',
+        title: 'HackCBS Portal Live Test 🔔',
         body: 'Push notification from Render cloud server works perfectly!'
       },
       data: { type: 'TEST' },
@@ -175,14 +175,14 @@ app.get('/.well-known/assetlinks.json', (req, res) => {
 app.get('/issue/:id', async (req, res) => {
   const problemId = req.params.id;
   const playStoreUrl = process.env.PLAYSTORE_URL || 'https://play.google.com/store/apps/details?id=com.example.sih_2026';
-  const appSchemeUrl = `jharkhandsamadhan://issue/${problemId}`;
-  const chromeIntentUrl = `intent://issue/${problemId}#Intent;scheme=jharkhandsamadhan;package=com.example.sih_2026;end`;
+  const appSchemeUrl = `hackcbs://issue/${problemId}`;
+  const chromeIntentUrl = `intent://issue/${problemId}#Intent;scheme=hackcbs;package=com.example.hackcbs;end`;
 
   try {
     const ProblemStatement = require('./models/ProblemStatement');
     const problem = await ProblemStatement.findById(problemId).lean();
-    const title = problem ? (problem.title || 'Civic Issue') : 'Civic Report on Jharkhand Samadhan';
-    const description = problem ? (problem.description ? problem.description.substring(0, 160) + '...' : '') : 'Report and track civic issues in Jharkhand.';
+    const title = problem ? (problem.title || 'Civic Issue') : 'Civic Report on HackCBS Portal';
+    const description = problem ? (problem.description ? problem.description.substring(0, 160) + '...' : '') : 'Report and track civic issues.';
     const image = (problem && problem.imagesAndMedia && problem.imagesAndMedia.length > 0)
       ? problem.imagesAndMedia[0].url
       : 'https://picsum.photos/600/400';
@@ -192,14 +192,14 @@ app.get('/issue/:id', async (req, res) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${title} | Jharkhand Samadhan</title>
+  <title>${title} | HackCBS Portal</title>
   <meta property="og:title" content="${title}" />
   <meta property="og:description" content="${description}" />
   <meta property="og:image" content="${image}" />
   <meta property="og:url" content="https://hackcbs-cjno.onrender.com/issue/${problemId}" />
   <meta property="al:android:url" content="${appSchemeUrl}" />
-  <meta property="al:android:package" content="com.example.sih_2026" />
-  <meta property="al:android:app_name" content="Jharkhand Samadhan" />
+  <meta property="al:android:package" content="com.example.hackcbs" />
+  <meta property="al:android:app_name" content="HackCBS Portal" />
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; text-align: center; padding: 40px 20px; background: #f8fafc; color: #1e293b; }
     .card { max-width: 480px; margin: 0 auto; background: white; border-radius: 20px; padding: 28px; box-shadow: 0 10px 25px rgba(0,0,0,0.06); }
@@ -221,7 +221,7 @@ app.get('/issue/:id', async (req, res) => {
     <h2 style="margin: 0 0 8px 0; font-size: 20px;">${title}</h2>
     <p style="color: #64748b; font-size: 14px; line-height: 1.5;">${description}</p>
     <div style="margin-top: 24px;">
-      <a href="${appSchemeUrl}" class="btn btn-primary">Open in Jharkhand Samadhan App</a><br/>
+      <a href="${appSchemeUrl}" class="btn btn-primary">Open in HackCBS Portal</a><br/>
       <a href="${playStoreUrl}" class="btn btn-secondary">Get on Google Play</a>
     </div>
   </div>

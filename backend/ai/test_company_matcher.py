@@ -28,7 +28,7 @@ sample_location = {
     "latitude": 22.7845,
     "longitude": 86.1552,
     "district": "Purbi Singhbhum",
-    "state": "Jharkhand"
+    "state": "Delhi"
 }
 
 # Sample registered companies from MongoDB database

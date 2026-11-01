@@ -343,8 +343,8 @@ const wrapProblemRow = (row) => {
     status: row.status || 'SUBMITTED',
     location: {
       address: row.address,
-      district: row.district || 'Ranchi',
-      state: row.state || 'Jharkhand',
+      district: row.district || 'Central Delhi',
+      state: row.state || 'Delhi',
       latitude: row.latitude,
       longitude: row.longitude,
       coordinates: {
@@ -457,8 +457,8 @@ const problems = {
         data.latitude || data.location?.latitude || data.location?.coordinates?.latitude || 23.3441,
         data.longitude || data.location?.longitude || data.location?.coordinates?.longitude || 85.3096,
         data.address || data.location?.address || '',
-        data.district || data.location?.district || 'Ranchi',
-        data.state || data.location?.state || 'Jharkhand',
+        data.district || data.location?.district || 'Central Delhi',
+        data.state || data.location?.state || 'Delhi',
         data.reportedBy || data.reported_by || null,
         JSON.stringify(data.aiAnalysis || data.ai_analysis || {}),
         (data.imagesAndMedia || []).map(m => m.url || m) || data.mediaUrls || [],

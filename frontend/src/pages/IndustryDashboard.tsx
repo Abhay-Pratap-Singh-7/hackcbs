@@ -424,7 +424,7 @@ const IndustryDashboard = () => {
                             <div className="flex items-center gap-1.5 text-xs text-[#556958] mb-4">
                               <MapPin size={13} className="text-[#4a6b4e]" />
                               <span className="truncate">
-                                {problem.location?.district || 'Ranchi'}, {problem.location?.state || 'Jharkhand'}
+                                {problem.location?.district || 'Central Delhi'}, {problem.location?.state || 'Delhi'}
                               </span>
                             </div>
                           </div>
@@ -622,7 +622,7 @@ const IndustryDashboard = () => {
 
             <div className="p-4 bg-[#f4f1e1]/60 rounded-2xl border border-[#e2ded0] text-xs text-[#556958] space-y-1">
               <p><strong>R&D Institution:</strong> {viewingProblemDetails.acceptedByUniversityName || 'Engineering College Partner'}</p>
-              <p><strong>District:</strong> {viewingProblemDetails.location?.district || 'Ranchi'}, {viewingProblemDetails.location?.state || 'Jharkhand'}</p>
+              <p><strong>District:</strong> {viewingProblemDetails.location?.district || 'Central Delhi'}, {viewingProblemDetails.location?.state || 'Delhi'}</p>
               {viewingProblemDetails.teamInfo?.teamName && (
                 <p><strong>Student Team:</strong> {viewingProblemDetails.teamInfo.teamName} (Mentor: {viewingProblemDetails.teamInfo.mentorName})</p>
               )}

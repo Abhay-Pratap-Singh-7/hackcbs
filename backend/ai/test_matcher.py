@@ -18,7 +18,7 @@ sample_location = {
     "latitude": 23.7957,
     "longitude": 86.4304,
     "district": "Dhanbad",
-    "state": "Jharkhand"
+    "state": "Delhi"
 }
 
 print("\n--- Testing College Matcher with problem_post_response.json ---")

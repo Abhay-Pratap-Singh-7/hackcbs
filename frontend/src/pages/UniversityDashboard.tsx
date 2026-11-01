@@ -714,7 +714,7 @@ const UniversityDashboard = () => {
                             <div className="flex items-center gap-1.5 text-xs text-civic-text-body mb-4">
                               <MapPin size={13} className="text-civic-primary" />
                               <span className="truncate">
-                                {problem.location?.district || 'Ranchi'}, {problem.location?.state || 'Jharkhand'}
+                                {problem.location?.district || 'Central Delhi'}, {problem.location?.state || 'Delhi'}
                               </span>
                             </div>
                           </div>
@@ -1344,7 +1344,7 @@ const UniversityDashboard = () => {
             <div className="flex flex-wrap items-center gap-4 text-xs text-[#556958] bg-[#f4f1e1]/60 p-3.5 rounded-2xl border border-[#e2ded0]">
               <span className="flex items-center gap-1.5 font-medium">
                 <MapPin size={14} className="text-[#4a6b4e]" />
-                {viewingProblemDetails.location?.district || 'Ranchi'}, {viewingProblemDetails.location?.state || 'Jharkhand'}
+                {viewingProblemDetails.location?.district || 'Central Delhi'}, {viewingProblemDetails.location?.state || 'Delhi'}
                 {viewingProblemDetails.location?.village && ` • ${viewingProblemDetails.location.village}`}
               </span>
               {viewingProblemDetails.createdAt && (

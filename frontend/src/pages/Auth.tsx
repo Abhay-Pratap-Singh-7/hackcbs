@@ -402,7 +402,7 @@ const Auth = () => {
               <div className="input-icon-right"><MapPin size={17} /></div>
             </div>
             <div className="input-pill">
-              <input type="text" placeholder="State (e.g. Jharkhand)" required onChange={e => handleProfileChange('state', e.target.value)} />
+              <input type="text" placeholder="State (e.g. Delhi)" required onChange={e => handleProfileChange('state', e.target.value)} />
               <div className="input-icon-right"><Map size={17} /></div>
             </div>
             <div className="input-pill">
@@ -752,7 +752,7 @@ const Auth = () => {
       <div className="auth-card">
         <div className="form-column" id="formColumn" ref={formColumnRef}>
           <div className="form-header">
-            <img src="/assets/logo.webp" alt="Jharkhand Samadhan" className="brand-logo" />
+            <img src="/assets/logo.webp" alt="HackCBS Portal" className="brand-logo" />
             <p>Civic Innovation & Grievance Resolution Platform</p>
           </div>
 
@@ -962,7 +962,7 @@ const Auth = () => {
         </div>
 
         <div className="image-column">
-          <img src="/assets/RightImage.webp" alt="Jharkhand Samadhan Campus" className="hero-img" />
+          <img src="/assets/RightImage.webp" alt="HackCBS Campus" className="hero-img" />
         </div>
       </div>
 

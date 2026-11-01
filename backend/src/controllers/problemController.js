@@ -969,7 +969,7 @@ const reportProblemContent = async (req, res, next) => {
 
     return res.status(200).json({
       success: true,
-      message: 'Report submitted successfully. Thank you for keeping Jharkhand Samadhan safe and accurate.'
+      message: 'Report submitted successfully. Thank you for keeping HackCBS Portal safe and accurate.'
     });
   } catch (err) {
     next(err);

@@ -303,7 +303,7 @@ const ProblemDetail = () => {
               <div className="flex flex-wrap items-center gap-6 text-xs text-[#556958] font-medium mb-6 pb-6 border-b border-[#e2ded0]">
                 <span className="flex items-center gap-1.5">
                   <MapPin size={14} className="text-[#4a6b4e]" />
-                  {problem.district || problem.location?.district || 'Ranchi'}, {problem.state || problem.location?.state || 'Jharkhand'}
+                  {problem.district || problem.location?.district || 'Central Delhi'}, {problem.state || problem.location?.state || 'Delhi'}
                   {problem.location?.village && ` • ${problem.location.village}`}
                 </span>
                 <span className="flex items-center gap-1.5">
@@ -646,7 +646,7 @@ const ProblemDetail = () => {
                               <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[#556958] mb-1.5">
                                 {company.district && (
                                   <span className="flex items-center gap-1">
-                                    <MapPin size={12} className="text-[#4a6b4e]" /> {company.district}, {company.state || 'Jharkhand'}
+                                    <MapPin size={12} className="text-[#4a6b4e]" /> {company.district}, {company.state || 'Delhi'}
                                   </span>
                                 )}
                                 {company.distance_km !== undefined && company.distance_km !== null && (

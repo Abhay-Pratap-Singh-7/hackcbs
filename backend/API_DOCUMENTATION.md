@@ -29,7 +29,7 @@
     "website": "https://doranda.edu.in",
     "campusCity": "Ranchi",
     "district": "Ranchi",
-    "state": "Jharkhand",
+    "state": "Delhi",
     "pincode": "834002"
   }
 }
@@ -141,7 +141,7 @@
     "ward": "Ward 12",
     "block": "Kanke",
     "district": "Ranchi",
-    "state": "Jharkhand",
+    "state": "Delhi",
     "pincode": "834002",
     "coordinates": { "latitude": 23.3441, "longitude": 85.3096 }
   },
@@ -164,7 +164,7 @@
     "_id": "65f2c3d4e5f6a7b8c9d0e1f2",
     "title": "Severe water contamination in Doranda",
     "description": "...",
-    "location": { "district": "Ranchi", "state": "Jharkhand", "coordinates": { "latitude": 23.3441, "longitude": 85.3096 } },
+    "location": { "district": "Ranchi", "state": "Delhi", "coordinates": { "latitude": 23.3441, "longitude": 85.3096 } },
     "aiAnalysis": {
       "summary": "Water logging and contamination affecting 500+ households in Doranda, Ranchi.",
       "key_points": "Waterborne disease risk; pipeline leakage; blocked drainage",
@@ -224,7 +224,7 @@
 | `my` | boolean | `?my=true` — only my submissions |
 | `category` | string | `?category=water resources` |
 | `district` | string | `?district=Ranchi` |
-| `state` | string | `?state=Jharkhand` |
+| `state` | string | `?state=Delhi` |
 | `status` | string | `?status=CLASSIFIED` |
 | `duplicate` | boolean | `?duplicate=false` |
 | `page` | number | `?page=1` |
@@ -396,7 +396,7 @@ Body: Same fields as submit (partial update supported)
       "_id": "65f2c3d4e5f6a7b8c9d0e1f2",
       "title": "Severe water contamination in Doranda",
       "description": "...",
-      "location": { "district": "Ranchi", "state": "Jharkhand", "coordinates": { "latitude": 23.3441, "longitude": 85.3096 } },
+      "location": { "district": "Ranchi", "state": "Delhi", "coordinates": { "latitude": 23.3441, "longitude": 85.3096 } },
       "imagesAndMedia": [
         {
           "url": "https://res.cloudinary.com/dxaww50be/image/upload/v12345/sih_problems/image1.jpg",

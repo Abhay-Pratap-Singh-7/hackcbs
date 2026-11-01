@@ -60,7 +60,7 @@ const ProblemSubmission = () => {
   const [position, setPosition] = useState<L.LatLng | null>(new L.LatLng(23.3441, 85.3096));
   const [address, setAddress] = useState('');
   const [district, setDistrict] = useState('Ranchi');
-  const [state, setState] = useState('Jharkhand');
+  const [state, setState] = useState('Delhi');
   const [pincode, setPincode] = useState('');
   const [village, setVillage] = useState('');
 
@@ -86,7 +86,7 @@ const ProblemSubmission = () => {
         .then(res => res.json())
         .then(data => {
           if (data && data.address) {
-            setState(data.address.state || 'Jharkhand');
+            setState(data.address.state || 'Delhi');
             setDistrict(data.address.state_district || data.address.county || data.address.city || 'Ranchi');
             setPincode(data.address.postcode || '');
             setVillage(data.address.village || data.address.town || data.address.suburb || data.address.neighbourhood || '');

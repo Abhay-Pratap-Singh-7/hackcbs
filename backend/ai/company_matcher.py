@@ -17,7 +17,7 @@ except ImportError:
 _companies_df = None
 _company_embeddings = None
 
-CSV_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "jharkhand_industry_dataset_merged_updated.csv")
+CSV_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "industry_dataset_merged_updated.csv")
 
 def _parse_coordinates(coord_str: Any) -> tuple:
     """Extracts (latitude, longitude) floats from strings like '(22.784512, 86.155210)' or dicts/lists."""
@@ -100,7 +100,7 @@ def match_companies_for_problem(
     Finds the best matching companies/industries for a problem statement.
     Supports dual data resolution:
       - MongoDB registered companies passed via `candidate_companies`
-      - Seed dataset from `jharkhand_industry_dataset_merged_updated.csv`
+      - Seed dataset from `industry_dataset_merged_updated.csv`
     """
     _init_companies_cache()
     

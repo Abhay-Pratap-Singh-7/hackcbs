@@ -273,7 +273,7 @@ const Landing = () => {
       >
         <img
           src="/assets/logo.webp"
-          alt="Jharkhand Samadhan"
+          alt="HackCBS Portal"
           className="h-24 md:h-20 sm:h-16 w-auto object-contain drop-shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
         />
       </Link>

@@ -242,7 +242,7 @@ const sendTestPush = async (req, res, next) => {
   try {
     const pushNotificationService = require('../services/pushNotificationService');
     const result = await pushNotificationService.sendPushToUser(req.user._id, {
-      title: 'Jharkhand Samadhan Test 🔔',
+      title: 'HackCBS Portal Test 🔔',
       body: 'Push notification service is active and working properly!',
       data: { type: 'TEST' }
     });

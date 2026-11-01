@@ -88,7 +88,7 @@ const runCompanyMatchingPipeline = async (problemData, locationData = {}, candid
       .slice(0, topK);
 
     return matches.length > 0 ? matches : [
-      { company_name: "Tata Steel Foundation", match_score: 0.92, domain: "CSR & Community Welfare", reason: "Matched by state CSR priority in Jharkhand" }
+      { company_name: "Tata Steel Foundation", match_score: 0.92, domain: "CSR & Community Welfare", reason: "Matched by state CSR priority" }
     ];
   }
 };

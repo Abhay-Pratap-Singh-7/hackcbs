@@ -57,7 +57,7 @@ const Sidebar = () => {
         {/* Logo Area */}
         <div className="p-6 pt-8 text-center relative z-10 flex flex-col items-center border-b border-[#3d5942]/60">
           <Link to="/" className="block relative transition-transform hover:scale-105">
-            <img src="/assets/logo.webp" alt="Jharkhand Samadhan" className="max-w-[160px] h-auto mx-auto drop-shadow-md" />
+            <img src="/assets/logo.webp" alt="HackCBS Portal" className="max-w-[160px] h-auto mx-auto drop-shadow-md" />
           </Link>
         </div>
 
@@ -94,7 +94,7 @@ const Sidebar = () => {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-bold text-[#f4f1e1] truncate">{user.name || (isUniversity ? 'University Representative' : isIndustry ? 'Industry Partner' : 'Citizen')}</p>
-              <p className="text-[10px] text-[#a4c2a8] truncate">{user.profileDetails?.companyName || user.profileDetails?.institutionName || user.district || (isUniversity ? 'Academic R&D Portal' : isIndustry ? 'Corporate CSR Hub' : 'Jharkhand, IN')}</p>
+              <p className="text-[10px] text-[#a4c2a8] truncate">{user.profileDetails?.companyName || user.profileDetails?.institutionName || user.district || (isUniversity ? 'Academic R&D Portal' : isIndustry ? 'Corporate CSR Hub' : 'India')}</p>
             </div>
           </div>
           <button

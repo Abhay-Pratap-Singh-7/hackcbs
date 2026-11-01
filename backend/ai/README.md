@@ -121,7 +121,7 @@ Computes `intfloat/multilingual-e5-large` (1024-dim) vector representations and 
 
 ## 3. API 3: College Matcher
 
-Matches a problem against 258 Jharkhand colleges using a multi-factor ranking formula:
+Matches a problem against 258  colleges using a multi-factor ranking formula:
 $$\text{Score} = 0.35 \times \text{Domain} + 0.35 \times \text{Geo Proximity} + 0.30 \times \text{Semantic Match}$$
 
 * **Endpoint**: `POST https://abhay958-teamsetu.hf.space/gradio_api/call/match_colleges`
