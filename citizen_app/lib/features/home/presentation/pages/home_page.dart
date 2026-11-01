@@ -369,7 +369,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       location = problem.location!.address!;
     } else {
       final district = problem.location?.district ?? 'Ranchi';
-      final state = problem.location?.state ?? 'Jharkhand';
+      final state = problem.location?.state ?? 'India';
       location = '$district, $state';
     }
     
@@ -542,69 +542,80 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 24,
-                      backgroundColor: Colors.white.withValues(alpha: 0.2),
-                      backgroundImage: hasAvatar ? NetworkImage(userAvatar) : null,
-                      onBackgroundImageError: hasAvatar ? (e, s) {} : null,
-                      child: !hasAvatar
-                          ? Text(
-                              userName.isNotEmpty ? userName[0].toUpperCase() : 'C',
-                              style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-                            )
-                          : null,
-                    ),
-                    const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            text: '$greeting,\n${userName.split(" ").first}! ',
-                            style: GoogleFonts.poppins(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              shadows: [
-                                Shadow(
-                                  color: Colors.black.withValues(alpha: 0.5),
-                                  blurRadius: 10,
-                                )
-                              ]
-                            ),
-                            children: const [
-                              TextSpan(text: '👋', style: TextStyle(fontSize: 22)),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
+                Expanded(
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 24,
+                        backgroundColor: Colors.white.withValues(alpha: 0.2),
+                        backgroundImage: hasAvatar ? NetworkImage(userAvatar) : null,
+                        onBackgroundImageError: hasAvatar ? (e, s) {} : null,
+                        child: !hasAvatar
+                            ? Text(
+                                userName.isNotEmpty ? userName[0].toUpperCase() : 'C',
+                                style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                              )
+                            : null,
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Icon(Icons.location_on, size: 14, color: Colors.white),
-                            const SizedBox(width: 4),
-                            Text(
-                              userDistrict,
-                              style: GoogleFonts.poppins(
-                                fontSize: 12, 
-                                color: Colors.white, 
-                                fontWeight: FontWeight.w600,
-                                shadows: [
-                                  Shadow(
-                                    color: Colors.black.withValues(alpha: 0.5),
-                                    blurRadius: 5,
-                                  )
-                                ]
+                            RichText(
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                text: '$greeting,\n${userName.split(" ").first}! ',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  shadows: [
+                                    Shadow(
+                                      color: Colors.black.withValues(alpha: 0.5),
+                                      blurRadius: 10,
+                                    )
+                                  ]
+                                ),
+                                children: const [
+                                  TextSpan(text: '👋', style: TextStyle(fontSize: 22)),
+                                ],
                               ),
                             ),
-                            const Icon(Icons.chevron_right, size: 16, color: Colors.white),
+                            const SizedBox(height: 4),
+                            Row(
+                              children: [
+                                const Icon(Icons.location_on, size: 14, color: Colors.white),
+                                const SizedBox(width: 4),
+                                Flexible(
+                                  child: Text(
+                                    userDistrict,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 12, 
+                                      color: Colors.white, 
+                                      fontWeight: FontWeight.w600,
+                                      shadows: [
+                                        Shadow(
+                                          color: Colors.black.withValues(alpha: 0.5),
+                                          blurRadius: 5,
+                                        )
+                                      ]
+                                    ),
+                                  ),
+                                ),
+                                const Icon(Icons.chevron_right, size: 16, color: Colors.white),
+                              ],
+                            ),
                           ],
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
+                const SizedBox(width: 8),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -667,7 +678,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               fit: BoxFit.scaleDown,
               alignment: Alignment.centerLeft,
               child: Text(
-                context.tr('jharkhand_motto'),
+                context.tr('india_motto'),
                 maxLines: 1,
                 softWrap: false,
                 style: GoogleFonts.caveat(
