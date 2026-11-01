@@ -6,7 +6,7 @@ class ApiClient {
   static final ApiClient _instance = ApiClient._internal();
   late final Dio dio;
   
-  final String _baseUrl = 'https://sih-26-jarr.onrender.com/api';
+  final String _baseUrl = 'https://hackcbs-cjno.onrender.com/api';
   
   // Future deduplication for concurrent 401 token refreshes
   Future<bool>? _ongoingRefresh;

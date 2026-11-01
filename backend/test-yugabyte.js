@@ -1,7 +1,10 @@
 const { Client } = require('pg');
 const fs = require('fs');
 const path = require('path');
-require('dotenv').config();
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+if (!process.env.DATABASE_URL) {
+  require('dotenv').config();
+}
 
 const caPath = process.env.DB_CA_CERT_PATH 
   ? path.resolve(__dirname, process.env.DB_CA_CERT_PATH)
