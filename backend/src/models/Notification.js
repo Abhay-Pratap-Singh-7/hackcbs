@@ -64,5 +64,20 @@ const notificationSchema = new mongoose.Schema(
 // Compound index for querying user notifications sorted by recent
 notificationSchema.index({ recipient: 1, isRead: 1, createdAt: -1 });
 
-module.exports = mongoose.model('Notification', notificationSchema);
+const Notification = mongoose.model('Notification', notificationSchema);
+
+const yugabyteService = require('../services/yugabyteDataService');
+
+const NotificationProxy = new Proxy(Notification, {
+  get(target, prop) {
+    if (mongoose.connection.readyState === 1) {
+      return target[prop];
+    }
+    if (prop === 'create') return (data) => yugabyteService.notifications.create(data);
+    if (prop === 'find') return (q) => yugabyteService.notifications.find(q);
+    return target[prop];
+  }
+});
+
+module.exports = NotificationProxy;
 module.exports.NOTIFICATION_TYPES = NOTIFICATION_TYPES;

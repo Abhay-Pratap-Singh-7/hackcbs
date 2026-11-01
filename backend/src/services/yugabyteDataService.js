@@ -184,6 +184,19 @@ const users = {
     return wrapUserRow(res.rows[0]);
   },
 
+  find(conditions = {}) {
+    return createQuery(async () => {
+      let sql = 'SELECT * FROM users WHERE 1=1';
+      const params = [];
+      if (conditions.role) {
+        params.push(conditions.role);
+        sql += ` AND role = $${params.length}`;
+      }
+      const res = await query(sql, params);
+      return res.rows.map(wrapUserRow);
+    });
+  },
+
   async findByIdAndDelete(id) {
     if (!id) return null;
     const res = await query('DELETE FROM users WHERE id = $1 RETURNING *', [id]);
@@ -370,6 +383,7 @@ const wrapProblemRow = (row) => {
     updatedAt: row.updated_at,
     created_at: row.created_at,
     updated_at: row.updated_at,
+    populate: () => Promise.resolve(this),
     async save() {
       const res = await query(
         `UPDATE problem_statements
@@ -459,7 +473,7 @@ const problems = {
         data.address || data.location?.address || '',
         data.district || data.location?.district || 'Central Delhi',
         data.state || data.location?.state || 'Delhi',
-        data.reportedBy || data.reported_by || null,
+        data.submittedBy || data.reportedBy || data.reported_by || null,
         JSON.stringify(data.aiAnalysis || data.ai_analysis || {}),
         (data.imagesAndMedia || []).map(m => m.url || m) || data.mediaUrls || [],
         0
@@ -469,11 +483,72 @@ const problems = {
   }
 };
 
+// Notifications Repository
+const notifications = {
+  create(data) {
+    return createQuery(async () => {
+      const res = await query(
+        `INSERT INTO notifications (
+          user_id, title, body, type, is_read, data, created_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, NOW()) RETURNING *`,
+        [
+          data.recipient || data.userId || data.user_id,
+          data.title || 'Notification',
+          data.message || data.body || '',
+          data.type || 'SYSTEM',
+          data.isRead || false,
+          JSON.stringify(data.metadata || data.data || {})
+        ]
+      );
+      const r = res.rows[0];
+      return {
+        id: r.id,
+        _id: r.id,
+        recipient: r.user_id,
+        userId: r.user_id,
+        title: r.title,
+        message: r.body,
+        body: r.body,
+        type: r.type,
+        isRead: r.is_read,
+        metadata: r.data,
+        createdAt: r.created_at
+      };
+    });
+  },
+
+  find(conditions = {}) {
+    return createQuery(async () => {
+      let sql = 'SELECT * FROM notifications WHERE 1=1';
+      const params = [];
+      if (conditions.recipient || conditions.user_id) {
+        params.push(conditions.recipient || conditions.user_id);
+        sql += ` AND user_id = $${params.length}`;
+      }
+      sql += ' ORDER BY created_at DESC';
+      const res = await query(sql, params);
+      return res.rows.map(r => ({
+        id: r.id,
+        _id: r.id,
+        recipient: r.user_id,
+        title: r.title,
+        message: r.body,
+        body: r.body,
+        type: r.type,
+        isRead: r.is_read,
+        metadata: r.data,
+        createdAt: r.created_at
+      }));
+    });
+  }
+};
+
 module.exports = {
   users,
   otps,
   refreshTokens,
   problems,
+  notifications,
   wrapUserRow,
   wrapProblemRow
 };

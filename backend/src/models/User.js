@@ -173,6 +173,7 @@ const UserProxy = new Proxy(User, {
       return target[prop];
     }
     if (prop === 'findOne') return (q) => yugabyteService.users.findOne(q);
+    if (prop === 'find') return (q) => yugabyteService.users.find(q);
     if (prop === 'findById') return (id) => yugabyteService.users.findById(id);
     if (prop === 'create') return (data) => yugabyteService.users.create(data);
     if (prop === 'findByIdAndDelete') return (id) => yugabyteService.users.findByIdAndDelete(id);
