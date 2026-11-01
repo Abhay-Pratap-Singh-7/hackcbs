@@ -11,7 +11,7 @@ cloudinary.config({
 const uploadStream = (fileBuffer) => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
-      { folder: "sih_problems" },
+      { folder: "hackcbs_problems" },
       (error, result) => {
         if (result) {
           resolve(result);
