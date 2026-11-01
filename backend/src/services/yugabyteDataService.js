@@ -347,22 +347,6 @@ const refreshTokens = {
 // Problem Statements Repository
 const wrapProblemRow = (row) => {
   if (!row) return null;
-  const ai = typeof row.ai_analysis === 'string' ? JSON.parse(row.ai_analysis || '{}') : (row.ai_analysis || {});
-  
-  let collegeSuggestions = [];
-  if (row.college_suggestions) {
-    collegeSuggestions = typeof row.college_suggestions === 'string' ? JSON.parse(row.college_suggestions) : row.college_suggestions;
-  } else if (ai.collegeSuggestions || ai.matchedColleges) {
-    collegeSuggestions = ai.collegeSuggestions || ai.matchedColleges || [];
-  }
-
-  let companySuggestions = [];
-  if (row.company_suggestions) {
-    companySuggestions = typeof row.company_suggestions === 'string' ? JSON.parse(row.company_suggestions) : row.company_suggestions;
-  } else if (ai.companySuggestions || ai.matchedCompanies) {
-    companySuggestions = ai.companySuggestions || ai.matchedCompanies || [];
-  }
-
   return {
     id: row.id,
     _id: row.id,
@@ -388,10 +372,13 @@ const wrapProblemRow = (row) => {
     state: row.state,
     reportedBy: row.reported_by,
     reported_by: row.reported_by,
-    aiAnalysis: ai,
-    ai_analysis: ai,
-    collegeSuggestions,
-    companySuggestions,
+    submittedBy: row.reported_by,
+    aiAnalysis: row.ai_analysis || {},
+    ai_analysis: row.ai_analysis || {},
+    collegeSuggestions: Array.isArray(row.college_suggestions) ? row.college_suggestions : (typeof row.college_suggestions === 'string' ? JSON.parse(row.college_suggestions) : []),
+    college_suggestions: Array.isArray(row.college_suggestions) ? row.college_suggestions : (typeof row.college_suggestions === 'string' ? JSON.parse(row.college_suggestions) : []),
+    companySuggestions: Array.isArray(row.company_suggestions) ? row.company_suggestions : (typeof row.company_suggestions === 'string' ? JSON.parse(row.company_suggestions) : []),
+    company_suggestions: Array.isArray(row.company_suggestions) ? row.company_suggestions : (typeof row.company_suggestions === 'string' ? JSON.parse(row.company_suggestions) : []),
     mediaUrls: row.media_urls || [],
     media_urls: row.media_urls || [],
     imagesAndMedia: (row.media_urls || []).map(u => ({ url: u, mediaType: 'image' })),
@@ -403,10 +390,6 @@ const wrapProblemRow = (row) => {
     updated_at: row.updated_at,
     populate: () => Promise.resolve(this),
     async save() {
-      const aiData = { ...(this.aiAnalysis || this.ai_analysis || {}) };
-      if (this.collegeSuggestions) aiData.collegeSuggestions = this.collegeSuggestions;
-      if (this.companySuggestions) aiData.companySuggestions = this.companySuggestions;
-
       const res = await query(
         `UPDATE problem_statements
          SET title = $1, description = $2, category = $3, status = $4,
@@ -425,11 +408,11 @@ const wrapProblemRow = (row) => {
           this.address,
           this.district,
           this.state,
-          JSON.stringify(aiData),
+          JSON.stringify(this.aiAnalysis || this.ai_analysis || {}),
           this.mediaUrls || this.media_urls || [],
           this.upvotes || this.upvotesCount || 0,
-          JSON.stringify(this.collegeSuggestions || []),
-          JSON.stringify(this.companySuggestions || []),
+          JSON.stringify(this.collegeSuggestions || this.college_suggestions || []),
+          JSON.stringify(this.companySuggestions || this.company_suggestions || []),
           this.id
         ]
       );
@@ -493,11 +476,18 @@ const problems = {
     return parseInt(res.rows[0].count, 10);
   },
 
-  async create(data) {
-    const aiData = { ...(data.aiAnalysis || data.ai_analysis || {}) };
-    if (data.collegeSuggestions) aiData.collegeSuggestions = data.collegeSuggestions;
-    if (data.companySuggestions) aiData.companySuggestions = data.companySuggestions;
+  async findByIdAndUpdate(id, update, options = {}) {
+    let p = await this.findById(id);
+    if (!p) return null;
+    if (update.$inc && update.$inc.upvotes) {
+      await query('UPDATE problem_statements SET upvotes = upvotes + $1 WHERE id = $2', [update.$inc.upvotes, id]);
+    }
+    Object.assign(p, update);
+    await p.save();
+    return p;
+  },
 
+  async create(data) {
     const res = await query(
       `INSERT INTO problem_statements (
         title, description, category, status, latitude, longitude,
@@ -516,11 +506,11 @@ const problems = {
         data.district || data.location?.district || 'Central Delhi',
         data.state || data.location?.state || 'Delhi',
         data.submittedBy || data.reportedBy || data.reported_by || null,
-        JSON.stringify(aiData),
+        JSON.stringify(data.aiAnalysis || data.ai_analysis || {}),
         (data.imagesAndMedia || []).map(m => m.url || m) || data.mediaUrls || [],
         0,
-        JSON.stringify(data.collegeSuggestions || []),
-        JSON.stringify(data.companySuggestions || [])
+        JSON.stringify(data.collegeSuggestions || data.college_suggestions || []),
+        JSON.stringify(data.companySuggestions || data.company_suggestions || [])
       ]
     );
     return wrapProblemRow(res.rows[0]);

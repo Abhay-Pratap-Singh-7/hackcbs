@@ -85,7 +85,7 @@ const ProblemDetail = () => {
         setUpvotesCount(backendUpvotes);
         setHasUpvoted(Array.isArray(p.upvotedBy) && p.upvotedBy.includes(user._id || user.id));
 
-        // Auto-fetch matched colleges if not already present
+        // Auto-fetch matched colleges via Hugging Face model if not present on problem
         if (!p.collegeSuggestions || (Array.isArray(p.collegeSuggestions) && p.collegeSuggestions.length === 0)) {
           try {
             const collegeRes = await fetch(`https://hackcbs-cjno.onrender.com/api/problems/${id}/matched-colleges`, {
@@ -240,11 +240,11 @@ const ProblemDetail = () => {
   const isTeamFormed = !!(team || ['IN_PROGRESS', 'PROPOSAL', 'PROTOTYPE', 'VALIDATED', 'DEPLOYED'].includes(problem.status));
   const isSolutionSubmitted = hasSolution;
 
-  const rawColleges = problem.collegeSuggestions || problem.aiAnalysis?.collegeSuggestions || problem.matchedColleges || [];
+  const rawColleges = problem.collegeSuggestions || problem.college_suggestions || problem.aiAnalysis?.collegeSuggestions || problem.aiAnalysis?.matchedColleges || problem.matchedColleges || [];
   const collegeSuggestions = Array.isArray(rawColleges)
     ? rawColleges
     : (typeof rawColleges === 'string' ? JSON.parse(rawColleges) : []);
-  const rawCompanies = problem.companySuggestions || problem.aiAnalysis?.companySuggestions || problem.matchedCompanies || [];
+  const rawCompanies = problem.companySuggestions || problem.company_suggestions || problem.aiAnalysis?.companySuggestions || problem.aiAnalysis?.matchedCompanies || problem.matchedCompanies || [];
   const companySuggestions = Array.isArray(rawCompanies)
     ? rawCompanies
     : (typeof rawCompanies === 'string' ? JSON.parse(rawCompanies) : []);

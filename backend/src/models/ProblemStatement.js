@@ -239,6 +239,7 @@ const ProblemStatementProxy = new Proxy(ProblemStatement, {
     if (prop === 'findById') return (id) => yugabyteService.problems.findById(id);
     if (prop === 'create') return (data) => yugabyteService.problems.create(data);
     if (prop === 'countDocuments') return (q) => yugabyteService.problems.countDocuments(q);
+    if (prop === 'findByIdAndUpdate') return (id, update, opts) => yugabyteService.problems.findByIdAndUpdate(id, update, opts);
     return target[prop];
   }
 });
