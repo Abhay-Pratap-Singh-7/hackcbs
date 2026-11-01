@@ -347,6 +347,22 @@ const refreshTokens = {
 // Problem Statements Repository
 const wrapProblemRow = (row) => {
   if (!row) return null;
+  const ai = typeof row.ai_analysis === 'string' ? JSON.parse(row.ai_analysis || '{}') : (row.ai_analysis || {});
+  
+  let collegeSuggestions = [];
+  if (row.college_suggestions) {
+    collegeSuggestions = typeof row.college_suggestions === 'string' ? JSON.parse(row.college_suggestions) : row.college_suggestions;
+  } else if (ai.collegeSuggestions || ai.matchedColleges) {
+    collegeSuggestions = ai.collegeSuggestions || ai.matchedColleges || [];
+  }
+
+  let companySuggestions = [];
+  if (row.company_suggestions) {
+    companySuggestions = typeof row.company_suggestions === 'string' ? JSON.parse(row.company_suggestions) : row.company_suggestions;
+  } else if (ai.companySuggestions || ai.matchedCompanies) {
+    companySuggestions = ai.companySuggestions || ai.matchedCompanies || [];
+  }
+
   return {
     id: row.id,
     _id: row.id,
@@ -372,8 +388,10 @@ const wrapProblemRow = (row) => {
     state: row.state,
     reportedBy: row.reported_by,
     reported_by: row.reported_by,
-    aiAnalysis: row.ai_analysis || {},
-    ai_analysis: row.ai_analysis || {},
+    aiAnalysis: ai,
+    ai_analysis: ai,
+    collegeSuggestions,
+    companySuggestions,
     mediaUrls: row.media_urls || [],
     media_urls: row.media_urls || [],
     imagesAndMedia: (row.media_urls || []).map(u => ({ url: u, mediaType: 'image' })),
@@ -385,13 +403,18 @@ const wrapProblemRow = (row) => {
     updated_at: row.updated_at,
     populate: () => Promise.resolve(this),
     async save() {
+      const aiData = { ...(this.aiAnalysis || this.ai_analysis || {}) };
+      if (this.collegeSuggestions) aiData.collegeSuggestions = this.collegeSuggestions;
+      if (this.companySuggestions) aiData.companySuggestions = this.companySuggestions;
+
       const res = await query(
         `UPDATE problem_statements
          SET title = $1, description = $2, category = $3, status = $4,
              latitude = $5, longitude = $6, address = $7, district = $8,
              state = $9, ai_analysis = $10, media_urls = $11, upvotes = $12,
+             college_suggestions = $13, company_suggestions = $14,
              updated_at = NOW()
-         WHERE id = $13 RETURNING *`,
+         WHERE id = $15 RETURNING *`,
         [
           this.title,
           this.description,
@@ -402,9 +425,11 @@ const wrapProblemRow = (row) => {
           this.address,
           this.district,
           this.state,
-          JSON.stringify(this.aiAnalysis || this.ai_analysis || {}),
+          JSON.stringify(aiData),
           this.mediaUrls || this.media_urls || [],
           this.upvotes || this.upvotesCount || 0,
+          JSON.stringify(this.collegeSuggestions || []),
+          JSON.stringify(this.companySuggestions || []),
           this.id
         ]
       );
@@ -434,7 +459,16 @@ const problems = {
       sql += ' ORDER BY created_at DESC';
 
       const res = await query(sql, params);
-      return res.rows.map(wrapProblemRow);
+      let rows = res.rows.map(wrapProblemRow);
+
+      if (conditions['collegeSuggestions.college_name']) {
+        const regex = conditions['collegeSuggestions.college_name'];
+        rows = rows.filter(p => Array.isArray(p.collegeSuggestions) && p.collegeSuggestions.some(c => 
+          c.college_name && (regex.test ? regex.test(c.college_name) : String(c.college_name).toLowerCase().includes(String(regex).toLowerCase()))
+        ));
+      }
+
+      return rows;
     });
   },
 
@@ -451,17 +485,25 @@ const problems = {
   },
 
   async countDocuments(conditions = {}) {
+    if (conditions['collegeSuggestions.college_name']) {
+      const list = await problems.find(conditions);
+      return list.length;
+    }
     const res = await query('SELECT count(*) FROM problem_statements');
     return parseInt(res.rows[0].count, 10);
   },
 
   async create(data) {
+    const aiData = { ...(data.aiAnalysis || data.ai_analysis || {}) };
+    if (data.collegeSuggestions) aiData.collegeSuggestions = data.collegeSuggestions;
+    if (data.companySuggestions) aiData.companySuggestions = data.companySuggestions;
+
     const res = await query(
       `INSERT INTO problem_statements (
         title, description, category, status, latitude, longitude,
         address, district, state, reported_by, ai_analysis, media_urls,
-        upvotes, created_at, updated_at
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, NOW(), NOW())
+        upvotes, college_suggestions, company_suggestions, created_at, updated_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, NOW(), NOW())
       RETURNING *`,
       [
         data.title || 'Civic Problem Statement',
@@ -474,9 +516,11 @@ const problems = {
         data.district || data.location?.district || 'Central Delhi',
         data.state || data.location?.state || 'Delhi',
         data.submittedBy || data.reportedBy || data.reported_by || null,
-        JSON.stringify(data.aiAnalysis || data.ai_analysis || {}),
+        JSON.stringify(aiData),
         (data.imagesAndMedia || []).map(m => m.url || m) || data.mediaUrls || [],
-        0
+        0,
+        JSON.stringify(data.collegeSuggestions || []),
+        JSON.stringify(data.companySuggestions || [])
       ]
     );
     return wrapProblemRow(res.rows[0]);

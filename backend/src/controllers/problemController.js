@@ -6,7 +6,7 @@ const { User } = require('../models/User');
 const pushNotificationService = require('../services/pushNotificationService');
 const { validateProblemSubmission } = require('../validations/problemValidation');
 const { analyzeProblemWithGroq } = require('../services/aiService');
-const { runAIPipeline, runCompanyMatchingPipeline } = require('../services/pythonAiService');
+const { runAIPipeline, runCompanyMatchingPipeline, runCollegeMatchingPipeline } = require('../services/pythonAiService');
 const { translateToEnglish } = require('../services/translationService');
 
 // Haversine formula to calculate distance in km between two GPS coordinates
@@ -124,18 +124,20 @@ const createProblemStatement = async (req, res, next) => {
       aiAnalysis = pipelineResult.aiAnalysis;
       embedding = pipelineResult.embedding;
       deduplication = pipelineResult.deduplication;
-      collegeSuggestions = Array.isArray(pipelineResult.matchedColleges) ? pipelineResult.matchedColleges : [];
+      collegeSuggestions = Array.isArray(pipelineResult.matchedColleges) && pipelineResult.matchedColleges.length > 0
+        ? pipelineResult.matchedColleges
+        : await runCollegeMatchingPipeline(aiAnalysis || { description: englishDescription }, location, 5);
       companySuggestions = Array.isArray(pipelineResult.matchedCompanies) ? pipelineResult.matchedCompanies : [];
       console.log(`[AI Pipeline]: Success. isDuplicate=${deduplication?.is_duplicate}, category=${aiAnalysis?.problem_classification}, colleges=${collegeSuggestions.length}, companies=${companySuggestions.length}`);
     } catch (pythonErr) {
-      // Graceful fallback: Use Groq-only classification if Python pipeline fails
-      console.warn('[AI Pipeline Fallback]: Python pipeline failed, using Groq-only classification.', pythonErr.message);
+      // Graceful fallback: Use Groq-only classification and local matching if Python pipeline fails
+      console.warn('[AI Pipeline Fallback]: Python pipeline failed, using Groq-only classification and robust dataset matchers.', pythonErr.message);
       pythonPipelineUsed = false;
       aiAnalysis = await analyzeProblemWithGroq(englishDescription);
       embedding = [];
       deduplication = { is_duplicate: false, matched_problem_id: null, similarity_score: 0, distance_km: null, matched_problem: null };
-      collegeSuggestions = [];
-      companySuggestions = [];
+      collegeSuggestions = await runCollegeMatchingPipeline(aiAnalysis || { description: englishDescription }, location, 5);
+      companySuggestions = await runCompanyMatchingPipeline(aiAnalysis || { description: englishDescription }, location, [], 5);
     }
 
     // 5. Auto-update urgency from AI severity
@@ -404,8 +406,31 @@ const getAllProblemStatements = async (req, res, next) => {
 // @access  Private
 const getProblemStatementById = async (req, res, next) => {
   try {
-    const problem = await ProblemStatement.findById(req.params.id).populate('submittedBy', 'name email role profileDetails');
+    let problem = await ProblemStatement.findById(req.params.id);
     if (!problem) return res.status(404).json({ success: false, message: `Problem not found with ID ${req.params.id}` });
+    if (typeof problem.populate === 'function') {
+      try { await problem.populate('submittedBy', 'name email role profileDetails'); } catch (_) {}
+    }
+
+    // Auto-populate collegeSuggestions if missing
+    if (!problem.collegeSuggestions || problem.collegeSuggestions.length === 0) {
+      try {
+        const colleges = await runCollegeMatchingPipeline(
+          problem.aiAnalysis || { description: problem.description, category: problem.category },
+          problem.location || { latitude: problem.latitude, longitude: problem.longitude, district: problem.district },
+          5
+        );
+        if (colleges && colleges.length > 0) {
+          problem.collegeSuggestions = colleges;
+          if (typeof problem.save === 'function') {
+            await problem.save();
+          }
+        }
+      } catch (matchErr) {
+        console.warn('[College Match on getProblem notice]:', matchErr.message);
+      }
+    }
+
     return res.status(200).json({ success: true, data: problem });
   } catch (err) {
     next(err);
@@ -640,6 +665,68 @@ const matchCompaniesForProblem = async (req, res, next) => {
     return res.status(500).json({
       success: false,
       message: 'Failed to perform company matching',
+      error: error.message
+    });
+  }
+};
+
+// @desc    Get top matched colleges for a Problem Statement
+// @route   GET /api/problems/:id/matched-colleges
+// @access  Private
+const getMatchedCollegesForProblem = async (req, res, next) => {
+  try {
+    const problem = await ProblemStatement.findById(req.params.id);
+    if (!problem) {
+      return res.status(404).json({ success: false, message: 'Problem statement not found' });
+    }
+
+    if (problem.collegeSuggestions && problem.collegeSuggestions.length > 0 && !req.query.refresh) {
+      return res.status(200).json({ success: true, source: 'cached', data: problem.collegeSuggestions });
+    }
+
+    const matchedColleges = await runCollegeMatchingPipeline(
+      problem.aiAnalysis || { description: problem.description, category: problem.category },
+      problem.location || { latitude: problem.latitude, longitude: problem.longitude, district: problem.district },
+      Number(req.query.top_k || 5)
+    );
+
+    problem.collegeSuggestions = matchedColleges;
+    if (typeof problem.save === 'function') {
+      await problem.save();
+    }
+
+    return res.status(200).json({ success: true, source: 'live_ai', data: matchedColleges });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// @desc    Match colleges for arbitrary problem data
+// @route   POST /api/problems/match-colleges
+// @access  Private
+const matchCollegesForProblem = async (req, res, next) => {
+  try {
+    const { problemData, location, topK = 5 } = req.body;
+    if (!problemData) {
+      return res.status(400).json({ success: false, message: 'problemData is required' });
+    }
+
+    const matchedColleges = await runCollegeMatchingPipeline(
+      problemData.aiAnalysis || problemData,
+      location || problemData.location || {},
+      Number(topK || 5)
+    );
+
+    return res.status(200).json({
+      success: true,
+      count: matchedColleges.length,
+      data: matchedColleges
+    });
+  } catch (error) {
+    console.error('[Match Colleges API Error]:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to perform college matching',
       error: error.message
     });
   }
@@ -991,6 +1078,8 @@ module.exports = {
   getComments,
   getMatchedCompaniesForProblem,
   matchCompaniesForProblem,
+  getMatchedCollegesForProblem,
+  matchCollegesForProblem,
   replyToComment,
   toggleCommentLike,
   editComment,

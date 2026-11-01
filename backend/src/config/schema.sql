@@ -62,6 +62,8 @@ CREATE TABLE IF NOT EXISTS problem_statements (
     ai_analysis JSONB DEFAULT '{}'::jsonb,
     media_urls TEXT[] DEFAULT ARRAY[]::TEXT[],
     upvotes INTEGER DEFAULT 0,
+    college_suggestions JSONB DEFAULT '[]'::jsonb,
+    company_suggestions JSONB DEFAULT '[]'::jsonb,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );

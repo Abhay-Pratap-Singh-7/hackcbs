@@ -85,6 +85,24 @@ const ProblemDetail = () => {
         setUpvotesCount(backendUpvotes);
         setHasUpvoted(Array.isArray(p.upvotedBy) && p.upvotedBy.includes(user._id || user.id));
 
+        // Auto-fetch matched colleges if not already present
+        if (!p.collegeSuggestions || (Array.isArray(p.collegeSuggestions) && p.collegeSuggestions.length === 0)) {
+          try {
+            const collegeRes = await fetch(`https://hackcbs-cjno.onrender.com/api/problems/${id}/matched-colleges`, {
+              headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (collegeRes.ok) {
+              const collegeData = await collegeRes.json();
+              if (Array.isArray(collegeData.data) && collegeData.data.length > 0) {
+                p.collegeSuggestions = collegeData.data;
+                setProblem((prev: any) => prev ? { ...prev, collegeSuggestions: collegeData.data } : prev);
+              }
+            }
+          } catch (cErr) {
+            console.warn('Could not auto-fetch matched colleges:', cErr);
+          }
+        }
+
         // Fetch real comments from backend
         try {
           const commentsRes = await fetch(`https://hackcbs-cjno.onrender.com/api/problems/${id}/comments`, {
@@ -222,8 +240,14 @@ const ProblemDetail = () => {
   const isTeamFormed = !!(team || ['IN_PROGRESS', 'PROPOSAL', 'PROTOTYPE', 'VALIDATED', 'DEPLOYED'].includes(problem.status));
   const isSolutionSubmitted = hasSolution;
 
-  const collegeSuggestions = Array.isArray(problem.collegeSuggestions) ? problem.collegeSuggestions : [];
-  const companySuggestions = Array.isArray(problem.companySuggestions) ? problem.companySuggestions : [];
+  const rawColleges = problem.collegeSuggestions || problem.aiAnalysis?.collegeSuggestions || problem.matchedColleges || [];
+  const collegeSuggestions = Array.isArray(rawColleges)
+    ? rawColleges
+    : (typeof rawColleges === 'string' ? JSON.parse(rawColleges) : []);
+  const rawCompanies = problem.companySuggestions || problem.aiAnalysis?.companySuggestions || problem.matchedCompanies || [];
+  const companySuggestions = Array.isArray(rawCompanies)
+    ? rawCompanies
+    : (typeof rawCompanies === 'string' ? JSON.parse(rawCompanies) : []);
 
   const lat = problem.location?.latitude || problem.location?.coordinates?.latitude || 23.3441;
   const lng = problem.location?.longitude || problem.location?.coordinates?.longitude || 85.3096;
