@@ -238,9 +238,10 @@ const login = async (req, res, next) => {
     }
 
     const { email, password } = req.body;
+    const cleanEmail = (email || '').toLowerCase().trim();
 
     // Fetch user with password field included
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email: cleanEmail }).select('+password');
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -303,8 +304,9 @@ const verifyLoginOtp = async (req, res, next) => {
     }
 
     const { email, otp } = req.body;
+    const cleanEmail = (email || '').toLowerCase().trim();
 
-    const otpRecord = await Otp.findOne({ email, otp, purpose: 'LOGIN_VERIFY' });
+    const otpRecord = await Otp.findOne({ email: cleanEmail, otp, purpose: 'LOGIN_VERIFY' });
     if (!otpRecord) {
       return res.status(400).json({
         success: false,
@@ -312,7 +314,7 @@ const verifyLoginOtp = async (req, res, next) => {
       });
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: cleanEmail });
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found.' });
     }

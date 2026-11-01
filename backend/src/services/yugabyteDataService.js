@@ -1,6 +1,28 @@
 const bcrypt = require('bcryptjs');
 const { query } = require('../config/yugabyte');
 
+// Query thenable helper to support Mongoose-style chaining (.select(), .populate(), .lean(), etc.)
+const createQuery = (executeFn) => {
+  let promise = null;
+  const getPromise = () => {
+    if (!promise) promise = executeFn();
+    return promise;
+  };
+
+  const queryObj = {
+    select: () => queryObj,
+    populate: () => queryObj,
+    sort: () => queryObj,
+    limit: (n) => queryObj,
+    skip: () => queryObj,
+    lean: () => queryObj,
+    then: (onFulfilled, onRejected) => getPromise().then(onFulfilled, onRejected),
+    catch: (onRejected) => getPromise().catch(onRejected),
+    finally: (onFinally) => getPromise().finally(onFinally)
+  };
+  return queryObj;
+};
+
 // Helper to wrap YugabyteDB user row with Mongoose-compatible properties and methods
 const wrapUserRow = (row) => {
   if (!row) return null;
@@ -86,61 +108,49 @@ const wrapUserRow = (row) => {
     }
   };
 
-  // Support Mongoose query chaining (.select('+password') returns a promise resolving to userObj)
-  const chainable = {
-    ...userObj,
-    select: () => Promise.resolve(userObj),
-    then: (resolve, reject) => Promise.resolve(userObj).then(resolve, reject),
-    catch: (reject) => Promise.resolve(userObj).catch(reject)
-  };
-
-  return chainable;
+  return userObj;
 };
 
 // Users Repository
 const users = {
-  async findOne(conditions = {}) {
-    let sql = 'SELECT * FROM users WHERE ';
-    const params = [];
+  findOne(conditions = {}) {
+    return createQuery(async () => {
+      let sql = 'SELECT * FROM users WHERE ';
+      const params = [];
 
-    if (conditions.email) {
-      params.push((conditions.email || '').toLowerCase().trim());
-      sql += `LOWER(email) = LOWER($${params.length})`;
-    } else if (conditions.googleId) {
-      params.push(conditions.googleId);
-      sql += `google_id = $${params.length}`;
-    } else if (conditions.digilockerId) {
-      params.push(conditions.digilockerId);
-      sql += `digilocker_id = $${params.length}`;
-    } else if (conditions.id || conditions._id) {
-      params.push(conditions.id || conditions._id);
-      sql += `id = $${params.length}`;
-    } else {
-      sql += '1=1';
-    }
+      if (conditions.email) {
+        params.push((conditions.email || '').toLowerCase().trim());
+        sql += `LOWER(email) = LOWER($${params.length})`;
+      } else if (conditions.googleId) {
+        params.push(conditions.googleId);
+        sql += `google_id = $${params.length}`;
+      } else if (conditions.digilockerId) {
+        params.push(conditions.digilockerId);
+        sql += `digilocker_id = $${params.length}`;
+      } else if (conditions.id || conditions._id) {
+        params.push(conditions.id || conditions._id);
+        sql += `id = $${params.length}`;
+      } else {
+        sql += '1=1';
+      }
 
-    sql += ' LIMIT 1';
+      sql += ' LIMIT 1';
 
-    const res = await query(sql, params);
-    const user = res.rows[0] ? wrapUserRow(res.rows[0]) : null;
-
-    // Return chainable promise with .select()
-    const chainable = {
-      select: () => Promise.resolve(user),
-      then: (resolve, reject) => Promise.resolve(user).then(resolve, reject),
-      catch: (reject) => Promise.resolve(user).catch(reject)
-    };
-    return chainable;
+      const res = await query(sql, params);
+      return res.rows[0] ? wrapUserRow(res.rows[0]) : null;
+    });
   },
 
-  async findById(id) {
-    if (!id) return null;
-    try {
-      const res = await query('SELECT * FROM users WHERE id = $1 LIMIT 1', [id]);
-      return res.rows[0] ? wrapUserRow(res.rows[0]) : null;
-    } catch (_) {
-      return null;
-    }
+  findById(id) {
+    return createQuery(async () => {
+      if (!id) return null;
+      try {
+        const res = await query('SELECT * FROM users WHERE id = $1 LIMIT 1', [id]);
+        return res.rows[0] ? wrapUserRow(res.rows[0]) : null;
+      } catch (_) {
+        return null;
+      }
+    });
   },
 
   async create(userData) {
@@ -194,37 +204,39 @@ const users = {
 
 // OTPs Repository
 const otps = {
-  async findOne(conditions = {}) {
-    let sql = 'SELECT * FROM otps WHERE expires_at > NOW()';
-    const params = [];
+  findOne(conditions = {}) {
+    return createQuery(async () => {
+      let sql = 'SELECT * FROM otps WHERE expires_at > NOW()';
+      const params = [];
 
-    if (conditions.email) {
-      params.push((conditions.email || '').toLowerCase().trim());
-      sql += ` AND LOWER(email) = LOWER($${params.length})`;
-    }
-    if (conditions.otp) {
-      params.push(String(conditions.otp).trim());
-      sql += ` AND otp = $${params.length}`;
-    }
-    if (conditions.purpose) {
-      params.push(conditions.purpose);
-      sql += ` AND purpose = $${params.length}`;
-    }
+      if (conditions.email) {
+        params.push((conditions.email || '').toLowerCase().trim());
+        sql += ` AND LOWER(email) = LOWER($${params.length})`;
+      }
+      if (conditions.otp) {
+        params.push(String(conditions.otp).trim());
+        sql += ` AND otp = $${params.length}`;
+      }
+      if (conditions.purpose) {
+        params.push(conditions.purpose);
+        sql += ` AND purpose = $${params.length}`;
+      }
 
-    sql += ' ORDER BY created_at DESC LIMIT 1';
-    const res = await query(sql, params);
-    if (!res.rows[0]) return null;
+      sql += ' ORDER BY created_at DESC LIMIT 1';
+      const res = await query(sql, params);
+      if (!res.rows[0]) return null;
 
-    const r = res.rows[0];
-    return {
-      id: r.id,
-      _id: r.id,
-      email: r.email,
-      otp: r.otp,
-      purpose: r.purpose,
-      expiresAt: r.expires_at,
-      createdAt: r.created_at
-    };
+      const r = res.rows[0];
+      return {
+        id: r.id,
+        _id: r.id,
+        email: r.email,
+        otp: r.otp,
+        purpose: r.purpose,
+        expiresAt: r.expires_at,
+        createdAt: r.created_at
+      };
+    });
   },
 
   async create(data) {
@@ -284,22 +296,24 @@ const refreshTokens = {
     return res.rows[0];
   },
 
-  async findOne(conditions = {}) {
-    if (!conditions.token) return null;
-    const res = await query(
-      'SELECT * FROM refresh_tokens WHERE token = $1 AND expires_at > NOW() LIMIT 1',
-      [conditions.token]
-    );
-    if (!res.rows[0]) return null;
-    const r = res.rows[0];
-    return {
-      id: r.id,
-      _id: r.id,
-      userId: r.user_id,
-      token: r.token,
-      expiresAt: r.expires_at,
-      createdAt: r.created_at
-    };
+  findOne(conditions = {}) {
+    return createQuery(async () => {
+      if (!conditions.token) return null;
+      const res = await query(
+        'SELECT * FROM refresh_tokens WHERE token = $1 AND expires_at > NOW() LIMIT 1',
+        [conditions.token]
+      );
+      if (!res.rows[0]) return null;
+      const r = res.rows[0];
+      return {
+        id: r.id,
+        _id: r.id,
+        userId: r.user_id,
+        token: r.token,
+        expiresAt: r.expires_at,
+        createdAt: r.created_at
+      };
+    });
   },
 
   async deleteOne(conditions = {}) {
@@ -387,53 +401,39 @@ const wrapProblemRow = (row) => {
 };
 
 const problems = {
-  async find(conditions = {}) {
-    let sql = 'SELECT * FROM problem_statements WHERE 1=1';
-    const params = [];
-    if (conditions.status) {
-      params.push(conditions.status);
-      sql += ` AND status = $${params.length}`;
-    }
-    if (conditions.district) {
-      params.push(conditions.district);
-      sql += ` AND district = $${params.length}`;
-    }
-    if (conditions.reportedBy || conditions.reported_by) {
-      params.push(conditions.reportedBy || conditions.reported_by);
-      sql += ` AND reported_by = $${params.length}`;
-    }
-    sql += ' ORDER BY created_at DESC';
+  find(conditions = {}) {
+    return createQuery(async () => {
+      let sql = 'SELECT * FROM problem_statements WHERE 1=1';
+      const params = [];
+      if (conditions.status) {
+        params.push(conditions.status);
+        sql += ` AND status = $${params.length}`;
+      }
+      if (conditions.district) {
+        params.push(conditions.district);
+        sql += ` AND district = $${params.length}`;
+      }
+      if (conditions.reportedBy || conditions.reported_by) {
+        params.push(conditions.reportedBy || conditions.reported_by);
+        sql += ` AND reported_by = $${params.length}`;
+      }
+      sql += ' ORDER BY created_at DESC';
 
-    const res = await query(sql, params);
-    const list = res.rows.map(wrapProblemRow);
-
-    const chainable = {
-      populate: () => chainable,
-      sort: () => chainable,
-      limit: (n) => Promise.resolve(list.slice(0, n)),
-      skip: () => chainable,
-      lean: () => Promise.resolve(list),
-      then: (resolve, reject) => Promise.resolve(list).then(resolve, reject),
-      catch: (reject) => Promise.resolve(list).catch(reject)
-    };
-    return chainable;
+      const res = await query(sql, params);
+      return res.rows.map(wrapProblemRow);
+    });
   },
 
-  async findById(id) {
-    if (!id) return null;
-    try {
-      const res = await query('SELECT * FROM problem_statements WHERE id = $1 LIMIT 1', [id]);
-      const p = res.rows[0] ? wrapProblemRow(res.rows[0]) : null;
-      const chainable = {
-        populate: () => chainable,
-        lean: () => Promise.resolve(p),
-        then: (resolve, reject) => Promise.resolve(p).then(resolve, reject),
-        catch: (reject) => Promise.resolve(p).catch(reject)
-      };
-      return chainable;
-    } catch (_) {
-      return null;
-    }
+  findById(id) {
+    return createQuery(async () => {
+      if (!id) return null;
+      try {
+        const res = await query('SELECT * FROM problem_statements WHERE id = $1 LIMIT 1', [id]);
+        return res.rows[0] ? wrapProblemRow(res.rows[0]) : null;
+      } catch (_) {
+        return null;
+      }
+    });
   },
 
   async countDocuments(conditions = {}) {
