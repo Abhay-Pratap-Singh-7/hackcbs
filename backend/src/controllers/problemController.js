@@ -6,7 +6,13 @@ const { User } = require('../models/User');
 const pushNotificationService = require('../services/pushNotificationService');
 const { validateProblemSubmission } = require('../validations/problemValidation');
 const { analyzeProblemWithGroq } = require('../services/aiService');
-const { runAIPipeline, runCompanyMatchingPipeline, runCollegeMatchingPipeline } = require('../services/pythonAiService');
+const {
+  runAIPipeline,
+  runProblemAnalysis,
+  runDeduplication,
+  runCompanyMatchingPipeline,
+  runCollegeMatchingPipeline
+} = require('../services/pythonAiService');
 const { translateToEnglish } = require('../services/translationService');
 
 // Haversine formula to calculate distance in km between two GPS coordinates
@@ -128,16 +134,37 @@ const createProblemStatement = async (req, res, next) => {
       companySuggestions = Array.isArray(pipelineResult.matchedCompanies) ? pipelineResult.matchedCompanies : [];
       console.log(`[AI Pipeline]: Success. isDuplicate=${deduplication?.is_duplicate}, category=${aiAnalysis?.problem_classification}, colleges=${collegeSuggestions.length}, companies=${companySuggestions.length}`);
     } catch (pythonErr) {
-      // Graceful fallback: Use Groq-only classification if Python pipeline fails
-      console.warn('[AI Pipeline Fallback]: Python pipeline failed, using Groq-only classification.', pythonErr.message);
+      console.warn('[AI Pipeline Modular Invocation]: Composite pipeline notice:', pythonErr.message);
       pythonPipelineUsed = false;
-      aiAnalysis = await analyzeProblemWithGroq(englishDescription);
+
+      // 1. Invoke API 1: Problem Analyzer (Hugging Face)
+      try {
+        aiAnalysis = await runProblemAnalysis(englishDescription);
+      } catch (analErr) {
+        console.warn('[AI Problem Analyzer Notice]: Direct Groq fallback:', analErr.message);
+        aiAnalysis = await analyzeProblemWithGroq(englishDescription);
+      }
+
+      // 2. Invoke API 2: Deduplication Checker (Hugging Face) if candidates exist
       embedding = [];
       deduplication = { is_duplicate: false, matched_problem_id: null, similarity_score: 0, distance_km: null, matched_problem: null };
+      if (candidates.length > 0 && aiAnalysis) {
+        try {
+          const dedupRes = await runDeduplication(aiAnalysis, location, candidates);
+          if (dedupRes?.deduplication) {
+            deduplication = dedupRes.deduplication;
+            embedding = dedupRes.embedding || [];
+          }
+        } catch (dErr) {
+          console.warn('[AI Deduplication Notice]:', dErr.message);
+        }
+      }
+
+      // 3. Invoke API 3: College Matcher (Hugging Face)
       try {
         collegeSuggestions = await runCollegeMatchingPipeline(aiAnalysis || { description: englishDescription }, location, 5);
       } catch (cErr) {
-        console.error('[Hugging Face College Matcher]: Could not match colleges from model:', cErr.message);
+        console.error('[Hugging Face College Matcher]:', cErr.message);
         collegeSuggestions = [];
       }
       companySuggestions = [];
